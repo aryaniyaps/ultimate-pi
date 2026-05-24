@@ -6,8 +6,6 @@
 
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
-import { getRunIdFromSession } from "../lib/harness-run-context.js";
 import {
 	acceptDebateRound,
 	finalizeDebateConsensus,
@@ -18,6 +16,8 @@ import {
 	getDebateState,
 	restoreDebateStateFromEntry,
 } from "../lib/debate-bus-state.js";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
+import { getRunIdFromSession } from "../lib/harness-run-context.js";
 import { normalizePlanDebateId } from "../lib/plan-debate-id.js";
 import { initPlanMessenger } from "../lib/plan-messenger.js";
 

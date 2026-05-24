@@ -1,12 +1,12 @@
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
+import { allowsAgentTool } from "./agents-policy.mjs";
 import { resolveGuardedRunDir } from "./harness-subagent-submit-path.js";
 import {
 	executeSubmitPipeline,
 	loadSubmitDocument,
 } from "./harness-subagent-submit-pipeline.js";
-import { allowsAgentTool } from "./agents-policy.mjs";
 import { SUBMIT_TOOL_SPECS } from "./harness-subagent-submit-registry.js";
 
 const DocumentSchema = Type.Object(

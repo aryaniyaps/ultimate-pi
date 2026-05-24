@@ -1,9 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import {
-	detectFileKind,
-	type FileKind,
-} from "./file-kinds.js";
+import { detectFileKind, type FileKind } from "./file-kinds.js";
 import { isPathIgnoredByProject } from "./file-utils.js";
 
 export interface ProjectProfile {
@@ -34,7 +31,10 @@ const LSP_DEFAULTS: Partial<Record<FileKind, string>> = {
 const MAX_WALK_FILES = 4000;
 const MAX_LSP_PREINSTALL = 3;
 
-function countKind(kind: FileKind, counts: Partial<Record<FileKind, number>>): void {
+function countKind(
+	kind: FileKind,
+	counts: Partial<Record<FileKind, number>>,
+): void {
 	counts[kind] = (counts[kind] ?? 0) + 1;
 }
 

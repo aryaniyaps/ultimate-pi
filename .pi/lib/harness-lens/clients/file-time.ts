@@ -81,7 +81,7 @@ export class FileTime {
 			throw new FileTimeError(
 				`You must read file ${absolutePath} before modifying it. Use the read tool first.`,
 				absolutePath,
-				"not-read"
+				"not-read",
 			);
 		}
 
@@ -98,7 +98,7 @@ export class FileTime {
 					`Last read: ${recorded.readAt.toISOString()}\n\n` +
 					`Please read the file again before modifying it.`,
 				absolutePath,
-				"modified"
+				"modified",
 			);
 		}
 	}
@@ -139,7 +139,10 @@ export class FileTime {
 			globalState.locks.delete(absolutePath);
 		});
 
-		globalState.locks.set(absolutePath, lockPromise.then(() => {}));
+		globalState.locks.set(
+			absolutePath,
+			lockPromise.then(() => {}),
+		);
 		return lockPromise;
 	}
 
@@ -166,7 +169,11 @@ export class FileTimeError extends Error {
 	readonly filePath: string;
 	readonly reason: "not-read" | "modified";
 
-	constructor(message: string, filePath: string, reason: "not-read" | "modified") {
+	constructor(
+		message: string,
+		filePath: string,
+		reason: "not-read" | "modified",
+	) {
 		super(message);
 		this.name = "FileTimeError";
 		this.filePath = filePath;

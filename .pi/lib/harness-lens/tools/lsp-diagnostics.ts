@@ -8,8 +8,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { Type } from "typebox";
-import { getLSPService } from "../clients/lsp/index.js";
 import type { LSPDiagnostic } from "../clients/lsp/client.js";
+import { getLSPService } from "../clients/lsp/index.js";
 
 const SKIP_DIRS = new Set([
 	"node_modules",

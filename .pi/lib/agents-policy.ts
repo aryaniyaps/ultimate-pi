@@ -3,17 +3,17 @@
  */
 
 export {
-	packageAgentsPolicyPath,
-	projectAgentsPolicyPath,
-	projectPoliciesDir,
-	loadAgentsPolicyMerged,
-	resolveEffectiveTools,
-	getAgentPolicySpec,
-	getAgentKind,
-	isHarnessPlanningAgent,
-	harnessSubagentPhaseHint,
 	allowsAgentTool,
 	applyAgentPolicyToConfig,
 	findProjectRootFromAgentsDir,
+	getAgentKind,
+	getAgentPolicySpec,
+	harnessSubagentPhaseHint,
 	isAgtGovernanceActive,
+	isHarnessPlanningAgent,
+	loadAgentsPolicyMerged,
+	packageAgentsPolicyPath,
+	projectAgentsPolicyPath,
+	projectPoliciesDir,
+	resolveEffectiveTools,
 } from "./agents-policy.mjs";

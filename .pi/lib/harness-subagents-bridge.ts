@@ -13,20 +13,20 @@ import {
 	type HarnessSubagentsOptions,
 	type SpawnAuthForward,
 } from "../../vendor/pi-subagents/src/subagents.js";
+import { subagentGovernanceExtensionPath } from "../extensions/subagent-governance.js";
+import { getAgentKind } from "./agents-policy.mjs";
 import {
 	delegationEnvFromBundle,
 	mintSubagentDelegation,
 } from "./agt/delegation.js";
 import { spawnCircuitOpen } from "./agt/sre-hooks.js";
+import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
+import { captureHarnessEvent } from "./harness-posthog.js";
 import {
 	getLatestRunContext,
 	getRunIdFromSession,
 	type HarnessPhase,
 } from "./harness-run-context.js";
-import { parseSpawnContextFromTask } from "./harness-spawn-parse.js";
-import { subagentGovernanceExtensionPath } from "../extensions/subagent-governance.js";
-import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
-import { captureHarnessEvent } from "./harness-posthog.js";
 import {
 	checkHarnessSpawnBudget,
 	countHarnessAgentsInRequest,
@@ -34,11 +34,11 @@ import {
 	recordSpawnEnd,
 	recordSpawnStart,
 } from "./harness-spawn-budget.js";
+import { parseSpawnContextFromTask } from "./harness-spawn-parse.js";
 import {
 	isUsableApiKey,
 	resolveConcreteSubagentModel,
 } from "./harness-subagent-auth.js";
-import { getAgentKind } from "./agents-policy.mjs";
 import {
 	inferPhaseForPrecheck,
 	precheckHarnessSubagentSpawn,

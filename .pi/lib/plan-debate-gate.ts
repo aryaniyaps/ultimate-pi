@@ -5,8 +5,8 @@
 import { constants } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { isHarnessBudgetEnforceOn } from "./harness-budget-enforce.js";
 import { capsForDebate } from "./debate-bus-core.js";
+import { isHarnessBudgetEnforceOn } from "./harness-budget-enforce.js";
 import type { DebateEligibilityResult } from "./plan-debate-eligibility.js";
 import {
 	getPlanFocusCoverage,

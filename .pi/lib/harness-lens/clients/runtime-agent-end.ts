@@ -1,7 +1,7 @@
 import * as nodeFs from "node:fs";
-import { runFormatPhase, resyncLspFile } from "./pipeline.js";
 import type { FormatService } from "./format-service.js";
 import { logLatency } from "./latency-logger.js";
+import { resyncLspFile, runFormatPhase } from "./pipeline.js";
 import type { RuntimeCoordinator } from "./runtime-coordinator.js";
 
 interface AgentEndDeps {

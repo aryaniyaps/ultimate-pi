@@ -1,5 +1,5 @@
-import type { PlanPacketLike } from "../harness-run-context.js";
 import type { AskResponse, DialogResult } from "../ask-user/types.js";
+import type { PlanPacketLike } from "../harness-run-context.js";
 
 export const DEFAULT_PLAN_APPROVAL_OPTIONS = [
 	"Approve",

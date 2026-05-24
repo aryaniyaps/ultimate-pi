@@ -485,7 +485,7 @@ export const rustfmtFormatter: FormatterInfo = {
 		const rustProject = (await findUp(["Cargo.toml"], cwd)).length > 0;
 		if (!rustProject) return false;
 		if ((await which("rustup")) === null) return false;
-	// rustfmt: PATH-only; no lazy gem/rustup install from harness-lens
+		// rustfmt: PATH-only; no lazy gem/rustup install from harness-lens
 		return (await which("rustfmt")) !== null;
 	},
 };
@@ -596,7 +596,7 @@ export const rubocopFormatter: FormatterInfo = {
 	async detect(cwd: string) {
 		if (!hasRubocopConfig(cwd)) return false;
 		if ((await which("rubocop")) !== null) return true;
-	// rubocop: PATH-only; no lazy gem install from harness-lens
+		// rubocop: PATH-only; no lazy gem install from harness-lens
 		return (await which("rubocop")) !== null;
 	},
 };

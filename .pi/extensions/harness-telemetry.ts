@@ -9,12 +9,12 @@
 
 import { createHash } from "node:crypto";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	captureHarnessEvent,
 	type HarnessPostHogEventName,
 	shutdownHarnessPostHog,
 } from "../lib/harness-posthog.js";
+import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 

@@ -4,6 +4,7 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import type { PlanPacketLike } from "../lib/harness-run-context.js";
 import {
 	appendPlanApprovalIfNew,
@@ -12,7 +13,6 @@ import {
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
 } from "../lib/harness-run-context.js";
-import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	CREATE_PLAN_GUIDELINES,
 	CREATE_PLAN_SNIPPET,

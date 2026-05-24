@@ -6,11 +6,11 @@ import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { validateAgainstHarnessSchema } from "./harness-schema-validate.js";
 import { resolveGuardedRunDir } from "./harness-subagent-submit-path.js";
-import { writeYamlFile } from "./harness-yaml.js";
 import {
 	resolveArtifactRelPath,
 	type SubmitToolSpec,
 } from "./harness-subagent-submit-registry.js";
+import { writeYamlFile } from "./harness-yaml.js";
 import {
 	type ApplyDebateLaneResult,
 	applyDebateLaneFromDoc,

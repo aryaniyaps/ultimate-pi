@@ -5,6 +5,14 @@
 import { appendFile, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
+	type DebateState,
+	getDebateState,
+	getLastSeverity,
+	type SeverityScores,
+	setDebateState,
+	setLastSeverity,
+} from "./debate-bus-state.js";
+import {
 	type DebateParticipant,
 	debatePhaseFromId,
 	isPlanDebateId,
@@ -15,14 +23,6 @@ import {
 	isHarnessBudgetEnforceOn,
 	shouldEmitBlockingBudgetExhausted,
 } from "./harness-budget-enforce.js";
-import {
-	type DebateState,
-	getDebateState,
-	getLastSeverity,
-	type SeverityScores,
-	setDebateState,
-	setLastSeverity,
-} from "./debate-bus-state.js";
 import {
 	type DebateProfile,
 	PLAN_BUDGET_FAST,

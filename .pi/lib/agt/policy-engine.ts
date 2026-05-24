@@ -41,7 +41,10 @@ function loadYamlFile(engine: PolicyEngine, path: string): void {
 	engine.loadYaml(raw);
 }
 
-function loadProjectPolicyDir(engine: PolicyEngine, projectRoot: string): string[] {
+function loadProjectPolicyDir(
+	engine: PolicyEngine,
+	projectRoot: string,
+): string[] {
 	const dir = resolveProjectPoliciesDir(projectRoot);
 	const loaded: string[] = [];
 	if (!existsSync(dir)) return loaded;
@@ -60,7 +63,9 @@ export interface CreateAgtPolicyEngineInput {
 	projectRoot: string;
 }
 
-export function createAgtPolicyEngine(input: CreateAgtPolicyEngineInput): PolicyEngine {
+export function createAgtPolicyEngine(
+	input: CreateAgtPolicyEngineInput,
+): PolicyEngine {
 	const engine = new PolicyEngine([], ConflictResolutionStrategy.DenyOverrides);
 	const dir = resolveHarnessPoliciesDir(input.packageRoot);
 	for (const file of PACKAGE_POLICY_FILES) {

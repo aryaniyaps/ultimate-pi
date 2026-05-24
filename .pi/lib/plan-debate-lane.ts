@@ -5,10 +5,7 @@
 import { constants } from "node:fs";
 import { access, mkdir } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import {
-	parseStructuredDocument,
-	writeYamlFile,
-} from "./harness-yaml.js";
+import { parseStructuredDocument, writeYamlFile } from "./harness-yaml.js";
 import { postMessengerMessage } from "./plan-messenger.js";
 
 export type DebateLaneKind =

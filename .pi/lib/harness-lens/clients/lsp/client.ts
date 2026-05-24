@@ -13,12 +13,12 @@ import { EventEmitter } from "node:events";
 import { existsSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import type { MessageConnection } from "vscode-jsonrpc";
-import { logLatency } from "../latency-logger.js";
 import {
 	createMessageConnection,
 	StreamMessageReader,
 	StreamMessageWriter,
 } from "vscode-jsonrpc/node.js";
+import { logLatency } from "../latency-logger.js";
 
 import type { LSPProcess } from "./launch.js";
 import { normalizeMapKey, uriToPath } from "./path-utils.js";

@@ -5,9 +5,12 @@
 
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { getAgentKind, harnessSubagentPhaseHint } from "../lib/agents-policy.mjs";
-import { claimSubagentGovernanceLoad } from "../lib/extension-load-guard.js";
+import {
+	getAgentKind,
+	harnessSubagentPhaseHint,
+} from "../lib/agents-policy.mjs";
 import { evaluateAgtToolCall } from "../lib/agt-tool-guard.js";
+import { claimSubagentGovernanceLoad } from "../lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import { registerHarnessSubagentSubmitTools } from "../lib/harness-subagent-submit-register.js";
 

@@ -3,10 +3,7 @@ import { appendPolicyAuditEvent } from "./agt/audit-run-sink.js";
 import type { BuildEvaluationContextInput } from "./agt/build-evaluation-context.js";
 import { evaluateHarnessToolPolicy } from "./agt/evaluate-policy.js";
 import { recordHarnessPolicyDeny } from "./agt/kill-switch-state.js";
-import {
-	recordPolicyAllow,
-	recordPolicyDeny,
-} from "./agt/trust-run-store.js";
+import { recordPolicyAllow, recordPolicyDeny } from "./agt/trust-run-store.js";
 import { getHarnessPackageRoot } from "./harness-paths.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";

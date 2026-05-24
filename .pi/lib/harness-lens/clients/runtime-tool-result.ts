@@ -1,12 +1,12 @@
 import * as nodeCrypto from "node:crypto";
 import * as nodeFs from "node:fs";
 import * as path from "node:path";
-import { getFormatService } from "./format-service.js";
 import { isPathIgnoredByProject } from "./file-utils.js";
+import { getFormatService } from "./format-service.js";
 import { logLatency } from "./latency-logger.js";
-import { runPipeline, type PipelineResult } from "./pipeline.js";
-import { resolveProjectRootForFile } from "./project-profile.js";
 import { isExternalOrVendorFile } from "./path-utils.js";
+import { type PipelineResult, runPipeline } from "./pipeline.js";
+import { resolveProjectRootForFile } from "./project-profile.js";
 import type { RuntimeCoordinator } from "./runtime-coordinator.js";
 
 interface ToolResultEvent {

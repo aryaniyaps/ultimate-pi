@@ -22,6 +22,7 @@ import {
 	isGitCommitOrPushAttempt,
 } from "./clients/git-guard.js";
 import { retargetReplacementIndentation } from "./clients/indent-retarget.js";
+import { ensureTool } from "./clients/installer/index.js";
 import {
 	loadPiLensGlobalConfig,
 	resolvePiLensFlag,
@@ -29,7 +30,6 @@ import {
 import { initLensEvents } from "./clients/lens-events.js";
 import { initLSPConfig } from "./clients/lsp/config.js";
 import { getLSPService, resetLSPService } from "./clients/lsp/index.js";
-import { ensureTool } from "./clients/installer/index.js";
 import { isExternalOrVendorFile } from "./clients/path-utils.js";
 import {
 	detectProjectProfile,
@@ -93,8 +93,14 @@ function getToolCallRawFilePath(
 ): string | undefined {
 	const inputObj = (event.input ?? {}) as Record<string, unknown>;
 	if (
-		isToolCallEventType("write", event as Parameters<typeof isToolCallEventType>[1]) ||
-		isToolCallEventType("edit", event as Parameters<typeof isToolCallEventType>[1])
+		isToolCallEventType(
+			"write",
+			event as Parameters<typeof isToolCallEventType>[1],
+		) ||
+		isToolCallEventType(
+			"edit",
+			event as Parameters<typeof isToolCallEventType>[1],
+		)
 	) {
 		const filePath = (event.input as { path?: unknown }).path;
 		return typeof filePath === "string" ? filePath : undefined;
@@ -109,7 +115,10 @@ function getToolCallRawFilePath(
 	return undefined;
 }
 
-function shouldSkipLspAutoTouch(filePath: string, projectRoot: string): boolean {
+function shouldSkipLspAutoTouch(
+	filePath: string,
+	projectRoot: string,
+): boolean {
 	const normalized = path.resolve(filePath).replace(/\\/g, "/").toLowerCase();
 	if (normalized.includes("/.pi/harness/.lens/")) return true;
 	if (normalized.includes("/.harness/")) return true;
@@ -181,9 +190,7 @@ function applyEditAutopatch(
 		newText?: string;
 		edits?: Array<{ oldText?: string; newText?: string }>;
 	},
-):
-	| { block: true; reason: string }
-	| undefined {
+): { block: true; reason: string } | undefined {
 	const oldTexts: EditIndentTarget[] = editInput.oldText
 		? [
 				{
@@ -337,7 +344,8 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 		if (typeof piFlags.getFlag === "function") return piFlags.getFlag(name);
 		return process.argv.includes(`--${name}`) ? true : undefined;
 	};
-	const getFlag = (name: string) => getLensFlag(name, readCliFlag, globalConfig);
+	const getFlag = (name: string) =>
+		getLensFlag(name, readCliFlag, globalConfig);
 
 	pi.registerFlag("no-lens", {
 		description: "Disable harness-lens for this session.",
@@ -394,7 +402,9 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 
 		const profile = detectProjectProfile(cwd);
 		const tools = lspPreinstallTools(profile);
-		dbg(`session_start profile kinds=${profile.detectedKinds.join(",")} lsp=${tools.join(",")}`);
+		dbg(
+			`session_start profile kinds=${profile.detectedKinds.join(",")} lsp=${tools.join(",")}`,
+		);
 		for (const toolId of tools) {
 			void ensureTool(toolId).catch((err) => {
 				dbg(`session_start lsp preinstall ${toolId} failed: ${err}`);
@@ -480,7 +490,12 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 			}
 		}
 
-		if (isToolCallEventType("edit", event as Parameters<typeof isToolCallEventType>[1])) {
+		if (
+			isToolCallEventType(
+				"edit",
+				event as Parameters<typeof isToolCallEventType>[1],
+			)
+		) {
 			const editInput = (event as { input?: unknown }).input as {
 				oldText?: string;
 				newText?: string;

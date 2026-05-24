@@ -6,13 +6,10 @@ import {
 	type AgentConfig,
 	agentAllowsMutatingTools,
 } from "../../vendor/pi-subagents/src/agents.js";
-import {
-	type HarnessPhase,
-	inferHarnessPhase,
-} from "./harness-run-context.js";
-import { validateHarnessSpawnTopology } from "./harness-spawn-topology.js";
 import { getAgentKind } from "./agents-policy.mjs";
 import { getHarnessPackageRoot } from "./harness-paths.js";
+import { type HarnessPhase, inferHarnessPhase } from "./harness-run-context.js";
+import { validateHarnessSpawnTopology } from "./harness-spawn-topology.js";
 
 export interface SubagentTaskRef {
 	agent: string;

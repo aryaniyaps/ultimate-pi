@@ -10,6 +10,7 @@
 import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { captureHarnessEvent } from "../lib/harness-posthog.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	getLatestRunContext,
@@ -20,7 +21,6 @@ import {
 	phaseTraceFileName,
 	saveRunContextToDisk,
 } from "../lib/harness-run-context.js";
-import { captureHarnessEvent } from "../lib/harness-posthog.js";
 
 interface ToolSpan {
 	tool_call_id: string;

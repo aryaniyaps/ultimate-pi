@@ -2,7 +2,7 @@ import path from "node:path";
 
 /**
  * Language ID Mappings for LSP
- * 
+ *
  * Maps file extensions to LSP language identifiers.
  */
 
@@ -106,7 +106,7 @@ export const LANGUAGE_EXTENSIONS: Record<string, string> = {
 
 	// Docker
 	".dockerfile": "dockerfile",
-	"Dockerfile": "dockerfile",
+	Dockerfile: "dockerfile",
 
 	// Terraform
 	".tf": "terraform",

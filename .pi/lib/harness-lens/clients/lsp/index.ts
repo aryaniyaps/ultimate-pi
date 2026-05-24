@@ -11,9 +11,10 @@
 import * as nodeFs from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { recordLsp } from "../widget-state.js";
 import { logLatency } from "../latency-logger.js";
 import { normalizeMapKey, uriToPath } from "../path-utils.js";
+import { recordLsp } from "../widget-state.js";
+import { raceToCompletion } from "./aggregation.js";
 import type { LSPClientInfo } from "./client.js";
 import { createLSPClient } from "./client.js";
 import { getServersForFileWithConfig } from "./config.js";
@@ -21,7 +22,6 @@ import { getLanguageId } from "./language.js";
 import type { LSPServerInfo } from "./server.js";
 import { isDirectLspCommandTemporarilyUnavailable } from "./server.js";
 import { getStrategy } from "./server-strategies.js";
-import { raceToCompletion } from "./aggregation.js";
 
 // --- Types ---
 

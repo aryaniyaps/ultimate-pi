@@ -1,17 +1,17 @@
 import { allowsAgentTool } from "../agents-policy.mjs";
-import { evaluateSubagentToolCall } from "../harness-spawn-policy.js";
-import type { BuildEvaluationContextInput } from "./build-evaluation-context.js";
-import {
-	buildHarnessAgtEvaluationContext,
-	harnessSessionToolDenyReason,
-	type HarnessAgtContext,
-} from "./build-evaluation-context.js";
 import { evaluateContextModeMutation } from "../harness-context-mode-policy.js";
 import {
 	extractWritePathFromToolInput,
 	getLatestRunContext,
 	isPlanPhaseAllowedMutation,
 } from "../harness-run-context.js";
+import { evaluateSubagentToolCall } from "../harness-spawn-policy.js";
+import type { BuildEvaluationContextInput } from "./build-evaluation-context.js";
+import {
+	buildHarnessAgtEvaluationContext,
+	type HarnessAgtContext,
+	harnessSessionToolDenyReason,
+} from "./build-evaluation-context.js";
 
 /** Combined legacy path for HARNESS_AGT_POLICY=0 parity tests. */
 export async function evaluateLegacyHarnessToolPolicy(

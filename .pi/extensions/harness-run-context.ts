@@ -16,6 +16,9 @@ import {
 import { basename, dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
+import { allowsAgentTool } from "../lib/agents-policy.mjs";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
+import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import {
 	canonicalPlanPath,
 	claimRunOwnership,
@@ -67,17 +70,14 @@ import {
 	validatePlanOverridePath,
 	validatePlanPacket,
 } from "../lib/harness-run-context.js";
+import { blockRunContextMessage } from "../lib/harness-run-context-responses.js";
+import { isSubmitToolName } from "../lib/harness-subagent-submit-registry.js";
+import { bootstrapHarnessSubprocessFromEnv } from "../lib/harness-subprocess-bootstrap.js";
 import {
 	normalizeHarnessYamlContent,
 	parseStructuredDocument,
 	writeYamlFile,
 } from "../lib/harness-yaml.js";
-import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
-import { getHarnessPackageRoot } from "../lib/harness-paths.js";
-import { blockRunContextMessage } from "../lib/harness-run-context-responses.js";
-import { allowsAgentTool } from "../lib/agents-policy.mjs";
-import { isSubmitToolName } from "../lib/harness-subagent-submit-registry.js";
-import { bootstrapHarnessSubprocessFromEnv } from "../lib/harness-subprocess-bootstrap.js";
 import { isReviewRoundArtifactPath } from "../lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js";
 

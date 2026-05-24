@@ -3,7 +3,6 @@ import {
 	getAgentKind,
 	isHarnessPlanningAgent,
 } from "../agents-policy.mjs";
-import { evaluateSubagentToolCall } from "../harness-spawn-policy.js";
 import {
 	evaluateContextModeMutation,
 	isMutatingBash,
@@ -11,11 +10,12 @@ import {
 import {
 	extractWritePathFromToolInput,
 	getLatestRunContext,
-	isHarnessAutoSession,
-	isPlanPhaseAllowedMutation,
 	type HarnessPhase,
 	type HarnessRunContext,
+	isHarnessAutoSession,
+	isPlanPhaseAllowedMutation,
 } from "../harness-run-context.js";
+import { evaluateSubagentToolCall } from "../harness-spawn-policy.js";
 
 export interface BuildEvaluationContextInput {
 	toolName: string;
@@ -135,11 +135,7 @@ export async function buildHarnessAgtEvaluationContext(
 	const agentId = resolveAgentId();
 	const isSubprocess = process.env.PI_HARNESS_SUBPROCESS === "1";
 	const isParentOrchestrator = agentId === "parent-orchestrator";
-	const agentKind = getAgentKind(
-		input.packageRoot,
-		input.projectRoot,
-		agentId,
-	);
+	const agentKind = getAgentKind(input.packageRoot, input.projectRoot, agentId);
 	const runCtx = getLatestRunContext(input.entries);
 	const phase = input.policyState.phase;
 	const bashCommand =
@@ -164,18 +160,17 @@ export async function buildHarnessAgtEvaluationContext(
 				)
 			: { allowed: true };
 
-	const ctxMode =
-		sessionActive
-			? evaluateContextModeMutation(input.toolName, input.toolInput, phase, {
-					aborted: input.policyState.aborted,
-					budgetBypass: input.policyState.budgetBypass,
-					readOnlyAgent:
-						agentKind === "planner" ||
-						agentKind === "evaluator" ||
-						agentKind === "adversary" ||
-						agentKind === "tie_breaker",
-				})
-			: { blocked: false, reason: "" };
+	const ctxMode = sessionActive
+		? evaluateContextModeMutation(input.toolName, input.toolInput, phase, {
+				aborted: input.policyState.aborted,
+				budgetBypass: input.policyState.budgetBypass,
+				readOnlyAgent:
+					agentKind === "planner" ||
+					agentKind === "evaluator" ||
+					agentKind === "adversary" ||
+					agentKind === "tie_breaker",
+			})
+		: { blocked: false, reason: "" };
 
 	const spawnDecision = evaluateSubagentToolCall(input.toolName, agentId);
 

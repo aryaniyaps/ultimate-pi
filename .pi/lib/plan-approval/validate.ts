@@ -1,9 +1,9 @@
+import type { AskResponse } from "../ask-user/types.js";
+import { formatResultText } from "../ask-user/validate.js";
 import {
 	type PlanPacketLike,
 	validatePlanPacket,
 } from "../harness-run-context.js";
-import type { AskResponse } from "../ask-user/types.js";
-import { formatResultText } from "../ask-user/validate.js";
 import type {
 	ApprovePlanParams,
 	ApprovePlanToolDetails,

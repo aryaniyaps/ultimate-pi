@@ -533,7 +533,9 @@ const ALL_TOOLS: ToolDefinition[] = [
 				if (platform === "linux")
 					return arch === "arm64" ? "linux_arm64.tar.gz" : "linux_amd64.tar.gz";
 				if (platform === "darwin")
-					return arch === "arm64" ? "darwin_arm64.tar.gz" : "darwin_amd64.tar.gz";
+					return arch === "arm64"
+						? "darwin_arm64.tar.gz"
+						: "darwin_amd64.tar.gz";
 				if (platform === "win32")
 					return arch === "arm64" ? "windows_arm64.zip" : "windows_amd64.zip";
 				return undefined;

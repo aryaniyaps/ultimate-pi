@@ -12,7 +12,6 @@
  */
 
 import * as path from "node:path";
-import { recordFormatter } from "./widget-state.js";
 import { FileTime } from "./file-time.js";
 import {
 	clearFormatterRuntimeState,
@@ -21,6 +20,7 @@ import {
 	formatFile,
 	getFormattersForFile,
 } from "./formatters.js";
+import { recordFormatter } from "./widget-state.js";
 
 // --- Configuration ---
 

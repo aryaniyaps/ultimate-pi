@@ -243,7 +243,10 @@ export async function applyWorkspaceEdit(
 			if (typeof change !== "object" || change === null || !("kind" in change))
 				continue;
 			const kind = (change as { kind?: unknown }).kind;
-			if (kind === "create" && typeof (change as CreateFileOp).uri === "string") {
+			if (
+				kind === "create" &&
+				typeof (change as CreateFileOp).uri === "string"
+			) {
 				const filePath = uriToPath((change as CreateFileOp).uri);
 				await fs.mkdir(path.dirname(filePath), { recursive: true });
 				await fs

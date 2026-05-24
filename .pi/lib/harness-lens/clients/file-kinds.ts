@@ -44,30 +44,15 @@ export type FileKind =
 	| "terraform" // Terraform
 	| "toml" // TOML
 	| "yaml" // YAML
-	| "zig" // Zig
-	;
+	| "zig"; // Zig
 
 // --- Extension Maps ---
 
 export const KIND_EXTENSIONS: Record<FileKind, readonly string[]> = {
-	clojure: [
-		".clj",
-		".cljc",
-		".cljs",
-		".edn",
-	],
-	cmake: [
-		".cmake",
-	],
-	csharp: [
-		".cs",
-	],
-	css: [
-		".css",
-		".less",
-		".sass",
-		".scss",
-	],
+	clojure: [".clj", ".cljc", ".cljs", ".edn"],
+	cmake: [".cmake"],
+	csharp: [".cs"],
+	css: [".css", ".less", ".sass", ".scss"],
 	// From llvm-project/clang/lib/Driver/Types.cpp clang::driver::types::lookupTypeForExtension:
 	cxx: [
 		// C
@@ -103,46 +88,17 @@ export const KIND_EXTENSIONS: Record<FileKind, readonly string[]> = {
 		".cl",
 		".clcpp",
 	],
-	dart: [
-		".dart",
-	],
-	docker: [
-		".dockerfile",
-	],
-	elixir: [
-		".ex",
-		".exs",
-	],
-	fish: [
-		".fish",
-	],
-	fsharp: [
-		".fs",
-		".fsi",
-		".fsx",
-	],
-	gleam: [
-		".gleam",
-	],
-	go: [
-		".go",
-	],
-	haskell: [
-		".hs",
-		".lhs",
-	],
-	html: [
-		".htm",
-		".html",
-	],
-	java: [
-		".java",
-	],
-	json: [
-		".json",
-		".json5",
-		".jsonc",
-	],
+	dart: [".dart"],
+	docker: [".dockerfile"],
+	elixir: [".ex", ".exs"],
+	fish: [".fish"],
+	fsharp: [".fs", ".fsi", ".fsx"],
+	gleam: [".gleam"],
+	go: [".go"],
+	haskell: [".hs", ".lhs"],
+	html: [".htm", ".html"],
+	java: [".java"],
+	json: [".json", ".json5", ".jsonc"],
 	jsts: [
 		".cjs",
 		".cts",
@@ -155,74 +111,24 @@ export const KIND_EXTENSIONS: Record<FileKind, readonly string[]> = {
 		".tsx",
 		".vue",
 	],
-	kotlin: [
-		".kt",
-		".kts",
-	],
-	lua: [
-		".lua",
-	],
-	markdown: [
-		".md",
-		".mdx",
-	],
-	nix: [
-		".nix",
-	],
-	ocaml: [
-		".ml",
-		".mli",
-	],
-	php: [
-		".php",
-	],
-	powershell: [
-		".ps1",
-		".psm1",
-		".psd1",
-	],
-	prisma: [
-		".prisma",
-	],
-	python: [
-		".py",
-		".pyi",
-	],
-	ruby: [
-		".gemspec",
-		".rake",
-		".rb",
-		".ru",
-	],
-	rust: [
-		".rs",
-	],
-	shell: [
-		".bash",
-		".sh",
-		".zsh",
-	],
-	sql: [
-		".sql",
-	],
-	swift: [
-		".swift",
-	],
-	terraform: [
-		".tf",
-		".tfvars",
-	],
-	toml: [
-		".toml",
-	],
-	yaml: [
-		".yaml",
-		".yml",
-	],
-	zig: [
-		".zig",
-		".zon",
-	],
+	kotlin: [".kt", ".kts"],
+	lua: [".lua"],
+	markdown: [".md", ".mdx"],
+	nix: [".nix"],
+	ocaml: [".ml", ".mli"],
+	php: [".php"],
+	powershell: [".ps1", ".psm1", ".psd1"],
+	prisma: [".prisma"],
+	python: [".py", ".pyi"],
+	ruby: [".gemspec", ".rake", ".rb", ".ru"],
+	rust: [".rs"],
+	shell: [".bash", ".sh", ".zsh"],
+	sql: [".sql"],
+	swift: [".swift"],
+	terraform: [".tf", ".tfvars"],
+	toml: [".toml"],
+	yaml: [".yaml", ".yml"],
+	zig: [".zig", ".zon"],
 };
 
 // Reverse map: extension → file kind (for fast lookup)
@@ -343,9 +249,16 @@ export function isCodeKind(kind: FileKind): boolean {
  * Check if a file kind represents a text/config file.
  */
 export function isConfigKind(kind: FileKind): boolean {
-	return ["json", "yaml", "markdown", "css", "sql", "docker", "cmake", "toml"].includes(
-		kind,
-	);
+	return [
+		"json",
+		"yaml",
+		"markdown",
+		"css",
+		"sql",
+		"docker",
+		"cmake",
+		"toml",
+	].includes(kind);
 }
 
 /**
