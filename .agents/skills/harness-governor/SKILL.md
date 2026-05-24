@@ -14,11 +14,12 @@ description: Enforce harness governance phases, policy gates, budgets, and promo
 ## Workflow
 
 1. Read current phase from `/harness-policy-status` or session `harness-policy-state`.
-2. Check ADRs: constitution (0001), eval promotion (0003), Sentrux (0006), drift (0007), rules lifecycle (0009).
-3. For promotion: require eval pass, no abort lock, debate consensus if escalated, Sentrux when `HARNESS_SENTRUX_REQUIRED=true` (`artifacts/sentrux-signal.yaml` from `/harness-run`, not executor self-report).
-4. **Intent vs observation:** Manifest/layer/boundary changes → `/harness-sentrux-steward` proposal + chair approval + ADR when material, then `sentrux-rules-sync --force`. `sentrux check`/`gate` degradation after execute → replan or fix code — do not tune manifest on a single noisy gate.
-5. After approved manifest edits: `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync`; emit `harness-architecture-changed` for the extension.
-5. Run `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` before claiming release readiness.
+2. Check ADRs: constitution (0001), eval promotion (0003), Sentrux (0006), drift (0007), rules lifecycle (0009), AGT policy (0046), AGT security layers (0047).
+3. Tool allow/deny is enforced by AGT `PolicyEngine` + `.pi/harness/policies/*.yaml` (parent `policy-gate`, subprocess `harness-subagent-governance`). Disable with `HARNESS_AGT_POLICY=0`. Audit: `.pi/harness/runs/<run_id>/agt-audit.jsonl`.
+4. For promotion: require eval pass, no abort lock, debate consensus if escalated, Sentrux when `HARNESS_SENTRUX_REQUIRED=true` (`artifacts/sentrux-signal.yaml` from `/harness-run`, not executor self-report).
+5. **Intent vs observation:** Manifest/layer/boundary changes → `/harness-sentrux-steward` proposal + chair approval + ADR when material, then `sentrux-rules-sync --force`. `sentrux check`/`gate` degradation after execute → replan or fix code — do not tune manifest on a single noisy gate.
+6. After approved manifest edits: `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync`; emit `harness-architecture-changed` for the extension.
+7. Run `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` before claiming release readiness (includes AGT policy doctor).
 
 ## Spec Distiller integration
 

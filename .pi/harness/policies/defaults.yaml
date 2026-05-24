@@ -1,0 +1,50 @@
+apiVersion: governance.toolkit/v1
+name: harness-defaults
+description: Fail-closed default; explicit allow when no harness blocks fire.
+default_action: deny
+rules:
+  - name: deny-abort-mutation
+    priority: 2000
+    ruleAction: deny
+    condition: abort_mutating_block == true
+    description: harness-abort lock blocks mutating tools
+  - name: deny-plan-mutation
+    priority: 1900
+    ruleAction: deny
+    condition: plan_mutation_block == true
+  - name: deny-context-mode
+    priority: 1800
+    ruleAction: deny
+    condition: context_mode_block == true
+  - name: deny-subagent-policy
+    priority: 1700
+    ruleAction: deny
+    condition: subagent_policy_block == true
+  - name: deny-spawn-policy
+    priority: 1650
+    ruleAction: deny
+    condition: spawn_policy_block == true
+  - name: deny-mutating-bash-phase
+    priority: 1600
+    ruleAction: deny
+    condition: mutating_bash_phase_block == true
+  - name: deny-eval-plan-packet-write
+    priority: 1550
+    ruleAction: deny
+    condition: eval_plan_packet_write_block == true
+  - name: deny-bash-web-bypass
+    priority: 1500
+    ruleAction: deny
+    condition: bash_web_block == true
+  - name: deny-bash-planning-heavy
+    priority: 1450
+    ruleAction: deny
+    condition: bash_planning_deny == true
+  - name: deny-bash-planning-json-artifact
+    priority: 1440
+    ruleAction: deny
+    condition: bash_planning_json_block == true
+  - name: allow-no-blocks
+    priority: 100
+    ruleAction: allow
+    condition: abort_mutating_block == false and plan_mutation_block == false and context_mode_block == false and subagent_policy_block == false and spawn_policy_block == false and mutating_bash_phase_block == false and eval_plan_packet_write_block == false and bash_web_block == false and bash_planning_deny == false and bash_planning_json_block == false

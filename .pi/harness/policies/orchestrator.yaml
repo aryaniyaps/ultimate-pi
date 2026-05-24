@@ -1,0 +1,18 @@
+apiVersion: governance.toolkit/v1
+name: harness-orchestrator
+description: Parent orchestrator submit_* and plan tools.
+default_action: allow
+rules:
+  - name: deny-parent-submit
+    priority: 2100
+    ruleAction: deny
+    condition: is_parent_orchestrator == true and is_submit_tool == true
+    description: submit_* is subprocess-only
+  - name: deny-subprocess-create-plan
+    priority: 2050
+    ruleAction: deny
+    condition: is_subprocess == true and tool_name == 'create_plan'
+  - name: deny-subprocess-approve-plan
+    priority: 2050
+    ruleAction: deny
+    condition: is_subprocess == true and tool_name == 'approve_plan'

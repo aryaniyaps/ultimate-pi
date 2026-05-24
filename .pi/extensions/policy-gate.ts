@@ -9,10 +9,7 @@
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import {
-	evaluateContextModeMutation,
-	isMutatingBash,
-} from "../lib/harness-context-mode-policy.js";
+import { isHarnessAgtPolicyEnabled } from "../lib/agt/config.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	extractWritePathFromToolInput,
@@ -32,6 +29,7 @@ import {
 	userVisiblePromptSlice,
 	validatePlanPacket,
 } from "../lib/harness-run-context.js";
+import { evaluateAgtHarnessToolCall } from "./lib/harness-agt-tool-guard.js";
 import { bootstrapHarnessSubprocessFromEnv } from "./lib/harness-subprocess-bootstrap.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
@@ -60,6 +58,9 @@ const PHASE_ORDER: HarnessPhase[] = [
 	"adversary",
 	"merge",
 ];
+
+// @ts-expect-error pi extensions run as ESM
+const MODULE_URL = import.meta.url;
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
 
@@ -250,6 +251,19 @@ export default function policyGate(pi: ExtensionAPI) {
 		const entries = ctx.sessionManager.getEntries();
 		const projectRoot = process.cwd();
 		const sessionId = ctx.sessionManager.getSessionId();
+
+		if (isHarnessAgtPolicyEnabled()) {
+			return evaluateAgtHarnessToolCall({
+				moduleUrl: MODULE_URL,
+				toolName: event.toolName,
+				toolInput: event.input as Record<string, unknown>,
+				policyState: state,
+				entries,
+				sessionId,
+				projectRoot,
+			});
+		}
+
 		const runCtx = getLatestRunContext(entries);
 
 		if (MUTATING_TOOLS.has(event.toolName)) {
@@ -274,6 +288,9 @@ export default function policyGate(pi: ExtensionAPI) {
 
 		if (event.toolName === "bash") {
 			const command = String(event.input.command ?? "");
+			const { isMutatingBash } = await import(
+				"../lib/harness-context-mode-policy.js"
+			);
 			if (!isMutatingBash(command)) return undefined;
 			if (state.aborted) {
 				return {
@@ -290,6 +307,9 @@ export default function policyGate(pi: ExtensionAPI) {
 			}
 		}
 
+		const { evaluateContextModeMutation } = await import(
+			"../lib/harness-context-mode-policy.js"
+		);
 		const ctxDecision = evaluateContextModeMutation(
 			event.toolName,
 			event.input as Record<string, unknown>,

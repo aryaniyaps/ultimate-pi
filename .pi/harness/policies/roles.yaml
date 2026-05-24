@@ -1,0 +1,5 @@
+apiVersion: governance.toolkit/v1
+name: harness-roles
+description: Role matrix enforced via subagent_policy_block precompute.
+default_action: allow
+rules: []

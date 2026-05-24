@@ -43,6 +43,9 @@ const REQUIRED_ADRS = [
 	"0038-budget-telemetry-only.md",
 	"0040-practice-grounded-orchestration.md",
 	"0045-harness-lens-minimal-contract.md",
+	"0046-agt-policy-engine.md",
+	"0047-agt-layered-security.md",
+	"0048-tool-call-hook-order.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -324,6 +327,11 @@ async function main() {
 	if (!bridgeSrc.includes("packageRoot")) {
 		fail("harness-subagents-bridge must pass packageRoot for agent discovery");
 	}
+	if (!bridgeSrc.includes("harnessSubagentGovernanceExtensionPath")) {
+		fail(
+			"harness-subagents-bridge must use harness-subagent-governance subprocess bundle",
+		);
+	}
 	const subagentsSrc = await readFile(subagentsVendor, "utf-8");
 	if (!subagentsSrc.includes("discoverAgents")) {
 		fail("vendor subagents.ts must implement discoverAgents");
@@ -345,12 +353,42 @@ async function main() {
 	if (!policyGateSrc.includes('pi.on("tool_call", async (event, ctx)')) {
 		fail("policy-gate tool_call must receive ctx for run context");
 	}
-	if (!policyGateSrc.includes("evaluateContextModeMutation")) {
-		fail(
-			"policy-gate.ts must evaluate context-mode execute tools via evaluateContextModeMutation",
-		);
+	if (!policyGateSrc.includes("evaluateAgtHarnessToolCall")) {
+		fail("policy-gate.ts must delegate tool_call to AGT evaluateAgtHarnessToolCall");
 	}
-	ok("policy-gate plan-phase writes");
+	const govPath = join(
+		ROOT,
+		".pi",
+		"extensions",
+		"harness-subagent-governance.ts",
+	);
+	if (!(await fileExists(govPath))) {
+		fail("missing harness-subagent-governance.ts subprocess bundle");
+	}
+	ok("policy-gate + subprocess governance");
+
+	const agtDoctorPath = join(ROOT, ".pi", "scripts", "harness-agt-doctor.ts");
+	const { code: agtDoctorCode, out: agtDoctorOut } = await new Promise(
+		(resolve) => {
+			const child = spawn(
+				"npx",
+				["-y", "tsx", agtDoctorPath],
+				{ cwd: ROOT, stdio: ["ignore", "pipe", "pipe"], shell: true },
+			);
+			let out = "";
+			child.stdout?.on("data", (d) => {
+				out += d.toString();
+			});
+			child.stderr?.on("data", (d) => {
+				out += d.toString();
+			});
+			child.on("close", (code) => resolve({ code: code ?? 1, out }));
+		},
+	);
+	if (agtDoctorCode !== 0) {
+		fail(agtDoctorOut.trim() || "AGT policy doctor failed");
+	}
+	ok("AGT policy doctor");
 
 	const runCtxFixture = join(SMOKE, "run-context.fixture.json");
 	if (!(await fileExists(runCtxFixture))) {

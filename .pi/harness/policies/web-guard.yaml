@@ -1,0 +1,5 @@
+apiVersion: governance.toolkit/v1
+name: harness-web-guard
+description: Web fetch bypass blocks (precomputed bash_web_block).
+default_action: allow
+rules: []

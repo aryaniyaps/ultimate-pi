@@ -1,0 +1,90 @@
+[
+	{
+		"id": "parent-submit-deny",
+		"toolName": "submit_decomposition_brief",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"expect": "deny"
+	},
+	{
+		"id": "evaluator-write-deny",
+		"toolName": "write",
+		"agentId": "harness/reviewing/evaluator",
+		"phase": "evaluate",
+		"isSubprocess": true,
+		"expect": "deny"
+	},
+	{
+		"id": "executor-write-allow",
+		"toolName": "write",
+		"agentId": "harness/running/executor",
+		"phase": "execute",
+		"isSubprocess": true,
+		"input": { "path": "src/a.ts", "content": "x" },
+		"expect": "allow"
+	},
+	{
+		"id": "planner-read-allow",
+		"toolName": "read",
+		"agentId": "harness/planning/decompose",
+		"phase": "plan",
+		"isSubprocess": true,
+		"expect": "allow"
+	},
+	{
+		"id": "planner-graphify-update-deny",
+		"toolName": "bash",
+		"agentId": "harness/planning/scout",
+		"phase": "plan",
+		"isSubprocess": true,
+		"input": { "command": "graphify update ." },
+		"expect": "deny"
+	},
+	{
+		"id": "abort-mutating-bash-deny",
+		"toolName": "bash",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"aborted": true,
+		"input": { "command": "git commit -m x" },
+		"expect": "deny"
+	},
+	{
+		"id": "plan-phase-mutating-bash-deny",
+		"toolName": "bash",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"input": { "command": "git commit -m x" },
+		"expect": "deny"
+	},
+	{
+		"id": "execute-mutating-bash-allow",
+		"toolName": "bash",
+		"agentId": "harness/running/executor",
+		"phase": "execute",
+		"isSubprocess": true,
+		"input": { "command": "git status" },
+		"expect": "allow"
+	},
+	{
+		"id": "web-curl-deny",
+		"toolName": "bash",
+		"agentId": "harness/running/executor",
+		"phase": "execute",
+		"isSubprocess": true,
+		"input": { "command": "curl https://example.com" },
+		"expect": "deny"
+	},
+	{
+		"id": "web-harness-py-allow",
+		"toolName": "bash",
+		"agentId": "harness/running/executor",
+		"phase": "execute",
+		"isSubprocess": true,
+		"input": { "command": "python3 .pi/scripts/harness-web.py status" },
+		"expect": "allow"
+	}
+]

@@ -1,0 +1,5 @@
+apiVersion: governance.toolkit/v1
+name: harness-bash-denylists
+description: Planning scout bash patterns (precomputed in context).
+default_action: allow
+rules: []

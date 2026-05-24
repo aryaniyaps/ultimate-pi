@@ -1,0 +1,9 @@
+apiVersion: governance.toolkit/v1
+name: harness-workflow-sequences
+description: Multi-step workflow gates (observation-bus flags); extend as needed.
+default_action: allow
+rules:
+  - name: log-execute-phase
+    priority: 1
+    ruleAction: log
+    condition: harness_phase == 'execute'
