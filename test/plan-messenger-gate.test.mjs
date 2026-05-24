@@ -1,17 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { planDebateIdForRun, normalizePlanDebateId } from "../.pi/extensions/lib/plan-debate-id.ts";
+import { planDebateIdForRun, normalizePlanDebateId } from "../.pi/lib/plan-debate-id.ts";
 import {
 	messengerRoundDebateReady,
 	messengerRoundDialogueReady,
-} from "../.pi/extensions/lib/plan-messenger.ts";
-import { validateIntegratorDraft } from "../.pi/extensions/lib/plan-review-integrator-rules.ts";
-import { assessPlanScopeDrift } from "../.pi/extensions/lib/plan-scope-guard.ts";
-import { isReviewRoundArtifactPath } from "../.pi/extensions/lib/plan-debate-gate.ts";
+} from "../.pi/lib/plan-messenger.ts";
+import { validateIntegratorDraft } from "../.pi/lib/plan-review-integrator-rules.ts";
+import { assessPlanScopeDrift } from "../.pi/lib/plan-scope-guard.ts";
+import { isReviewRoundArtifactPath } from "../.pi/lib/plan-debate-gate.ts";
 import {
 	extractClaimIds,
 	laneArtifactPath,
-} from "../.pi/extensions/lib/plan-debate-lane.ts";
+} from "../.pi/lib/plan-debate-lane.ts";
 
 test("planDebateIdForRun uses run_id", () => {
 	assert.equal(planDebateIdForRun("run-abc"), "plan-run-abc");

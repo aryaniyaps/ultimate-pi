@@ -9,7 +9,7 @@ import {
 	formatPlanPacketMarkdown,
 	formatResearchBriefMarkdown,
 	writePlanReviewMarkdown,
-} from "../.pi/extensions/lib/plan-approval/plan-review.ts";
+} from "../.pi/lib/plan-approval/plan-review.ts";
 import { createFreshRunContext } from "../.pi/lib/harness-run-context.ts";
 
 const samplePacket = {

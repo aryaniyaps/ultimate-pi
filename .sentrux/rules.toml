@@ -23,9 +23,9 @@ order = 0
 
 [[layers]]
 name = "contracts"
-paths = [".pi/harness/specs/*", ".pi/harness/docs/*"]
+paths = [".pi/harness/specs/*", ".pi/harness/docs/*", ".pi/harness/policies/*", ".pi/harness/agents.policy.yaml", ".pi/harness/examples/*"]
 order = 1
-# Harness schemas, ADRs, and governance docs
+# Harness schemas, ADRs, AGT policies, and agents.policy SSOT
 
 [[layers]]
 name = "runtime"
@@ -44,6 +44,12 @@ name = "tooling"
 paths = [".pi/scripts/*"]
 order = 4
 # Harness CLI scripts
+
+[[layers]]
+name = "foundation"
+paths = [".pi/lib/*"]
+order = 5
+# Shared harness/AGT libraries (imported by extensions and scripts)
 
 [[boundaries]]
 from = ".agents/skills/*"
@@ -64,6 +70,16 @@ reason = "Knowledge graph output must not depend on harness runtime extensions"
 from = ".pi/harness/specs/*"
 to = ".pi/extensions/*"
 reason = "Contracts are data-only JSON schemas; extensions implement behavior"
+
+[[boundaries]]
+from = ".pi/lib/*"
+to = ".pi/extensions/*"
+reason = "Foundation lib must not import extension modules"
+
+[[boundaries]]
+from = ".pi/harness/policies/*"
+to = ".pi/extensions/*"
+reason = "Declarative AGT YAML must not depend on extension implementation"
 
 [[boundaries]]
 from = ".pi/scripts/*"

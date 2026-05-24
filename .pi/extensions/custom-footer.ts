@@ -16,7 +16,7 @@ import {
 	truncateToWidth,
 	visibleWidth,
 } from "@earendil-works/pi-tui";
-import { getLSPService } from "./lib/harness-lens/clients/lsp/index.js";
+import { getLSPService } from "../lib/harness-lens/clients/lsp/index.js";
 
 // ── token formatting ──────────────────────────────────────────────
 

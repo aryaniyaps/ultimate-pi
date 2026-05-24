@@ -153,9 +153,9 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 # Reinstall everything: bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh" --force
 ```
 
-**Required (script must exit 0):** scrapling + harness-web smoke, ctx7, biome, ast-grep (`sg`), sentrux (when harness manifest present).
+**Required (script must exit 0):** scrapling + harness-web smoke, ctx7, ast-grep (`sg`), sentrux (when harness manifest present).
 
-**Warnings allowed:** gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), cocoindex-code (empty corpus on tiny repos; first `[full]` install downloads local embedding model).
+**Warnings allowed:** biome (optional; skipped for non-JS/TS repos or if install fails), gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), cocoindex-code (empty corpus on tiny repos; first `[full]` install downloads local embedding model).
 
 If the script reports **agent-browser shared library errors** on Linux/WSL, run the fix it prints, then re-verify:
 
@@ -250,20 +250,20 @@ ccc status
 
 Verify: `ccc doctor` and `ccc search --limit 3 "export function"` (no `--refresh`).
 
-### 2.5 — biome (Lint + Format Gate)
+### 2.5 — biome (Optional, JS/TS-focused lint + format)
+
+Biome is **not a hard requirement** for harness setup. Install/use it when the target project is JS/TS (for example, has `package.json` or already uses `biome.json`). For other stacks, skip and use the repo's native formatter/linter.
 
 ```bash
-if ! command -v biome &>/dev/null || [ "$FORCE" = "true" ]; then
-	npm install -g @biomejs/biome
+if [ -f package.json ] || [ -f biome.json ]; then
+  if ! command -v biome &>/dev/null || [ "$FORCE" = "true" ]; then
+    npm install -g @biomejs/biome
+  fi
+  biome --version
+else
+  echo "Skipping biome (non-JS/TS repo; optional tool)"
 fi
 ```
-
-Check if project already has biome config:
-```bash
-ls biome.json 2>/dev/null && echo "biome.json found — using project config" || echo "No biome.json — using defaults"
-```
-
-Verify: `biome --version`
 
 ### 2.6 — ast-grep (AST-Aware Structural Code Search)
 
@@ -646,7 +646,7 @@ Output summary table:
 | ctx7 | ✓/✗ | Login: yes/no |
 | agent-browser | ✓/✗ | Config: .pi/harness/browser.json |
 | cocoindex-code | ✓/✗ | `ccc status`; index auto-refreshed before harness scouts |
-| biome | ✓/✗ | Project config: found/default |
+| biome | ✓/✗/skip | Optional; JS/TS-focused (skip on non-JS/TS stacks) |
 | ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
@@ -702,7 +702,7 @@ Next steps:
 | gh not installed | Show GitHub CLI install link. Skip label creation. |
 | pi packages install fail | Show error output. Check npm permissions. |
 | graph already exists | Report node count. Refresh with `graphify update .` unless user passed `--force`. |
-| biome.json missing | Create minimal config. |
+| biome.json missing | No action required. Biome is optional; use project-native tooling. |
 | settings.json not writable | Warn. Settings won't persist across sessions. |
 | No internet | Block for tool installs. Continue for graphify-only steps if `--skip-tools`. |
 | sentrux install fails | Show install script output. Fallback: download from https://github.com/sentrux/sentrux/releases/latest |

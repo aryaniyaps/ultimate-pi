@@ -12,9 +12,9 @@ const ROOT = resolve(new URL("../..", import.meta.url).pathname);
 const ALLOWED_FILES = new Set([
 	".pi/extensions/harness-web-guard.ts",
 	".pi/extensions/harness-web-tools.ts",
-	".pi/extensions/lib/harness-web/run-cli.ts",
+	".pi/lib/harness-web/run-cli.ts",
 	".pi/extensions/harness-run-context.ts",
-	".pi/extensions/lib/ask-user/schema.ts",
+	".pi/lib/ask-user/schema.ts",
 	".pi/scripts/harness-web.py",
 	".pi/scripts/harness-web-search.md",
 	".pi/scripts/harness-web-policy-guard.mjs",

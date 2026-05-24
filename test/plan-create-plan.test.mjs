@@ -5,7 +5,7 @@ import { parse as parseYaml } from "yaml";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { canonicalPlanPath } from "../.pi/lib/harness-run-context.ts";
-import { executeCreatePlan } from "../.pi/extensions/lib/plan-approval/create-plan.ts";
+import { executeCreatePlan } from "../.pi/lib/plan-approval/create-plan.ts";
 
 const samplePacket = {
 	schema_version: "1.0.0",

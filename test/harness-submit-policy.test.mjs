@@ -1,11 +1,30 @@
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
-import { evaluateHarnessSubagentToolCall } from "../.pi/extensions/lib/harness-subagent-policy.ts";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { allowsAgentTool } from "../.pi/lib/agents-policy.mjs";
 import {
-	SUBMIT_TOOLS_BY_AGENT,
 	specForSubmitTool,
-} from "../.pi/extensions/lib/harness-subagent-submit-registry.ts";
+} from "../.pi/lib/harness-subagent-submit-registry.ts";
 import { extractLastSubmitCall } from "../.pi/lib/harness-agent-output.ts";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = root;
+const projectRoot = root;
+
+function evaluateHarnessSubagentToolCall(toolName, toolInput, agentId) {
+	const isParent = agentId === "parent-orchestrator";
+	const allowed = allowsAgentTool({
+		packageRoot,
+		projectRoot,
+		agentId,
+		toolName,
+		toolInput,
+		isSubprocess: !isParent && Boolean(process.env.PI_HARNESS_SUBPROCESS),
+		isParentOrchestrator: isParent,
+	});
+	return allowed ? { action: "allow" } : { action: "block" };
+}
 
 describe("submit tool policy", () => {
 	test("parent session blocks submit_decomposition_brief", () => {
@@ -46,11 +65,15 @@ describe("submit tool policy", () => {
 		else delete process.env.PI_HARNESS_SUBPROCESS;
 	});
 
-	test("registry maps agents to tools", () => {
+	test("agents.policy.yaml grants decompose submit_decomposition_brief", () => {
 		assert.ok(
-			SUBMIT_TOOLS_BY_AGENT["harness/planning/decompose"]?.has(
-				"submit_decomposition_brief",
-			),
+			allowsAgentTool({
+				packageRoot,
+				projectRoot,
+				agentId: "harness/planning/decompose",
+				toolName: "submit_decomposition_brief",
+				isSubprocess: true,
+			}),
 		);
 		assert.ok(specForSubmitTool("submit_stack_brief"));
 	});

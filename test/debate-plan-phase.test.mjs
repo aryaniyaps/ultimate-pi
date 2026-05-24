@@ -7,19 +7,19 @@ import {
 	debatePhaseFromId,
 	isPlanDebateId,
 } from "../.pi/lib/debate-orchestrator-types.ts";
-import { capsForDebate } from "../.pi/extensions/lib/debate-bus-core.ts";
-import { lanesForRound } from "../.pi/extensions/lib/plan-debate-lanes.ts";
-import { buildPlanReviewRoundEnvelope } from "../.pi/extensions/lib/plan-debate-envelope.ts";
+import { capsForDebate } from "../.pi/lib/debate-bus-core.ts";
+import { lanesForRound } from "../.pi/lib/plan-debate-lanes.ts";
+import { buildPlanReviewRoundEnvelope } from "../.pi/lib/plan-debate-envelope.ts";
 import {
 	getPlanFocusCoverage,
 	planDebateOutcomeComplete,
 	PLAN_FOCUS_AREAS,
-} from "../.pi/extensions/lib/plan-debate-focus.ts";
+} from "../.pi/lib/plan-debate-focus.ts";
 import {
 	messengerRoundDialogueReady,
 	messengerRoundDebateReady,
 	syncRoundStateFromTranscript,
-} from "../.pi/extensions/lib/plan-messenger.ts";
+} from "../.pi/lib/plan-messenger.ts";
 
 test("isPlanDebateId detects plan- prefix", () => {
 	assert.equal(isPlanDebateId("plan-run-123"), true);

@@ -262,11 +262,18 @@ verify_cocoindex() {
 
 verify_biome() {
 	log "[biome]"
-	npm_global_install "@biomejs/biome" "biome" || { fail "biome npm install"; return; }
+	if [ ! -f "${ROOT}/package.json" ] && [ ! -f "${ROOT}/biome.json" ]; then
+		warn "biome skipped (non-JS/TS repo detected; optional tool)"
+		return
+	fi
+	npm_global_install "@biomejs/biome" "biome" || {
+		warn "biome npm install failed (optional — use your stack's formatter/linter)"
+		return
+	}
 	if biome --version &>/dev/null; then
 		pass "biome $(biome --version 2>/dev/null | head -1)"
 	else
-		fail "biome --version failed"
+		warn "biome --version failed (optional — use your stack's formatter/linter)"
 	fi
 }
 

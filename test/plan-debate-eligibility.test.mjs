@@ -1,11 +1,11 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { harnessPlanDebateEligibility } from "../.pi/extensions/lib/plan-debate-eligibility.ts";
+import { harnessPlanDebateEligibility } from "../.pi/lib/plan-debate-eligibility.ts";
 import {
 	getPlanFocusCoverage,
 	planDebateOutcomeComplete,
-} from "../.pi/extensions/lib/plan-debate-focus.ts";
-import { lanesForRound } from "../.pi/extensions/lib/plan-debate-lanes.ts";
+} from "../.pi/lib/plan-debate-focus.ts";
+import { lanesForRound } from "../.pi/lib/plan-debate-lanes.ts";
 import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";

@@ -1,18 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { allowsAgentTool } from "../.pi/lib/agents-policy.mjs";
 
-/** Mirror vendor/pi-subagents computeEffectiveTools for scout contract tests. */
-function computeEffectiveTools(allowed, disallowed, agentName) {
-	const deny = new Set(
-		(disallowed ?? []).map((t) => t.trim()).filter(Boolean),
-	);
-	deny.add("subagent");
-	deny.add("Agent");
-	if (agentName.startsWith("harness/")) deny.add("subagent");
-	return allowed.filter((t) => !deny.has(t));
-}
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = root;
+const projectRoot = root;
+const PLANNING_CONTEXT = "harness/planning/planning-context";
 
 function agentAllowsMutatingTools(agent) {
 	const tools = agent.tools ?? [];
@@ -68,28 +64,31 @@ test("parallel tasks reject multiple mutating harness agents", () => {
 	assert.equal(result.ok, false);
 });
 
-test("planning-context effective tools omit grep find and subagent", () => {
-	const scoutPath = join(
-		process.cwd(),
-		".pi/agents/harness/planning/planning-context.md",
+test("planning-context policy allows read/bash/submit and blocks subagent", () => {
+	const policyOpts = {
+		packageRoot,
+		projectRoot,
+		agentId: PLANNING_CONTEXT,
+		isSubprocess: true,
+		isParentOrchestrator: false,
+	};
+	assert.ok(
+		allowsAgentTool({ ...policyOpts, toolName: "read", toolInput: {} }),
 	);
-	const body = readFileSync(scoutPath, "utf-8");
-	const toolsMatch = body.match(/^tools:\s*(.+)$/m);
-	const disallowedMatch = body.match(/^disallowed_tools:\s*(.+)$/m);
-	assert.ok(toolsMatch);
-	const allowed = toolsMatch[1].split(",").map((s) => s.trim());
-	const disallowed = (disallowedMatch?.[1] ?? "")
-		.split(",")
-		.map((s) => s.trim())
-		.filter(Boolean);
-	const effective = computeEffectiveTools(
-		allowed,
-		disallowed,
-		"harness/planning/planning-context",
+	assert.ok(
+		allowsAgentTool({ ...policyOpts, toolName: "bash", toolInput: {} }),
 	);
-	assert.ok(effective.includes("read"));
-	assert.ok(effective.includes("submit_planning_context"));
-	assert.ok(!effective.includes("grep"));
-	assert.ok(!effective.includes("find"));
-	assert.ok(!effective.includes("subagent"));
+	assert.ok(
+		allowsAgentTool({
+			...policyOpts,
+			toolName: "submit_planning_context",
+			toolInput: {},
+		}),
+	);
+	assert.ok(
+		!allowsAgentTool({ ...policyOpts, toolName: "subagent", toolInput: {} }),
+	);
+	assert.ok(
+		!allowsAgentTool({ ...policyOpts, toolName: "write", toolInput: {} }),
+	);
 });

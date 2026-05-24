@@ -22,7 +22,7 @@ We use an explicit allowlist (not the whole `.pi/` tree) so dev-only artifacts n
 
 - No `.pi/harness/runs/`, `.pi/harness/.lens/` runtime config/cache, or `firecrawl/.env`
 - Ship `.pi/settings.example.json`, not `.pi/settings.json` (dev checkout uses `".."` local package)
-- Include **`.pi/extensions/lib/harness-lens/`** (harness-native lens: edit autopatch, secrets, deferred format, LSP) — loaded through `.pi/extensions/harness-lens.ts`; findings flow to harness PostHog telemetry
+- Include **`.pi/lib/harness-lens/`** (harness-native lens: edit autopatch, secrets, deferred format, LSP) — loaded through `.pi/extensions/harness-lens.ts`; findings flow to harness PostHog telemetry
 - Include **`vendor/pi-vcc/`** ([`pi-vcc`](https://github.com/sting8k/pi-vcc), MIT; inspired by [lllyasviel/VCC](https://github.com/lllyasviel/VCC)) — loaded via `.pi/extensions/ultimate-pi-vcc.ts`; refresh with `npm run vendor:sync-vcc`
 - Include **`vendor/pi-subagents/`** (vendored from [narumiruna/pi-extensions](https://github.com/narumiruna/pi-extensions) `pi-subagents`) — loaded via `.pi/extensions/harness-subagents.ts`; refresh with `npm run vendor:sync-subagents`
 

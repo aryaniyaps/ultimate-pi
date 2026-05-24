@@ -1,7 +1,5 @@
 ---
 description: Plan-phase adversarial verification on ExecutionPlan.
-tools: read, grep, find, ls, submit_adversary_brief
-disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
 max_turns: 14

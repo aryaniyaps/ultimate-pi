@@ -1,6 +1,5 @@
 ---
 description: Harness trace librarian for run replay, artifact indexing, and forensics summaries.
-tools: read, grep, find, ls, submit_human_required
 extensions: false
 thinking: medium
 max_turns: 20

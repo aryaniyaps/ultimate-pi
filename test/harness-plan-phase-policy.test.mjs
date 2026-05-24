@@ -14,8 +14,8 @@ import {
 	parseAskUserApprovalFromMessage,
 	validatePlanOverridePath,
 } from "../.pi/lib/harness-run-context.ts";
-import { capsForDebate } from "../.pi/extensions/lib/debate-bus-core.ts";
-import { planDebateIdForRun } from "../.pi/extensions/lib/plan-debate-id.ts";
+import { capsForDebate } from "../.pi/lib/debate-bus-core.ts";
+import { planDebateIdForRun } from "../.pi/lib/plan-debate-id.ts";
 
 function runCtx(runId, projectRoot) {
 	return {

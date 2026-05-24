@@ -1,7 +1,5 @@
 ---
 description: Plan-phase optional reconnaissance subagent — graphify, sg, ccc (read-only). Prefer parent tool use.
-tools: read, bash, ls, submit_planning_context
-disallowed_tools: write, edit, ask_user, approve_plan, create_plan, subagent, grep, find
 extensions: false
 thinking: low
 max_turns: 12

@@ -16,10 +16,11 @@ rules:
     priority: 1800
     ruleAction: deny
     condition: context_mode_block == true
-  - name: deny-subagent-policy
+  - name: deny-tool-not-in-manifest
     priority: 1700
     ruleAction: deny
-    condition: subagent_policy_block == true
+    condition: tool_allowed == false
+    description: tool not allowed by agents.policy.yaml for this agent
   - name: deny-spawn-policy
     priority: 1650
     ruleAction: deny
@@ -47,4 +48,4 @@ rules:
   - name: allow-no-blocks
     priority: 100
     ruleAction: allow
-    condition: abort_mutating_block == false and plan_mutation_block == false and context_mode_block == false and subagent_policy_block == false and spawn_policy_block == false and mutating_bash_phase_block == false and eval_plan_packet_write_block == false and bash_web_block == false and bash_planning_deny == false and bash_planning_json_block == false
+    condition: abort_mutating_block == false and plan_mutation_block == false and context_mode_block == false and tool_allowed == true and spawn_policy_block == false and mutating_bash_phase_block == false and eval_plan_packet_write_block == false and bash_web_block == false and bash_planning_deny == false and bash_planning_json_block == false

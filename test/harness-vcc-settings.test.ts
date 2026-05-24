@@ -3,7 +3,7 @@ import { afterEach, describe, test } from "node:test";
 import {
 	resolveOverrideDefaultCompaction,
 	resolveVccDebug,
-} from "../.pi/extensions/lib/harness-vcc-settings.ts";
+} from "../.pi/lib/harness-vcc-settings.ts";
 
 const compactionBackup = process.env.HARNESS_VCC_COMPACTION;
 const debugBackup = process.env.HARNESS_VCC_DEBUG;

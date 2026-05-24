@@ -1,8 +1,6 @@
 ---
 description: Adversarial harness reviewer focused on breaking assumptions and surfacing regressions.
-tools: read, grep, find, ls, submit_adversary_report
 extensions: false
-disallowed_tools: ask_user
 thinking: high
 max_turns: 20
 ---

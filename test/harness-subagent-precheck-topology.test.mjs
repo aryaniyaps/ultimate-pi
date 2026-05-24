@@ -4,7 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
-import { validateHarnessSpawnTopology } from "../.pi/extensions/lib/harness-spawn-topology.ts";
+import { validateHarnessSpawnTopology } from "../.pi/lib/harness-spawn-topology.ts";
 
 test("rejects decompose and hypothesis in same parallel batch", async () => {
 	const result = await validateHarnessSpawnTopology(

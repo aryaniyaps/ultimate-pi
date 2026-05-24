@@ -1,16 +1,10 @@
-## Harness lens (harness-native)
-
-- ultimate-pi ships a harness-native lens at [`.pi/extensions/harness-lens.ts`](.pi/extensions/harness-lens.ts) → [`.pi/extensions/lib/harness-lens/`](.pi/extensions/lib/harness-lens/). Formerly derived from pi-lens; no upstream sync.
-- **Contract:** edit autopatch, secrets block, deferred format, LSP delegate (`lsp_diagnostics`, `lsp_navigation`). See [ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md).
-- **Not in lens:** ast-grep pi tools, bundled YAML rules, architecture gate (Sentrux), structural search (shell `sg`).
-
 ## pi-vcc (vendored)
 
 - **Project:** https://github.com/sting8k/pi-vcc
 - **Conceptual basis:** https://github.com/lllyasviel/VCC (View-oriented Conversation Compiler)
 - **License:** MIT (see upstream repository)
 - **Pinned revision:** See [vendor/pi-vcc/UPSTREAM_PIN.md](vendor/pi-vcc/UPSTREAM_PIN.md)
-- ultimate-pi loads it from [`vendor/pi-vcc`](vendor/pi-vcc) via [`.pi/extensions/ultimate-pi-vcc.ts`](.pi/extensions/ultimate-pi-vcc.ts). Harness configuration is env-only: `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG` ([`.pi/extensions/lib/harness-vcc-settings.ts`](.pi/extensions/lib/harness-vcc-settings.ts)). Maintainer refresh: `npm run vendor:sync-vcc`.
+- ultimate-pi loads it from [`vendor/pi-vcc`](vendor/pi-vcc) via [`.pi/extensions/ultimate-pi-vcc.ts`](.pi/extensions/ultimate-pi-vcc.ts). Harness configuration is env-only: `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG` ([`.pi/lib/harness-vcc-settings.ts`](.pi/lib/harness-vcc-settings.ts)). Maintainer refresh: `npm run vendor:sync-vcc`.
 
 ## pi-subagents (vendored)
 

@@ -1,9 +1,8 @@
 import {
-	classifyHarnessAgent,
-	evaluateHarnessSubagentToolCall,
+	allowsAgentTool,
+	getAgentKind,
 	isHarnessPlanningAgent,
-} from "../../extensions/lib/harness-subagent-policy.js";
-import { evaluateSubagentToolCall } from "../../extensions/lib/spawn-policy.js";
+} from "../agents-policy.mjs";
 import {
 	evaluateContextModeMutation,
 	isMutatingBash,
@@ -13,8 +12,10 @@ import {
 	getLatestRunContext,
 	type HarnessPhase,
 	type HarnessRunContext,
+	isHarnessAutoSession,
 	isPlanPhaseAllowedMutation,
 } from "../harness-run-context.js";
+import { evaluateSubagentToolCall } from "../harness-spawn-policy.js";
 
 export interface BuildEvaluationContextInput {
 	toolName: string;
@@ -73,10 +74,45 @@ function resolveAgentId(): string {
 	return "parent-orchestrator";
 }
 
-function bashWebBlocked(command: string): boolean {
+export function bashWebBlocked(command: string): boolean {
 	if (!command) return false;
 	if (WEB_ALLOW_PATTERNS.some((re) => re.test(command))) return false;
 	return WEB_BLOCK_PATTERNS.some(({ re }) => re.test(command));
+}
+
+/** Shared session-scoped deny reasons for legacy parity and AGT context flags. */
+export function harnessSessionToolDenyReason(input: {
+	toolName: string;
+	toolInput: Record<string, unknown>;
+	phase: HarnessPhase;
+	agentId: string;
+	entries: unknown[];
+	aborted: boolean;
+}): string | null {
+	if (!isHarnessAutoSession(input.entries)) return null;
+	const bashCommand =
+		input.toolName === "bash" ? String(input.toolInput.command ?? "") : "";
+	if (
+		input.aborted &&
+		((bashCommand && isMutatingBash(bashCommand)) ||
+			input.toolName === "write" ||
+			input.toolName === "edit")
+	) {
+		return "harness-abort lock";
+	}
+	if (
+		bashCommand &&
+		isMutatingBash(bashCommand) &&
+		!input.aborted &&
+		input.phase !== "execute" &&
+		input.phase !== "merge"
+	) {
+		return "mutating bash blocked outside execute/merge";
+	}
+	if (bashCommand && bashWebBlocked(bashCommand)) {
+		return "web/bash curl blocked (use harness web_search / web_fetch)";
+	}
+	return null;
 }
 
 function bashPlanningDenied(command: string, agentType: string): boolean {
@@ -89,60 +125,68 @@ function bashPlanningJsonDenied(command: string, agentType: string): boolean {
 	return PLANNING_ARTIFACT_JSON_WRITE.test(command);
 }
 
+function harnessSessionActive(entries: unknown[]): boolean {
+	return isHarnessAutoSession(entries);
+}
+
 export async function buildHarnessAgtEvaluationContext(
 	input: BuildEvaluationContextInput,
 ): Promise<HarnessAgtContext> {
 	const agentId = resolveAgentId();
 	const isSubprocess = process.env.PI_HARNESS_SUBPROCESS === "1";
 	const isParentOrchestrator = agentId === "parent-orchestrator";
-	const agentKind = classifyHarnessAgent(agentId);
+	const agentKind = getAgentKind(input.packageRoot, input.projectRoot, agentId);
 	const runCtx = getLatestRunContext(input.entries);
 	const phase = input.policyState.phase;
 	const bashCommand =
 		input.toolName === "bash" ? String(input.toolInput.command ?? "") : "";
+	const sessionActive = harnessSessionActive(input.entries);
 
 	const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
-	const planMutation = MUTATING_FILE_TOOLS.has(input.toolName)
-		? await isPlanPhaseAllowedMutation(
-				input.toolName,
-				input.toolInput,
-				phase,
-				runCtx,
-				input.projectRoot,
-				{
-					aborted: input.policyState.aborted,
-					entries: input.entries,
-					ownerSessionId: runCtx?.owner_pi_session_id,
-					currentSessionId: input.sessionId,
-				},
-			)
-		: { allowed: true };
+	const planMutation =
+		sessionActive && MUTATING_FILE_TOOLS.has(input.toolName)
+			? await isPlanPhaseAllowedMutation(
+					input.toolName,
+					input.toolInput,
+					phase,
+					runCtx,
+					input.projectRoot,
+					{
+						aborted: input.policyState.aborted,
+						entries: input.entries,
+						ownerSessionId: runCtx?.owner_pi_session_id,
+						currentSessionId: input.sessionId,
+					},
+				)
+			: { allowed: true };
 
-	const ctxMode = evaluateContextModeMutation(
-		input.toolName,
-		input.toolInput,
-		phase,
-		{
-			aborted: input.policyState.aborted,
-			budgetBypass: input.policyState.budgetBypass,
-			readOnlyAgent:
-				agentKind === "planner" ||
-				agentKind === "evaluator" ||
-				agentKind === "adversary" ||
-				agentKind === "tie_breaker",
-		},
-	);
-
-	const subagentDecision = evaluateHarnessSubagentToolCall(
-		input.toolName,
-		input.toolInput,
-		agentId,
-	);
+	const ctxMode = sessionActive
+		? evaluateContextModeMutation(input.toolName, input.toolInput, phase, {
+				aborted: input.policyState.aborted,
+				budgetBypass: input.policyState.budgetBypass,
+				readOnlyAgent:
+					agentKind === "planner" ||
+					agentKind === "evaluator" ||
+					agentKind === "adversary" ||
+					agentKind === "tie_breaker",
+			})
+		: { blocked: false, reason: "" };
 
 	const spawnDecision = evaluateSubagentToolCall(input.toolName, agentId);
 
+	const toolAllowed = allowsAgentTool({
+		packageRoot: input.packageRoot,
+		projectRoot: input.projectRoot,
+		agentId,
+		toolName: input.toolName,
+		toolInput: input.toolInput,
+		isSubprocess,
+		isParentOrchestrator,
+	});
+
 	let evalPlanPacketBlock = false;
 	if (
+		sessionActive &&
 		runCtx?.plan_packet_path &&
 		(phase === "evaluate" || phase === "adversary") &&
 		(input.toolName === "write" || input.toolName === "edit")
@@ -161,12 +205,14 @@ export async function buildHarnessAgtEvaluationContext(
 			: null;
 
 	const mutatingBashPhaseBlock =
+		sessionActive &&
 		Boolean(bashCommand && isMutatingBash(bashCommand)) &&
 		!input.policyState.aborted &&
 		phase !== "execute" &&
 		phase !== "merge";
 
 	const abortMutatingBlock =
+		sessionActive &&
 		input.policyState.aborted &&
 		((bashCommand && isMutatingBash(bashCommand)) ||
 			input.toolName === "write" ||
@@ -179,6 +225,8 @@ export async function buildHarnessAgtEvaluationContext(
 		harness_agent_kind: agentKind,
 		is_subprocess: isSubprocess,
 		is_parent_orchestrator: isParentOrchestrator,
+		harness_session_active: sessionActive,
+		is_harness_agent: agentId.startsWith("harness/"),
 		approved_plan: input.policyState.approvedPlan,
 		plan_ready: Boolean(runCtx?.plan_ready),
 		aborted: input.policyState.aborted,
@@ -186,16 +234,18 @@ export async function buildHarnessAgtEvaluationContext(
 		run_id: runCtx?.run_id ?? process.env.HARNESS_RUN_ID ?? "",
 		plan_id: input.policyState.planId ?? runCtx?.plan_id ?? "",
 		plan_mutation_allowed: planMutation.allowed,
-		plan_mutation_block: !planMutation.allowed,
+		plan_mutation_block: sessionActive && !planMutation.allowed,
 		context_mode_block: ctxMode.blocked,
-		subagent_policy_block: subagentDecision.action === "block",
+		tool_allowed: toolAllowed,
 		spawn_policy_block: spawnDecision.action === "block",
 		is_mutating_bash: bashCommand ? isMutatingBash(bashCommand) : false,
 		is_mutating_write_tool:
 			input.toolName === "write" || input.toolName === "edit",
-		bash_web_block: bashWebBlocked(bashCommand),
-		bash_planning_deny: bashPlanningDenied(bashCommand, agentId),
-		bash_planning_json_block: bashPlanningJsonDenied(bashCommand, agentId),
+		bash_web_block: sessionActive && bashWebBlocked(bashCommand),
+		bash_planning_deny:
+			sessionActive && bashPlanningDenied(bashCommand, agentId),
+		bash_planning_json_block:
+			sessionActive && bashPlanningJsonDenied(bashCommand, agentId),
 		eval_plan_packet_write_block: evalPlanPacketBlock,
 		is_submit_tool: input.toolName.startsWith("submit_"),
 		is_planning_agent: isHarnessPlanningAgent(agentId),

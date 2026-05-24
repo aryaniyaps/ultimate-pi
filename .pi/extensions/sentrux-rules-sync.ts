@@ -4,8 +4,8 @@
 
 import { spawn } from "node:child_process";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { resolveHarnessScript } from "../lib/harness-paths.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
-import { resolveHarnessScript } from "./lib/harness-paths.js";
 
 function resolveSyncScript(): string {
 	return resolveHarnessScript(

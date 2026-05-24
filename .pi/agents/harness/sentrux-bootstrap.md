@@ -1,6 +1,5 @@
 ---
 description: Bootstrap Sentrux rules for a harness project — seed architecture manifest, sync merge-safe rules.toml, verify sentrux check.
-tools: read, bash, grep, find, ls
 extensions: true
 thinking: low
 max_turns: 12

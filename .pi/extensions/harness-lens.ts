@@ -3,7 +3,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import {
 	captureHarnessEvent,
 	type HarnessPostHogEventName,
-} from "./lib/harness-posthog.js";
+} from "../lib/harness-posthog.js";
 
 const LENS_EVENT_TO_POSTHOG: Record<string, HarnessPostHogEventName> = {
 	"pi-lens/analysis-complete": "harness_lens_analysis_complete",
@@ -87,7 +87,7 @@ export default async function harnessLens(pi: ExtensionAPI) {
 	configureHarnessLensPaths();
 	installLensPostHogBridge(pi);
 
-	const lens = (await import("./lib/harness-lens/index.js")) as unknown as {
+	const lens = (await import("../lib/harness-lens/index.js")) as unknown as {
 		default: (pi: ExtensionAPI) => unknown;
 	};
 	return lens.default(pi);

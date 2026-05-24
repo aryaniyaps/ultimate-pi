@@ -1,7 +1,5 @@
 ---
 description: Plan-phase ADR-020 sprint contract auditor.
-tools: read, grep, find, ls, submit_sprint_audit
-disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
 max_turns: 12

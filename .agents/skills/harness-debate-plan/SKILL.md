@@ -78,4 +78,4 @@ Resume: `harness_debate_round_status({ round_index: N })` → run listed `next_t
 
 Do not `approve_plan` on `policy_decision: block`. On `human_required` → `ask_user` first.
 
-Rubrics: `.pi/prompts/planning-rubrics.md`.
+Rubrics: `.pi/harness/docs/planning-rubrics.md`.

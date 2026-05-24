@@ -1,7 +1,5 @@
 ---
 description: Plan-phase Validation Checks evaluator (neutral pass/fail).
-tools: read, grep, find, ls, submit_validation_turn
-disallowed_tools: write, edit, bash, ask_user, approve_plan, create_plan, subagent
 extensions: false
 thinking: medium
 max_turns: 14
@@ -13,7 +11,7 @@ max_turns: 14
 
 Score the ExecutionPlan against Validation Checks for one Review Gate round. Emit stable `checks[]` with ids and messenger-ready `claim_ids`. You are not an advocate for the plan.
 
-Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`. Use rubric ids from `.pi/prompts/planning-rubrics.md` for that focus.
+Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`. Use rubric ids from `.pi/harness/docs/planning-rubrics.md` for that focus.
 
 ## Process
 

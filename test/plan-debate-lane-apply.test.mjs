@@ -3,8 +3,8 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { applyDebateLane } from "../.pi/extensions/lib/plan-debate-lane.ts";
-import { readRoundTranscript } from "../.pi/extensions/lib/plan-messenger.ts";
+import { applyDebateLane } from "../.pi/lib/plan-debate-lane.ts";
+import { readRoundTranscript } from "../.pi/lib/plan-messenger.ts";
 
 test("applyDebateLane writes validation-turn and posts claim", async () => {
 	const runDir = await mkdtemp(join(tmpdir(), "debate-lane-"));

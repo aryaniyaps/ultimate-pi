@@ -3,6 +3,7 @@
  */
 
 import * as fs from "node:fs";
+import { createRequire } from "node:module";
 import * as path from "node:path";
 import { getAgentDir, parseFrontmatter } from "@earendil-works/pi-coding-agent";
 
@@ -294,6 +295,42 @@ function resolvePackageAgentsDir(
 	return null;
 }
 
+function resolveProjectRootFromCwd(cwd: string): string {
+	const projectAgentsDir = findNearestProjectAgentsDir(cwd);
+	if (!projectAgentsDir) return cwd;
+	const piDir = path.dirname(projectAgentsDir);
+	return piDir.endsWith(`${path.sep}.pi`) ? path.dirname(piDir) : cwd;
+}
+
+type ApplyAgentPolicyFn = (
+	agent: AgentConfig,
+	packageRoot: string,
+	projectRoot: string,
+) => AgentConfig;
+
+let cachedApplyPolicy: ApplyAgentPolicyFn | null | undefined;
+
+function applyAgentsPolicyIfAvailable(
+	agent: AgentConfig,
+	packageRoot: string | undefined,
+	projectRoot: string,
+): AgentConfig {
+	if (!packageRoot) return agent;
+	if (cachedApplyPolicy === undefined) {
+		try {
+			const req = createRequire(path.join(packageRoot, "package.json"));
+			const mod = req("./.pi/lib/agents-policy.mjs") as {
+				applyAgentPolicyToConfig?: ApplyAgentPolicyFn;
+			};
+			cachedApplyPolicy = mod.applyAgentPolicyToConfig ?? null;
+		} catch {
+			cachedApplyPolicy = null;
+		}
+	}
+	if (!cachedApplyPolicy) return agent;
+	return cachedApplyPolicy(agent, packageRoot, projectRoot);
+}
+
 export function discoverAgents(
 	cwd: string,
 	scope: AgentScope,
@@ -316,6 +353,7 @@ export function discoverAgents(
 	}
 
 	const agentMap = new Map<string, AgentConfig>();
+	const projectRoot = resolveProjectRootFromCwd(cwd);
 
 	for (const agent of BUILT_IN_AGENTS) {
 		agentMap.set(agent.name, { ...agent });
@@ -331,7 +369,13 @@ export function discoverAgents(
 					? "project"
 					: "user";
 		const parsed = parseMarkdownAgent(id, file.content, source, file.filePath);
-		if (parsed) agentMap.set(parsed.name, parsed);
+		if (!parsed) continue;
+		const withPolicy = applyAgentsPolicyIfAvailable(
+			parsed,
+			packageRoot,
+			projectRoot,
+		);
+		agentMap.set(withPolicy.name, withPolicy);
 	}
 
 	return {

@@ -1,0 +1,9 @@
+# Example project AGT rule — copy to <project>/.pi/policies/custom-deny-bash.yaml
+# Loaded after package .pi/harness/policies/*.yaml when createAgtPolicyEngine runs.
+
+policies:
+  - name: deny-rm-rf-in-subagents
+    description: Block recursive rm -rf in subprocess tool calls
+    effect: deny
+    priority: 200
+    condition: is_subprocess == true && tool_name == "bash" && contains(tool_input.command, "rm -rf")

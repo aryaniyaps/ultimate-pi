@@ -2,7 +2,7 @@
  * Load before other extensions: IPv4-first fetch for *.posthog.com (@posthog/pi uses global fetch).
  */
 
-import { installPostHogFetchPatch } from "./lib/posthog-client.js";
+import { installPostHogFetchPatch } from "../lib/posthog-client.js";
 
 installPostHogFetchPatch();
 

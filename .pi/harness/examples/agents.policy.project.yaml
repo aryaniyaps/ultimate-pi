@@ -1,0 +1,19 @@
+# Example project override — copy to <project>/.pi/agents.policy.yaml
+# Merges on top of package .pi/harness/agents.policy.yaml (same agent ids win on project keys).
+
+apiVersion: harness.toolkit/v1
+
+agents:
+  my-custom-scout:
+    kind: planner
+    tools_add:
+      - web_search
+      - web_fetch
+    extensions: false
+    max_turns: 12
+
+  my-custom-runner:
+    kind: executor
+    tools_add:
+      - submit_executor_handoff
+    extensions: true

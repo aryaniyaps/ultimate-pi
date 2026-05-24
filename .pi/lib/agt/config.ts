@@ -15,6 +15,10 @@ export function resolveHarnessPoliciesDir(packageRoot: string): string {
 	return join(packageRoot, ".pi", "harness", "policies");
 }
 
+export function resolveProjectPoliciesDir(projectRoot: string): string {
+	return join(projectRoot, ".pi", "policies");
+}
+
 export function resolveHarnessPackageRootFromEnv(): string {
 	return (
 		process.env.HARNESS_PKG_ROOT?.trim() ||

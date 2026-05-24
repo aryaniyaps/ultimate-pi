@@ -29,7 +29,7 @@ cat >"$VEND/UPSTREAM_PIN.md" <<EOF
 - **License:** MIT (see upstream repository)
 - **Pinned upstream commit:** \`$COMMIT\`
 - **Local changes:**
-  - \`src/core/settings.ts\` re-exports env-only [\`harness-vcc-settings\`](../../.pi/extensions/lib/harness-vcc-settings.ts) (\`HARNESS_VCC_COMPACTION\`, \`HARNESS_VCC_DEBUG\`)
+  - \`src/core/settings.ts\` re-exports env-only [\`harness-vcc-settings\`](../../.pi/lib/harness-vcc-settings.ts) (\`HARNESS_VCC_COMPACTION\`, \`HARNESS_VCC_DEBUG\`)
   - No \`scaffoldSettings\` / no \`PI_VCC_CONFIG_PATH\`
   - Compaction \`details.compactor\` is \`ultimate-pi-vcc\`
 

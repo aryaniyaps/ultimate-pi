@@ -10,6 +10,7 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { isHarnessAgtPolicyEnabled } from "../lib/agt/config.js";
+import { evaluateAgtHarnessToolCall } from "../lib/harness-agt-tool-guard.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import {
 	extractWritePathFromToolInput,
@@ -29,8 +30,7 @@ import {
 	userVisiblePromptSlice,
 	validatePlanPacket,
 } from "../lib/harness-run-context.js";
-import { evaluateAgtHarnessToolCall } from "./lib/harness-agt-tool-guard.js";
-import { bootstrapHarnessSubprocessFromEnv } from "./lib/harness-subprocess-bootstrap.js";
+import { bootstrapHarnessSubprocessFromEnv } from "../lib/harness-subprocess-bootstrap.js";
 
 type HarnessPhase = "plan" | "execute" | "evaluate" | "adversary" | "merge";
 

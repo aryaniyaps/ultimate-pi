@@ -4,21 +4,21 @@
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { runAskDialog } from "./lib/ask-user/dialog.js";
-import { runAskFallback } from "./lib/ask-user/fallback.js";
-import { renderAskCall, renderAskResult } from "./lib/ask-user/render.js";
+import { runAskDialog } from "../lib/ask-user/dialog.js";
+import { runAskFallback } from "../lib/ask-user/fallback.js";
+import { renderAskCall, renderAskResult } from "../lib/ask-user/render.js";
 import {
 	AskUserParamsSchema,
 	PROMPT_GUIDELINES,
 	PROMPT_SNIPPET,
-} from "./lib/ask-user/schema.js";
-import type { AskUserParams, DialogResult } from "./lib/ask-user/types.js";
+} from "../lib/ask-user/schema.js";
+import type { AskUserParams, DialogResult } from "../lib/ask-user/types.js";
 import {
 	formatResultText,
 	toToolDetails,
 	validateAskParams,
-} from "./lib/ask-user/validate.js";
-import { claimHarnessGovernanceLoad } from "./lib/extension-load-guard.js";
+} from "../lib/ask-user/validate.js";
+import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;

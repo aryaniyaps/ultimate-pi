@@ -35,6 +35,7 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0046](0046-agt-policy-engine.md) | AGT policy engine + subagent identity | Accepted |
 | [0047](0047-agt-layered-security.md) | AGT layered security (rings, prompt defense, CI) | Accepted |
 | [0048](0048-tool-call-hook-order.md) | tool_call hook interaction matrix | Accepted |
+| [0049](0049-agents-policy-manifest.md) | agents.policy.yaml SSOT + native discovery | Accepted |
 
 ## Practice map
 

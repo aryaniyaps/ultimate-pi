@@ -4,7 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
-import { validatePlanApprovalReadiness } from "../.pi/extensions/lib/plan-approval-readiness.ts";
+import { validatePlanApprovalReadiness } from "../.pi/lib/plan-approval-readiness.ts";
 
 const PLANNING_CONTEXT = `schema_version: "1.0.0"
 status: ok

@@ -11,6 +11,16 @@ const cases = JSON.parse(
 	readFileSync(join(root, "test/fixtures/agt-policy-cases.json"), "utf-8"),
 );
 
+function entriesForHarnessSession(active) {
+	if (!active) return [];
+	return [
+		{
+			type: "message",
+			message: { role: "user", content: "/harness-auto" },
+		},
+	];
+}
+
 for (const c of cases) {
 	test(`AGT parity: ${c.id}`, async () => {
 		const prevSub = process.env.PI_HARNESS_SUBPROCESS;
@@ -25,7 +35,7 @@ for (const c of cases) {
 				packageRoot: root,
 				projectRoot: root,
 				sessionId: "test-session",
-				entries: [],
+				entries: entriesForHarnessSession(Boolean(c.harnessSession)),
 				policyState: {
 					phase: c.phase,
 					approvedPlan: c.phase === "execute" || c.phase === "merge",
