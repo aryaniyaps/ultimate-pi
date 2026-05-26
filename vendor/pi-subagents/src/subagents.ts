@@ -46,6 +46,10 @@ export interface HarnessSubagentsOptions {
 	subprocessGovernanceExtensionPath?: string;
 	/** @deprecated Use subprocessGovernanceExtensionPath */
 	harnessSubprocessExtensionPath?: string;
+	/** Resolve curated `-e` extension paths for agents.policy `extension_bundle`. */
+	resolveExtensionBundlePaths?: (
+		bundleName: string,
+	) => string[];
 	/** Extra env vars per subprocess (e.g. HARNESS_RUN_ID, HARNESS_RUN_DIR). */
 	resolveSubprocessEnv?: (
 		task: string,
@@ -453,13 +457,28 @@ function buildAgentArgs(
 		agent.extensionsOff &&
 		(subagentsOptions?.subprocessGovernanceExtensionPath ??
 			subagentsOptions?.harnessSubprocessExtensionPath);
-	if (agent.extensionsOff) {
+	const bundlePaths =
+		agent.extensionBundle && subagentsOptions?.resolveExtensionBundlePaths
+			? subagentsOptions.resolveExtensionBundlePaths(agent.extensionBundle)
+			: [];
+
+	if (agent.extensionBundle && bundlePaths.length > 0) {
+		args.push("--no-extensions");
+		for (const extPath of bundlePaths) {
+			args.push("-e", extPath);
+		}
+		if (agent.skillsOff) args.push("--no-skills");
+	} else if (agent.extensionsOff) {
 		args.push("--no-extensions");
 		if (governanceExt) args.push("-e", governanceExt);
 		if (agent.skillsOff) args.push("--no-skills");
 	}
-	if (agent.tools?.length) args.push("--tools", agent.tools.join(","));
-	else if (agent.extensionsOff) args.push("--no-tools");
+	if (agent.tools?.length) {
+		args.push("--tools", agent.tools.join(","));
+		if (agent.noBuiltinTools) args.push("--no-builtin-tools");
+	} else if (agent.extensionsOff || agent.extensionBundle) {
+		args.push("--no-tools");
+	}
 	return args;
 }
 

@@ -6,6 +6,10 @@ export interface AgentPolicySpec {
 	kind: string;
 	effectiveTools: string[];
 	extensionsOff: boolean;
+	/** Subprocess-only: load curated -e extensions instead of full .pi/extensions. */
+	extensionBundle?: string;
+	extensionsFull: boolean;
+	noBuiltinTools: boolean;
 	readOnly: boolean;
 	maxTurns?: number;
 	thinking?: string;

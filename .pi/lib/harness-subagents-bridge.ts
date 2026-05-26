@@ -14,7 +14,7 @@ import {
 	type SpawnAuthForward,
 } from "../../vendor/pi-subagents/src/subagents.js";
 import { subagentGovernanceExtensionPath } from "../extensions/subagent-governance.js";
-import { getAgentKind } from "./agents-policy.mjs";
+import { getAgentKind, resolveExtensionBundlePaths } from "./agents-policy.mjs";
 import {
 	delegationEnvFromBundle,
 	mintSubagentDelegation,
@@ -36,10 +36,6 @@ import {
 } from "./harness-spawn-budget.js";
 import { parseSpawnContextFromTask } from "./harness-spawn-parse.js";
 import {
-	getRememberedSessionWebArtifactDir,
-	resolveWebArtifactScope,
-} from "./harness-web/artifacts.js";
-import {
 	isUsableApiKey,
 	resolveConcreteSubagentModel,
 } from "./harness-subagent-auth.js";
@@ -47,6 +43,10 @@ import {
 	inferPhaseForPrecheck,
 	precheckHarnessSubagentSpawn,
 } from "./harness-subagent-precheck.js";
+import {
+	getRememberedSessionWebArtifactDir,
+	resolveWebArtifactScope,
+} from "./harness-web/artifacts.js";
 
 const spawnBudget = createSpawnBudgetState();
 let lastSessionId = "harness";
@@ -126,6 +126,8 @@ export function createHarnessSubagentsExtension(
 		packageRoot,
 		subprocessGovernanceExtensionPath: governanceExtPath,
 		harnessSubprocessExtensionPath: governanceExtPath,
+		resolveExtensionBundlePaths: (bundleName) =>
+			resolveExtensionBundlePaths(packageRoot, bundleName),
 		resolveSubprocessEnv: (task, agent) => {
 			const projectRoot = process.cwd();
 			const base: Record<string, string> = {

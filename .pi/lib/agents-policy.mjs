@@ -31,8 +31,24 @@ const MUTATING_TOOLS = new Set(["write", "edit"]);
 
 const cache = new Map();
 
+const EXTENSION_BUNDLE_MODULES = {
+	executor: [
+		"subagent-governance.ts",
+		"harness-anchored-edit.ts",
+		"harness-lens.ts",
+	],
+};
+
 export function packageAgentsPolicyPath(packageRoot) {
 	return join(packageRoot, ".pi", "harness", "agents.policy.yaml");
+}
+
+/** Absolute paths for subprocess `-e` loads (curated; avoids parent-only extensions). */
+export function resolveExtensionBundlePaths(packageRoot, bundleName) {
+	const modules = EXTENSION_BUNDLE_MODULES[bundleName];
+	if (!modules) return [];
+	const extDir = join(packageRoot, ".pi", "extensions");
+	return modules.map((name) => join(extDir, name));
 }
 
 export function projectAgentsPolicyPath(projectRoot) {
@@ -52,12 +68,19 @@ function readYamlFile(path) {
 	}
 }
 
+function normalizeExtensionBundle(raw) {
+	if (typeof raw.extension_bundle !== "string") return undefined;
+	const bundle = raw.extension_bundle.trim();
+	return bundle.length > 0 ? bundle : undefined;
+}
+
 function normalizeKindEntry(raw) {
 	if (!raw || typeof raw !== "object") return null;
 	const tools = Array.isArray(raw.tools) ? raw.tools.map(String) : [];
 	return {
 		tools,
 		extensions: raw.extensions === false ? false : Boolean(raw.extensions),
+		extensionBundle: normalizeExtensionBundle(raw),
 		readOnly: raw.read_only === true,
 		maxTurns:
 			typeof raw.max_turns === "number" && raw.max_turns > 0
@@ -93,6 +116,7 @@ function normalizeAgentEntry(raw) {
 				: raw.extensions === true
 					? true
 					: undefined,
+		extensionBundle: normalizeExtensionBundle(raw),
 		maxTurns:
 			typeof raw.max_turns === "number" && raw.max_turns > 0
 				? raw.max_turns
@@ -162,10 +186,25 @@ export function resolveEffectiveTools(agentId, merged) {
 	for (const t of entry.toolsDeny ?? []) base.delete(t);
 	for (const t of BUILTIN_DENY_TOOLS) base.delete(t);
 
+	const extensionBundle =
+		entry.extensionBundle ?? kind.extensionBundle ?? undefined;
+	const extensionsFull =
+		!extensionBundle &&
+		(entry.extensions === true
+			? true
+			: entry.extensions === false
+				? false
+				: Boolean(kind.extensions));
+	const extensionsOff = !extensionsFull;
+
 	return {
 		kind: kindName,
 		effectiveTools: [...base],
-		extensionsOff: entry.extensions === true ? false : entry.extensions === false ? true : !kind.extensions,
+		extensionsOff,
+		extensionBundle,
+		extensionsFull,
+		/** Suppress Pi builtins when harness read/edit register (full extensions or subprocess bundle). */
+		noBuiltinTools: extensionsFull || Boolean(extensionBundle),
 		readOnly: kind.readOnly,
 		maxTurns: entry.maxTurns ?? kind.maxTurns,
 		thinking: entry.thinking ?? kind.thinking,
@@ -304,6 +343,9 @@ export function applyAgentPolicyToConfig(agent, packageRoot, projectRoot) {
 		...agent,
 		tools: spec.effectiveTools.length > 0 ? spec.effectiveTools : undefined,
 		extensionsOff: spec.extensionsOff,
+		extensionBundle: spec.extensionBundle,
+		extensionsFull: spec.extensionsFull,
+		noBuiltinTools: spec.noBuiltinTools,
 		maxTurns: spec.maxTurns ?? agent.maxTurns,
 		thinking: spec.thinking ?? agent.thinking,
 		model: spec.model ?? agent.model,

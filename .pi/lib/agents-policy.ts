@@ -16,4 +16,5 @@ export {
 	projectAgentsPolicyPath,
 	projectPoliciesDir,
 	resolveEffectiveTools,
+	resolveExtensionBundlePaths,
 } from "./agents-policy.mjs";

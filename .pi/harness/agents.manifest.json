@@ -1,9 +1,9 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.19.0",
-	"generated_at": "2026-05-26T06:39:19.250Z",
-	"policy_sha256": "f0eb41bc6a877a237087e87762ce11908e93755a42d58f19d6573665b198665f",
+	"package_version": "0.19.1",
+	"generated_at": "2026-05-26T07:37:49.163Z",
+	"policy_sha256": "5a1e71f380df7dde8f6d1f33b366da8bba191689476a6440b3bcdbd776dc617a",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -87,7 +87,7 @@
 		},
 		"harness/running/executor": {
 			"path": ".pi/agents/harness/running/executor.md",
-			"sha256": "219c9307567acc95a9c1b1340f899fac860406fb2c2e84f51b4a8c3ba3a0e2ec"
+			"sha256": "1b8aa6e05ffacc8550569465d47cc8525902b53431e36b1c0f973ca633eab450"
 		},
 		"harness/reviewing/adversary": {
 			"path": ".pi/agents/harness/reviewing/adversary.md",
