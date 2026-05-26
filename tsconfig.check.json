@@ -1,0 +1,31 @@
+{
+	"compilerOptions": {
+		"target": "ES2023",
+		"lib": ["ES2023"],
+		"moduleResolution": "nodenext",
+		"module": "nodenext",
+		"skipLibCheck": true,
+		"noEmit": true
+	},
+	"include": [
+		".pi/lib/agt/**/*.ts",
+		".pi/lib/agt-*.ts",
+		".pi/lib/ask-user/**/*.ts",
+		".pi/lib/plan-approval/**/*.ts",
+		".pi/lib/harness-*.ts",
+		".pi/lib/harness-web/**/*.ts",
+		".pi/lib/posthog-*.ts",
+		".pi/lib/agents-policy.ts",
+		".pi/lib/debate-bus-*.ts",
+		".pi/lib/plan-debate-*.ts",
+		".pi/lib/plan-messenger.ts",
+		".pi/lib/plan-review-integrator-rules.ts",
+		".pi/lib/plan-scope-guard.ts",
+		".pi/extensions/*.ts",
+		"vendor/pi-subagents/src/*.ts"
+	],
+	"exclude": [
+		".pi/extensions/harness-lens.ts",
+		".pi/extensions/vcc-compaction.ts"
+	]
+}

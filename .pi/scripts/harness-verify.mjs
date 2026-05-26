@@ -424,7 +424,85 @@ async function main() {
 	}
 	ok("agents.manifest.json in sync");
 
+	await checkWrsContracts();
+
 	console.log("\nharness:verify PASS");
+}
+
+async function checkWrsContracts() {
+	const systemMd = join(ROOT, ".pi", "SYSTEM.md");
+	const toolsTs = join(ROOT, ".pi", "extensions", "harness-web-tools.ts");
+	const runCli = join(ROOT, ".pi", "lib", "harness-web", "run-cli.ts");
+	const webRetrievalSkill = join(ROOT, ".agents", "skills", "web-retrieval", "SKILL.md");
+	const adr = join(
+		ROOT,
+		".pi",
+		"harness",
+		"docs",
+		"adrs",
+		"0050-agentic-web-retrieval-stack.md",
+	);
+
+	for (const p of [systemMd, toolsTs, runCli, webRetrievalSkill, adr]) {
+		if (!(await fileExists(p))) fail(`WRS contract missing file: ${p}`);
+	}
+
+	const sys = await readFile(systemMd, "utf-8");
+	if (!sys.includes("tier=deep") && !sys.includes('tier: "deep"')) {
+		fail("SYSTEM.md must document deep tier default for WRS");
+	}
+	if (!sys.includes("web-retrieval")) {
+		fail("SYSTEM.md must reference web-retrieval skill");
+	}
+	if (!sys.includes(".web/cache") && !sys.includes("HARNESS_WEB_CACHE")) {
+		fail("SYSTEM.md must document pooled WRS cache under .web/cache/");
+	}
+
+	const tools = await readFile(toolsTs, "utf-8");
+	if (!tools.includes('Literal("deep")')) {
+		fail("harness-web-tools.ts must define tier enum including deep");
+	}
+	if (!tools.includes("anglesFile")) {
+		fail("harness-web-tools.ts must expose anglesFile on web_search");
+	}
+
+	const cli = await readFile(runCli, "utf-8");
+	if (!cli.includes("tier=deep")) {
+		fail("run-cli.ts harnessWebContextLine must mention tier=deep");
+	}
+
+	const artifactsTs = join(ROOT, ".pi", "lib", "harness-web", "artifacts.ts");
+	if (!(await fileExists(artifactsTs))) {
+		fail("missing harness-web/artifacts.ts for scoped .web paths");
+	}
+	const cacheTs = join(ROOT, ".pi", "lib", "harness-web", "cache.ts");
+	if (!(await fileExists(cacheTs))) {
+		fail("missing harness-web/cache.ts for pooled .web/cache/");
+	}
+	if (!tools.includes("refreshCache") || !tools.includes("lookupSearchCache")) {
+		fail("harness-web-tools.ts must implement pooled cache (refreshCache, lookupSearchCache)");
+	}
+	const heuristicYaml = join(ROOT, ".pi", "harness", "web-heuristic-angles.yaml");
+	if (!(await fileExists(heuristicYaml))) {
+		fail("missing .pi/harness/web-heuristic-angles.yaml");
+	}
+	const heuristicPy = join(ROOT, ".pi", "scripts", "harness_web", "heuristic_config.py");
+	if (!(await fileExists(heuristicPy))) {
+		fail("missing harness_web/heuristic_config.py");
+	}
+
+	const rankPy = join(ROOT, ".pi", "scripts", "harness_web", "rank.py");
+	const anglesPy = join(ROOT, ".pi", "scripts", "harness_web", "deep_search.py");
+	for (const p of [rankPy, anglesPy]) {
+		if (!(await fileExists(p))) fail(`WRS python module missing: ${p}`);
+	}
+
+	const expander = join(ROOT, ".pi", "agents", "harness", "web-retrieval", "web-query-expander.md");
+	if (!(await fileExists(expander))) {
+		fail("missing web-query-expander agent");
+	}
+
+	ok("WRS contracts (SYSTEM.md, tools, modules, web-retrieval skill, ADR)");
 }
 
 main().catch((err) => {

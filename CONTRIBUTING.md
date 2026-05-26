@@ -86,7 +86,7 @@ scrapling install
 bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 ```
 
-Artifacts go under `.web/` (gitignored). See `.agents/skills/scrapling-web/SKILL.md`.
+Artifacts go under `.web/` (gitignored). See `.agents/skills/web-retrieval/SKILL.md`.
 
 ### Environment
 
@@ -142,7 +142,7 @@ These Pi extensions are loaded from `.pi/extensions/` via the root `package.json
 |---|---|
 | context7-cli | [upstash/context7](https://github.com/upstash/context7) |
 | find-skills | bundled (context7-compatible discovery) |
-| scrapling-web | bundled (harness-web CLI + Scrapling) |
+| web-retrieval | bundled (WRS + harness-web CLI + Scrapling) |
 | obsidian/wiki skills (11 skills) | [AgriciDaniel/claude-obsidian](https://github.com/AgriciDaniel/claude-obsidian) |
 | posthog-analyst | bundled (PostHog MCP integration) |
 

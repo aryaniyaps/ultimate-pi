@@ -46,6 +46,8 @@ export interface SearchHit {
 	url: string;
 	title: string;
 	description: string;
+	score?: number;
+	angle_ids?: string[];
 }
 
 export function summarizeSearchJson(filePath: string, cwd: string): string {
@@ -55,11 +57,15 @@ export function summarizeSearchJson(filePath: string, cwd: string): string {
 		const data = JSON.parse(readFileSync(full, "utf-8")) as {
 			query?: string;
 			engine?: string;
+			tier?: string;
+			mode?: string;
 			data?: { web?: SearchHit[] };
 		};
 		const hits = data.data?.web ?? [];
+		const tier = data.tier ?? data.mode ?? "standard";
 		const lines = [
 			`engine: ${data.engine ?? "unknown"}`,
+			`tier: ${tier}`,
 			`query: ${data.query ?? ""}`,
 			`results: ${hits.length}`,
 			"",
@@ -67,6 +73,12 @@ export function summarizeSearchJson(filePath: string, cwd: string): string {
 		for (const [i, hit] of hits.entries()) {
 			lines.push(`${i + 1}. ${hit.title || "(no title)"}`);
 			lines.push(`   ${hit.url}`);
+			if (hit.score != null) {
+				lines.push(`   score: ${hit.score}`);
+			}
+			if (hit.angle_ids?.length) {
+				lines.push(`   angles: ${hit.angle_ids.join(", ")}`);
+			}
 			if (hit.description) {
 				const snip =
 					hit.description.length > 120
@@ -81,12 +93,40 @@ export function summarizeSearchJson(filePath: string, cwd: string): string {
 	}
 }
 
+export function summarizeDeepSearchJson(filePath: string, cwd: string): string {
+	const full = resolve(cwd, filePath);
+	if (!existsSync(full)) return "";
+	try {
+		const data = JSON.parse(readFileSync(full, "utf-8")) as {
+			query?: string;
+			angles?: Array<{ id: string; query: string }>;
+			data?: { web?: SearchHit[] };
+		};
+		const lines = [
+			summarizeSearchJson(filePath, cwd),
+			"",
+			`angles: ${data.angles?.length ?? 0}`,
+		];
+		for (const a of data.angles ?? []) {
+			lines.push(`  - ${a.id}: ${a.query}`);
+		}
+		lines.push("");
+		lines.push("Prefer URLs with multiple angle_ids. Use web_fetch highlights on top 3.");
+		return lines.join("\n");
+	} catch {
+		return summarizeSearchJson(filePath, cwd);
+	}
+}
+
 export function harnessWebContextLine(): string {
 	const engine = process.env.HARNESS_WEB_SEARCH_ENGINE?.trim() || "ddg_html";
 	const searx = process.env.HARNESS_WEB_SEARXNG_URL?.trim();
 	const searxPart = searx ? ` searxng_url=${searx}` : "";
 	return (
-		`[HarnessWeb] search_engine=${engine}${searxPart} — use web_search / web_fetch tools; ` +
-		"never resolve UP_PKG, ls harness-web.py, or python3 -c import scrapling before searching."
+		`[HarnessWeb] engine=${engine}${searxPart} | research: tier=deep + web-query-expander | ` +
+		"latency: tier=instant|standard or web-query-expander-fast | " +
+		"artifacts: .web/runs/<run_id>/ or .web/sessions/<session_id>/ (not flat .web/answer.md) | " +
+		"models: HARNESS_WEB_*_MODEL env (provider/model-id) | " +
+		"skill: web-retrieval"
 	);
 }

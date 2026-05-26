@@ -1,0 +1,22 @@
+# Example project extension — copy to:
+#   <your-project>/.pi/harness/web-heuristic-angles.yaml
+#
+# Merges on top of package .pi/harness/web-heuristic-angles.yaml.
+# Same angle id in a category replaces the package entry; new ids append.
+
+version: 1
+
+categories:
+  code:
+    # Add Rust-specific angles (keeps github + stackoverflow from package defaults)
+    - id: docs_rs
+      query: "{query} site:docs.rs"
+      rationale: Official Rust API docs
+    - id: crates_io
+      query: "{query} site:crates.io"
+      rationale: Crate ecosystem
+  # Package already ships category=security; extend or override ids here:
+  # security:
+  #   - id: cisa_kev
+  #     query: "{query} site:cisa.gov/known-exploited-vulnerabilities"
+  #     rationale: CISA KEV catalog

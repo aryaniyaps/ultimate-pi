@@ -1,0 +1,182 @@
+# WRS emergency heuristic angles (--expand-heuristic / expandHeuristic:true).
+# Package defaults (ultimate-pi). External projects: copy
+# .pi/harness/examples/web-heuristic-angles.project.yaml to
+# <your-project>/.pi/harness/web-heuristic-angles.yaml and edit.
+#
+# Placeholders: {query} → user search string
+# Order matters: base angles run first, then category (deduped by id, capped at max_angles).
+# JSON mirror (no PyYAML): run `node .pi/scripts/gen-web-heuristic-angles-json.mjs` after edits.
+# Stdlib fallback: .pi/scripts/harness_web/heuristic_angles_shipped.py
+
+version: 1
+max_angles: 8
+
+base:
+  - id: definitional
+    query: "{query}"
+    rationale: Core intent phrasing
+  - id: authoritative
+    query: "{query} official documentation OR specification OR RFC"
+    rationale: Primary specs and vendor docs
+
+categories:
+  code:
+    - id: github
+      query: "{query} site:github.com"
+      rationale: Source, issues, discussions
+    - id: stackoverflow
+      query: "{query} site:stackoverflow.com"
+      rationale: Debugging and API usage Q&A
+    - id: stackexchange
+      query: "{query} site:stackexchange.com"
+      rationale: Broader SE network (Super User, Server Fault, etc.)
+    - id: readthedocs
+      query: "{query} site:readthedocs.io"
+      rationale: OSS library documentation
+    - id: mdn
+      query: "{query} site:developer.mozilla.org"
+      rationale: Web platform and browser APIs
+    - id: package_registries
+      query: "{query} site:npmjs.com OR site:pypi.org OR site:pkg.go.dev OR site:crates.io"
+      rationale: Package metadata across major ecosystems
+    - id: microsoft_learn
+      query: "{query} site:learn.microsoft.com"
+      rationale: .NET, Azure, Windows, and enterprise stacks
+    - id: hacker_news
+      query: "{query} site:news.ycombinator.com"
+      rationale: High-signal practitioner discussion
+    - id: gitlab
+      query: "{query} site:gitlab.com"
+      rationale: Alternate host and CI-visible code
+    - id: devto
+      query: "{query} site:dev.to OR site:medium.com"
+      rationale: Tutorials and implementation writeups
+
+  paper:
+    - id: arxiv
+      query: "{query} site:arxiv.org"
+      rationale: Preprints and latest ML/CS uploads
+    - id: semantic_scholar
+      query: "{query} site:semanticscholar.org"
+      rationale: Citations, influences, and PDF links
+    - id: google_scholar
+      query: "{query} site:scholar.google.com"
+      rationale: Broad academic discovery
+    - id: papers_with_code
+      query: "{query} site:paperswithcode.com"
+      rationale: Benchmarks tied to implementations
+    - id: openreview
+      query: "{query} site:openreview.net"
+      rationale: Peer reviews and ML conference submissions
+    - id: acl_anthology
+      query: "{query} site:aclanthology.org"
+      rationale: NLP and computational linguistics
+    - id: acm_dl
+      query: "{query} site:dl.acm.org"
+      rationale: ACM proceedings and journals
+    - id: pubmed
+      query: "{query} site:pubmed.ncbi.nlm.nih.gov"
+      rationale: Biomedical and life-sciences literature
+
+  news:
+    - id: recent
+      query: "{query} news 2025 2026"
+      rationale: Recency-biased open web
+    - id: wire_reuters
+      query: "{query} site:reuters.com"
+      rationale: Wire-service reporting
+    - id: wire_ap
+      query: "{query} site:apnews.com"
+      rationale: Associated Press coverage
+    - id: tech_press
+      query: "{query} site:techcrunch.com OR site:theverge.com OR site:arstechnica.com"
+      rationale: Technology industry news
+    - id: business_press
+      query: "{query} site:bloomberg.com OR site:ft.com OR site:wsj.com"
+      rationale: Markets and business context
+    - id: analysis
+      query: "{query} in-depth analysis explainer"
+      rationale: Long-form journalism and explainers
+    - id: bbc
+      query: "{query} site:bbc.com/news"
+      rationale: International general news desk
+
+  company:
+    - id: official_site
+      query: "{query} official website"
+      rationale: Company-controlled messaging
+    - id: crunchbase
+      query: "{query} site:crunchbase.com"
+      rationale: Funding, investors, and competitors
+    - id: linkedin_company
+      query: "{query} site:linkedin.com/company"
+      rationale: Headcount, hiring, and positioning
+    - id: sec_filings
+      query: "{query} site:sec.gov 10-K OR 10-Q OR S-1"
+      rationale: US public-company disclosures
+    - id: g2_reviews
+      query: "{query} site:g2.com OR site:capterra.com"
+      rationale: B2B software reviews and comparisons
+    - id: company_news
+      query: "{query} company announcement press release"
+      rationale: Launches, partnerships, and earnings
+    - id: glassdoor
+      query: "{query} site:glassdoor.com"
+      rationale: Employee sentiment and culture signals
+
+  people:
+    - id: linkedin
+      query: "{query} site:linkedin.com/in"
+      rationale: Professional profiles
+    - id: github_person
+      query: "{query} site:github.com"
+      rationale: Open-source footprint for builders
+    - id: wikipedia
+      query: "{query} site:en.wikipedia.org"
+      rationale: Neutral biographical baseline
+    - id: scholar_person
+      query: "{query} site:scholar.google.com"
+      rationale: Publication record for researchers
+    - id: interviews
+      query: "{query} interview podcast keynote"
+      rationale: First-person statements and talks
+    - id: twitter_x
+      query: "{query} site:x.com OR site:twitter.com"
+      rationale: Public statements and discourse
+
+  security:
+    - id: cve_nvd
+      query: "{query} CVE site:nvd.nist.gov"
+      rationale: National Vulnerability Database
+    - id: owasp
+      query: "{query} site:owasp.org"
+      rationale: AppSec standards and cheat sheets
+    - id: cwe
+      query: "{query} site:cwe.mitre.org"
+      rationale: Weakness taxonomy
+    - id: github_advisories
+      query: "{query} site:github.com/advisories OR dependabot"
+      rationale: Ecosystem security advisories
+    - id: snyk_blog
+      query: "{query} site:snyk.io/blog OR vulnerability"
+      rationale: Practitioner security writeups
+
+  default:
+    - id: technical
+      query: "{query} how it works architecture internals"
+      rationale: Mechanism and design
+    - id: criticism
+      query: "{query} limitations criticism drawbacks"
+      rationale: Counterpoints and failure modes
+    - id: wikipedia
+      query: "{query} site:en.wikipedia.org"
+      rationale: Structured overview
+    - id: comparison
+      query: "{query} vs alternatives comparison benchmark"
+      rationale: Competitive landscape
+    - id: reddit
+      query: "{query} site:reddit.com"
+      rationale: Community experience reports
+    - id: hn_default
+      query: "{query} site:news.ycombinator.com"
+      rationale: Practitioner threads when category unknown

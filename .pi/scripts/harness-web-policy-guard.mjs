@@ -18,7 +18,7 @@ const ALLOWED_FILES = new Set([
 	".pi/scripts/harness-web.py",
 	".pi/scripts/harness-web-search.md",
 	".pi/scripts/harness-web-policy-guard.mjs",
-	".agents/skills/scrapling-web/SKILL.md",
+	".agents/skills/web-retrieval/SKILL.md",
 	".pi/scripts/harness-cli-verify.sh",
 	".pi/scripts/harness_web/output.py",
 	"AGENTS.md",

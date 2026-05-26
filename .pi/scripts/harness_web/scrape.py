@@ -41,6 +41,36 @@ def scrape_url(
     write_page_markdown(Path(output), page, main_content_only=True)
 
 
+def scrape_url_with_highlights(
+    url: str,
+    markdown_output: str,
+    highlights_output: str | None,
+    *,
+    config: HarnessWebConfig,
+    fast: bool,
+    wait_ms: int | None,
+    highlight_query: str,
+) -> None:
+    import json
+    from pathlib import Path
+
+    from .highlights import extract_highlights
+
+    page = fetch_page(url, config=config, fast=fast, wait_ms=wait_ms)
+    md_path = Path(markdown_output)
+    write_page_markdown(md_path, page, main_content_only=True)
+    if highlights_output and highlight_query.strip():
+        text = md_path.read_text(encoding="utf-8")
+        spans = extract_highlights(text, highlight_query)
+        hp = Path(highlights_output)
+        hp.parent.mkdir(parents=True, exist_ok=True)
+        hp.write_text(
+            json.dumps({"url": url, "query": highlight_query, "highlights": spans}, indent=2)
+            + "\n",
+            encoding="utf-8",
+        )
+
+
 def map_url(
     url: str,
     output: str,
