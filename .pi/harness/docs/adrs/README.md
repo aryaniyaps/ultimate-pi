@@ -38,6 +38,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0049](0049-agents-policy-manifest.md) | agents.policy.yaml SSOT + native discovery | Accepted |
 | [0050](0050-agentic-web-retrieval-stack.md) | Agentic Web Retrieval Stack (WRS) | Accepted |
 | [0051](0051-hash-anchored-executor-edits.md) | Hash-anchored read/edit (Dirac-inspired) | Accepted |
+| [0052](0052-ls-lint-naming-lifecycle.md) | ls-lint naming lifecycle | Accepted |
+| [0053](0053-plan-task-clarification-gate.md) | Plan-phase task clarification gate | Accepted |
 
 ## Practice map
 

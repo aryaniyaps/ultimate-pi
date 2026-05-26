@@ -38,6 +38,14 @@ The wrapper passes the resolved project root explicitly so Sentrux can find `.se
 
 Do **not** ask the executor to optimize Sentrux metrics — observation is for `/harness-review` only.
 
+When `HARNESS_LS_LINT_REQUIRED=true`, record a pre-execute filename baseline:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" --json
+```
+
+Note `violation_count` in run notes (do not block execute on pre-existing violations unless chair policy says otherwise).
+
 ## Orchestration — Single jelled implementer
 
 **Practice:** Peopleware — one accountable team owns delivery; generator–evaluator separation (executor does not self-certify).
@@ -81,6 +89,30 @@ phase: execute
 - Append session custom entry `harness-sentrux-signal` with the same fields (observation bus / telemetry).
 
 `harness_artifact_ready({ paths: ["artifacts/sentrux-signal.yaml"] })` when written.
+
+When `HARNESS_LS_LINT_REQUIRED=true`, after executor completes:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" --json
+```
+
+- If `lint_pass` is false → include in `validation_summary`; prefer `scope_drift` when new violations vs pre-run baseline.
+- Write `artifacts/ls-lint-signal.yaml` via `write_harness_yaml`:
+
+```yaml
+schema_version: "1.0.0"
+run_id: "<run_id>"
+lint_pass: true|false
+violation_count: 0
+status: pass|fail|skipped|not_installed
+quality_signal_summary: "<one line>"
+recorded_at: "<ISO8601>"
+phase: execute
+```
+
+- Append session custom entry `harness-ls-lint-signal` with the same fields.
+
+`harness_artifact_ready({ paths: ["artifacts/ls-lint-signal.yaml"] })` when written.
 
 ## Parent rules
 

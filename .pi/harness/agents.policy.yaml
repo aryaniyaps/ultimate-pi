@@ -129,6 +129,15 @@ agents:
     max_turns: 16
     thinking: high
     submit_tool: submit_sentrux_manifest_proposal
+  harness/ls-lint-steward:
+    kind: planner
+    tools_add:
+      - bash
+      - submit_ls_lint_manifest_proposal
+    extensions: false
+    max_turns: 16
+    thinking: high
+    submit_tool: submit_ls_lint_manifest_proposal
   harness/trace-librarian:
     kind: trace
     tools_add:

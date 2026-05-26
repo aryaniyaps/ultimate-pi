@@ -63,6 +63,14 @@ Compare to baseline from `/harness-run` (`harness-sentrux-cli.mjs gate --save`).
 
 Ensure `artifacts/sentrux-signal.yaml` exists under the run dir (written during `/harness-run`). If missing, write it from the latest `sentrux check` / `gate` output. Append or refresh session entry `harness-sentrux-signal`.
 
+When `HARNESS_LS_LINT_REQUIRED=true`:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" --json
+```
+
+Ensure `artifacts/ls-lint-signal.yaml` exists (from `/harness-run` or write from CLI output). Append or refresh `harness-ls-lint-signal`.
+
 Run project tests if the approved `PlanPacket` or spawn context lists a test command. Capture stdout paths only — do not paste full logs into the next spawn.
 
 Write `artifacts/benchmark-log.yaml` via `write_harness_yaml` when any shell step ran:
@@ -72,10 +80,12 @@ schema_version: "1.0.0"
 harness_verify: pass|fail
 sentrux_check: pass|fail|skipped|not_installed
 sentrux_gate: pass|degraded|skipped|not_installed
+ls_lint: pass|fail|skipped|not_installed
+ls_lint_violations: 0
 notes: "…"
 ```
 
-`harness_artifact_ready({ paths: ["artifacts/benchmark-log.yaml", "artifacts/sentrux-signal.yaml"] })` when written.
+`harness_artifact_ready({ paths: ["artifacts/benchmark-log.yaml", "artifacts/sentrux-signal.yaml", "artifacts/ls-lint-signal.yaml"] })` when written.
 
 ## Phase 2 — Measure actuals vs plan (benchmark evaluator)
 
@@ -85,7 +95,7 @@ notes: "…"
 subagent({
   agentScope: "both",
   agent: "harness/reviewing/evaluator",
-  task: "<HarnessSpawnContext mode benchmark + plan_packet_path + run_dir + acceptance_checks + paths: benchmark-log.yaml, sentrux-signal.yaml — treat Sentrux fields as measured structural actuals, not executor goals>"
+  task: "<HarnessSpawnContext mode benchmark + plan_packet_path + run_dir + acceptance_checks + paths: benchmark-log.yaml, sentrux-signal.yaml, ls-lint-signal.yaml — treat Sentrux/ls-lint fields as measured structural actuals, not executor goals>"
 })
 ```
 

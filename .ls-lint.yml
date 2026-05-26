@@ -1,0 +1,100 @@
+# ls-lint — 2026-05-26
+# Docs: https://ls-lint.org/
+# Sync: node $UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs --force (see .pi/scripts/README.md for UP_PKG) or /harness-ls-lint-sync in pi
+#
+# Custom rules: add YAML below the managed block; they are preserved on sync.
+
+# --- harness:managed:start ---
+# Generated from .pi/harness/ls-lint/naming.manifest.json
+# Project: ultimate-pi
+# Schema: 1.0.0
+
+ls:
+  .*: "kebab-case"
+  .md: "kebab-case"
+  .ts: "kebab-case"
+  .tsx: "kebab-case"
+  .mjs: "kebab-case"
+  .js: "kebab-case"
+  .json: "kebab-case"
+  .yaml: "kebab-case"
+  .yml: "kebab-case"
+  .toml: "kebab-case"
+  .py: "kebab-case"
+  .sh: "kebab-case"
+  .css: "kebab-case"
+  .html: "kebab-case"
+  ".pi/harness/docs/adrs":
+    .md: "regex:^\\d{4}-[a-z0-9-]+$|^template$"
+  ".agents/skills":
+    .dir: "kebab-case"
+    .md: "regex:^SKILL\\.md$"
+  scripts:
+    .dir: "kebab-case"
+  docs:
+    .dir: "kebab-case"
+  ".pi/scripts":
+    .dir: snake_case
+  ".pi/agents":
+    .dir: "kebab-case"
+
+ignore:
+  - .git
+  - node_modules
+  - "graphify-out"
+  - "graphify-books-out"
+  - vendor
+  - dist
+  - build
+  - coverage
+  - .web
+  - .cursor
+  - .github
+  - .agents
+  - ".pi/npm"
+  - ".pi/harness/runs"
+  - ".pi/harness/debates"
+  - ".pi/harness/.lens"
+  - ".pi/wiki-search"
+  - .cocoindex_code
+  - .sentrux
+  - ".ls-lint"
+  - .searxng
+  - ".vault-meta"
+  - .raw
+  - raw
+  - data
+  - "**/__pycache__/**"
+  - submissions
+  - jobs
+  - pl
+  - "**/*.png"
+  - "**/*.jpg"
+  - "**/*.jpeg"
+  - "**/*.gif"
+  - "**/*.webp"
+  - "**/*.ico"
+  - "**/*.svg"
+  - "package-lock.json"
+  - "pnpm-lock.yaml"
+  - yarn.lock
+  - "*.lock"
+  - README.md
+  - "**/README.md"
+  - SKILL.md
+  - "**/SKILL.md"
+  - CHANGELOG.md
+  - LICENSE
+  - AGENTS.md
+  - CONTRIBUTING.md
+  - THIRD_PARTY_NOTICES.md
+  - .env.example
+  - "skills-lock.json"
+  - ".fallow-baseline.json"
+  - .graphify_detect.json
+  - .graphify_python
+  - .graphify_root
+  - .graphify_incremental.json
+  - ".pi/SYSTEM.md"
+  - ".pi/PACKAGING.md"
+# --- harness:managed:end ---

@@ -23,7 +23,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 1. **Parallelism law** — Parallel `subagent` `tasks` only when outputs are independent inputs to a later merge (implementation ∥ stack research; inspector ∥ adversary in `parallel_probes`). Never parallelize decompose ∥ hypothesis.
 2. **Two-pizza cap per batch** — Max 2 research lanes, max 1 optional `planning-context` subagent, max 1 executor, max 1 debate lane agent per `subagent` call (plan-verify may use 2 probes + integrator in separate batches).
 3. **No redundant thinkers** — If artifact X exists, downstream agents read it; they do not re-derive (e.g. decompose after `planning-context.yaml`).
-4. **Sequential dependency chain** — planning context → problem framing / decompose → hypothesis → research → synthesis/author → DAG → plan-verify → approve → execute → review → (steer)* → policy.
+4. **Sequential dependency chain** — task clarification → planning context → problem framing / decompose → hypothesis → research → synthesis/author → DAG → plan-verify → approve → execute → review → (steer)* → policy.
 5. **Plan-verify (agent-native)** — For `fast`/`standard`, parallel probes then integrator; parent is chair, not participant. Threaded debate remains for `full` until parity.
 6. **Tool intelligence** — Parent chooses graphify, sg, ccc; subprocesses optional. **Path-first:** disk is source of truth; tool args are pointers (ADR 0043).
 
@@ -31,8 +31,9 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 
 | Phase | Practice | Agent translation | Actor | Spawn |
 |-------|----------|---------------------|-------|-------|
-| 0 | Tooling / fast feedback | Pre-index once | Parent + `ccc` | Automatic |
-| 1 | Reconnaissance before WBS | **ContextPack** on disk | Parent tools or optional `planning-context` | No default subprocess |
+| 0 | Task clarification | Task contract on disk; code + web OK | Parent + `ask_user` | No subprocess |
+| 0a | Tooling / fast feedback | Pre-index once | Parent + `ccc` | Automatic |
+| 1 | Reconnaissance before WBS | **ContextPack** on disk | Parent tools or optional `planning-context` | After task-clarification gate |
 | 2a | Problem framing / lakes | Lake outcomes, not ticket tree | `decompose` or synthesizer section | Sequential after context gate |
 | 2b | Hypothesis-driven approach | Falsifiable claim grounded in framing | `hypothesis` or synthesizer | After `artifacts/decomposition.yaml` |
 | 3.5 | Spike / external research | Paths in research brief | Researchers optional | Artifacts required |
@@ -41,6 +42,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | 4c | Deterministic quality gate | Script, not LLM | `validate-plan-dag.mjs` | Parent; hard stop |
 | 4d | Tailor process to risk | Probe depth, not meeting count | `harness_plan_debate_eligibility` | Pre plan-verify |
 | 4e | Architectural intent | Fitness-function spec | `harness/sentrux-steward` optional | When structural risk |
+| 4e′ | Naming intent | Filename convention spec | `harness/ls-lint-steward` optional | New paths/extensions |
 | 5 | Plan-verify (Review Gate) | Parallel probes + integrator | Debate cast / probes | `parallel_probes` or threaded |
 | 6 | Baseline + approve | Path-only `approve_plan` | Parent | `approve_plan`, `create_plan` |
 
@@ -69,9 +71,9 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | Step | Practice | Agent translation | Actor |
 |------|----------|-------------------|-------|
 | Gate | Change control | `plan_ready` required | Parent |
-| Pre-work | Fitness baseline | `sentrux gate --save` | Parent |
+| Pre-work | Fitness baseline | `sentrux gate --save` + ls-lint pre-check | Parent |
 | Work | Single implementer | `executor_strategy` | `harness/running/executor` |
-| Post-work | Observation | `sentrux check` / signal artifact | Parent |
+| Post-work | Observation | `sentrux check` / `ls-lint` signal artifacts | Parent |
 | Handoff | Generator–evaluator | `submit_executor_handoff` | Executor |
 | Next | Always verify | **`/harness-review`** (not replan on blocked) | Parent routing |
 
@@ -111,6 +113,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 
 ## Anti-patterns
 
+- **Do not** write `planning-context.yaml` or spawn planning subagents before `artifacts/task-clarification.yaml` is `ready` (enforced in `write_harness_yaml`, spawn topology, `approve_plan`).
 - **Do not** spawn `decompose` and `hypothesis` in the same parallel `tasks` batch.
 - **Do not** run `graphify query` in `decompose` when planning-context coverage is ok (ADR 0041).
 - **Do not** parallelize threaded debate lanes in one batch (except `parallel_probes` inspector ∥ adversary per ADR 0042).

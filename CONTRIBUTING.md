@@ -73,6 +73,18 @@ max_cc = 25
 no_god_files = true
 ```
 
+## ls-lint (filename / directory naming)
+
+[ls-lint](https://ls-lint.org/) enforces kebab-case (and path-scoped rules) on file and directory names. The harness keeps `.ls-lint.yml` in sync with `.pi/harness/ls-lint/naming.manifest.json` (see ADR 0052).
+
+```bash
+npm install -g @ls-lint/ls-lint@2.3.1
+node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs"
+ls-lint
+```
+
+In Pi sessions, use **harness-ls-lint-setup** for bootstrap vs steward vs sync. Re-sync after manifest edits: `/harness-ls-lint-sync` or `node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --force`.
+
 ## harness-web (Scrapling)
 
 Harness agents fetch the web through `python3 "$UP_PKG/.pi/scripts/harness-web.py"` (Scrapling). No Docker compose stack or paid API keys.

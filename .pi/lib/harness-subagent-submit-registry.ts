@@ -106,6 +106,11 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 		schemaFile: "sentrux-manifest-proposal.schema.json",
 		artifactPath: "artifacts/sentrux-manifest-proposal.yaml",
 	},
+	{
+		toolName: "submit_ls_lint_manifest_proposal",
+		schemaFile: "ls-lint-manifest-proposal.schema.json",
+		artifactPath: "artifacts/ls-lint-manifest-proposal.yaml",
+	},
 ] as const;
 
 export function specForSubmitTool(

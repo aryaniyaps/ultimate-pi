@@ -324,6 +324,37 @@ verify_gh() {
 	fi
 }
 
+verify_ls_lint() {
+	log "[ls-lint]"
+	npm_global_install "@ls-lint/ls-lint@2.3.1" "ls-lint" || {
+		fail "ls-lint npm install"
+		return
+	}
+	if ! ls-lint --version &>/dev/null; then
+		fail "ls-lint --version failed"
+		return
+	fi
+	_bootstrap="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-ls-lint-bootstrap.mjs"
+	if [ -f "$_bootstrap" ]; then
+		node "$_bootstrap" --force 2>/dev/null ||
+			warn "ls-lint bootstrap failed (see harness-ls-lint-setup skill)"
+	fi
+	_cli="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-ls-lint-cli.mjs"
+	if [ -f "$_cli" ]; then
+		if node "$_cli" 2>/dev/null; then
+			pass "ls-lint $(ls-lint --version 2>/dev/null | head -1)"
+		else
+			fail "ls-lint filename check failed (fix violations or tune naming.manifest.json)"
+		fi
+	else
+		if ls-lint 2>/dev/null; then
+			pass "ls-lint $(ls-lint --version 2>/dev/null | head -1)"
+		else
+			fail "ls-lint check failed"
+		fi
+	fi
+}
+
 verify_sentrux() {
 	log "[sentrux]"
 	if ! have_cmd sentrux || [ "$FORCE" = true ]; then
@@ -362,6 +393,7 @@ verify_biome
 verify_sg
 verify_gh
 verify_sentrux
+verify_ls_lint
 
 log ""
 if [ "$FAILURES" -gt 0 ]; then

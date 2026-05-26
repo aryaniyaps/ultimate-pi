@@ -19,6 +19,7 @@ type ObservationKind =
 	| "drift"
 	| "eval"
 	| "sentrux"
+	| "ls-lint"
 	| "trace";
 type ObservationSource =
 	| "policy-gate"
@@ -29,6 +30,7 @@ type ObservationSource =
 	| "debate-orchestrator"
 	| "drift-monitor"
 	| "sentrux"
+	| "ls-lint"
 	| "evaluator"
 	| "harness-telemetry";
 
@@ -52,6 +54,7 @@ const SOURCE_BY_CUSTOM: Record<string, ObservationSource> = {
 	"harness-drift-report": "drift-monitor",
 	"harness-eval-verdict": "evaluator",
 	"harness-sentrux-signal": "sentrux",
+	"harness-ls-lint-signal": "ls-lint",
 	"harness-run-record": "trace-recorder",
 };
 
@@ -69,6 +72,7 @@ const KIND_BY_CUSTOM: Record<string, ObservationKind> = {
 	"harness-drift-report": "drift",
 	"harness-eval-verdict": "eval",
 	"harness-sentrux-signal": "sentrux",
+	"harness-ls-lint-signal": "ls-lint",
 	"harness-run-record": "trace",
 };
 

@@ -21,7 +21,7 @@ description: >-
 
 | Phase | Practice | Actor | Artifact |
 |-------|----------|-------|----------|
-| 1 | Automated QC + Sentrux fitness functions | Parent | `harness-verify.mjs`, `harness-sentrux-cli.mjs gate`, `benchmark-log.yaml`, `sentrux-signal.yaml` |
+| 1 | Automated QC + fitness functions | Parent | `harness-verify.mjs`, Sentrux gate, ls-lint CLI, `benchmark-log.yaml`, `sentrux-signal.yaml`, `ls-lint-signal.yaml` |
 | 2 | Measure actuals (EVM) | `harness/reviewing/evaluator` benchmark | `eval-verdict.yaml` |
 | 2b | Controlling | Parent | Write `review-outcome.yaml`; route via `remediation_class` (not fail-fast abort) |
 | 6 | Outcome | Parent | `review-outcome.yaml` → `/harness-steer` or replan |

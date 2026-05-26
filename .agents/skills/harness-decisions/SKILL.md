@@ -54,7 +54,40 @@ Parent orchestrator calls **`approve_plan`** with the full `plan_packet` (scroll
 }
 ```
 
-## Example (plan — scope)
+## Phase 0 — task contract (before reconnaissance)
+
+Use during **`/harness-plan` Phase 0** only. Purpose: disambiguate the **task** (scope, success, risk) — not research-backed implementation forks (those are Phase 4 after Phase 3.5).
+
+### Example (Phase 0 — success criteria)
+
+```json
+{
+  "question": "What does done look like for this task?",
+  "context": "The request could mean harness-only changes, product code, or docs. Phase 0 must lock acceptance before reconnaissance.",
+  "options": [
+    { "title": "Harness contract only", "description": "Changes under .pi/harness and prompts; harness-verify passes" },
+    { "title": "End-to-end feature", "description": "User-visible behavior + tests in the app repo" },
+    { "title": "Docs / ADR only", "description": "No runtime code changes" }
+  ],
+  "allowFreeform": true
+}
+```
+
+### Example (Phase 0 — risk when `--risk` omitted)
+
+```json
+{
+  "question": "What risk level should tailor debate and research depth?",
+  "options": [
+    { "title": "Low", "description": "Small, localized change; fast plan-verify profile" },
+    { "title": "Med (default)", "description": "Typical feature or multi-file harness work" },
+    { "title": "High", "description": "Architecture, security, or broad blast radius" }
+  ],
+  "allowFreeform": false
+}
+```
+
+## Example (plan — scope) — Phase 4 fork, not Phase 0
 
 ```json
 {
@@ -69,6 +102,6 @@ Parent orchestrator calls **`approve_plan`** with the full `plan_packet` (scroll
 
 ## Who calls what
 
-- **Parent orchestrator** during `/harness-plan` — `ask_user` for clarification; **`approve_plan`** then **`create_plan`** for the plan file.
+- **Parent orchestrator** during `/harness-plan` — Phase 0: `ask_user` for **task contract** → `artifacts/task-clarification.yaml`; later: **`approve_plan`** then **`create_plan`** for the plan file; Phase 4: `ask_user` for **dialectical forks** only.
 - `harness/planning/*` (scouts, decompose, hypothesis, hypothesis-eval) — JSON only; no `ask_user` / `approve_plan` / `create_plan`.
 - `harness/reviewing/evaluator`, `harness/reviewing/adversary`, and `harness/reviewing/tie-breaker` — emit `human_required`; the **parent orchestrator** calls `ask_user`.

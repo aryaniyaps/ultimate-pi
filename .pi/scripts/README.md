@@ -28,6 +28,10 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Sentrux rules re-sync after manifest edit | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync` |
 | Sentrux rules drift check (CI) | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --check` |
 | Sentrux run/review check or gate (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` / `gate [--save]` |
+| ls-lint naming bootstrap (harness-setup) | `node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs"` |
+| ls-lint naming re-sync after manifest edit | `node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs" --force` or `/harness-ls-lint-sync` |
+| ls-lint config drift check (CI) | `node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --check` |
+| ls-lint filename check (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs` [`--json`] |
 | Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
 | Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
 | Harness lens extension | `.pi/extensions/harness-lens.ts` → `.pi/lib/harness-lens/index.ts` (loaded by `.pi/extensions`; PostHog owns lens telemetry) |

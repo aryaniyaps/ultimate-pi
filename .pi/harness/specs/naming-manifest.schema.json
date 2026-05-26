@@ -1,0 +1,54 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/naming-manifest.schema.json",
+	"title": "NamingManifest",
+	"description": "Canonical harness source for .ls-lint.yml (filename and directory naming).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": ["schema_version", "project", "global_rules", "ignores"],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"project": {
+			"type": "string",
+			"minLength": 1
+		},
+		"global_rules": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "string",
+				"minLength": 1
+			}
+		},
+		"scoped_rules": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["path", "rules"],
+				"properties": {
+					"path": {
+						"type": "string",
+						"minLength": 1
+					},
+					"rules": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "string",
+							"minLength": 1
+						}
+					}
+				}
+			}
+		},
+		"ignores": {
+			"type": "array",
+			"items": {
+				"type": "string",
+				"minLength": 1
+			}
+		}
+	}
+}

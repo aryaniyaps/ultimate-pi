@@ -26,6 +26,13 @@ const SENTRUX_TEMPLATE = join(
 	"sentrux",
 	"architecture.manifest.json",
 );
+const LS_LINT_TEMPLATE = join(
+	UP_PKG,
+	".pi",
+	"harness",
+	"ls-lint",
+	"naming.manifest.json",
+);
 
 const projectRoot = process.argv[2] || process.cwd();
 const specDest = join(projectRoot, ".pi", "harness", "specs");
@@ -35,6 +42,13 @@ const sentruxDest = join(
 	"harness",
 	"sentrux",
 	"architecture.manifest.json",
+);
+const lsLintDest = join(
+	projectRoot,
+	".pi",
+	"harness",
+	"ls-lint",
+	"naming.manifest.json",
 );
 
 async function fileExists(path) {
@@ -71,6 +85,14 @@ async function main() {
 		await copyFile(SENTRUX_TEMPLATE, sentruxDest);
 		console.log(
 			`harness-seed-project-contracts: seeded Sentrux manifest -> ${sentruxDest} (run harness-sentrux-bootstrap.mjs to sync rules.toml)`,
+		);
+	}
+
+	if (!(await fileExists(lsLintDest)) && (await fileExists(LS_LINT_TEMPLATE))) {
+		await mkdir(dirname(lsLintDest), { recursive: true });
+		await copyFile(LS_LINT_TEMPLATE, lsLintDest);
+		console.log(
+			`harness-seed-project-contracts: seeded ls-lint manifest -> ${lsLintDest} (run harness-ls-lint-bootstrap.mjs to sync .ls-lint.yml)`,
 		);
 	}
 }

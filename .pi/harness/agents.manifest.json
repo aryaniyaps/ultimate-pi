@@ -1,9 +1,9 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.19.1",
-	"generated_at": "2026-05-26T07:37:49.163Z",
-	"policy_sha256": "5a1e71f380df7dde8f6d1f33b366da8bba191689476a6440b3bcdbd776dc617a",
+	"package_version": "0.20.0",
+	"generated_at": "2026-05-26T11:40:35.667Z",
+	"policy_sha256": "c4fb5e53f8374527d47bb3bafae5cee0e1cee599232c9d74ef16389f8bc07583",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -48,6 +48,10 @@
 		"harness/incident-recorder": {
 			"path": ".pi/agents/harness/incident-recorder.md",
 			"sha256": "4efbdb9482b1038e2bd08cae9898aed9ef983903107ddab6c84d51436d5d3296"
+		},
+		"harness/ls-lint-steward": {
+			"path": ".pi/agents/harness/ls-lint-steward.md",
+			"sha256": "e35bf59adf2785e7369a7428793a26691cea43d630e02a9541398cb5a5b1f5dc"
 		},
 		"harness/sentrux-bootstrap": {
 			"path": ".pi/agents/harness/sentrux-bootstrap.md",
@@ -95,7 +99,7 @@
 		},
 		"harness/reviewing/evaluator": {
 			"path": ".pi/agents/harness/reviewing/evaluator.md",
-			"sha256": "5d6d34654d5c223e5549de9b7b0277b4e28745b2409545ecf3034bd0789c3fa3"
+			"sha256": "885dda59bbbc6193c485a90fa4a867d44f2d4278b6ab001dc548c67529d06452"
 		},
 		"harness/reviewing/tie-breaker": {
 			"path": ".pi/agents/harness/reviewing/tie-breaker.md",
@@ -103,7 +107,7 @@
 		},
 		"harness/planning/decompose": {
 			"path": ".pi/agents/harness/planning/decompose.md",
-			"sha256": "944c7221b7bf8e15cd8cf324c3d5ae135c643c6387d8f611cf9128f9ea922963"
+			"sha256": "ef552be75ff92667e6be90a85768e0804501d00e517b753ca37d174b2561618a"
 		},
 		"harness/planning/execution-plan-author": {
 			"path": ".pi/agents/harness/planning/execution-plan-author.md",

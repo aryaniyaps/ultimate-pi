@@ -10,6 +10,7 @@ const NODE_ONLY_TESTS = [
 	'harness-subagents-loader.test.mjs',
 	'harness-subagent-precheck.test.mjs',
 	'sentrux-rules-sync.test.mjs',
+	'ls-lint-rules-sync.test.mjs',
 	'harness-budget-guard.test.mjs',
 ];
 

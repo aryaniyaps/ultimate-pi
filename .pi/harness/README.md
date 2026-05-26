@@ -11,6 +11,7 @@ Phase 1–2 scaffold for the Pi harness runtime surfaces.
 - `evolution/` - self-healing rules and chaos drills (JSONL-first).
 - `corpus/` - ingest notes for graphify/raw sources.
 - `sentrux/` - `architecture.manifest.json` source for `.sentrux/rules.toml` ([ADR 0009](docs/adrs/0009-sentrux-rules-lifecycle.md)).
+- `ls-lint/` - `naming.manifest.json` source for `.ls-lint.yml` ([ADR 0052](docs/adrs/0052-ls-lint-naming-lifecycle.md)).
 
 This scaffold is intentionally minimal and safe to adopt incrementally.
 
@@ -21,6 +22,8 @@ UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.
 node "$UP_PKG/.pi/scripts/harness-verify.mjs"
 node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs"       # idempotent bootstrap (/harness-setup)
 node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force   # after editing sentrux/architecture.manifest.json
+node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs"       # idempotent naming bootstrap
+node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs" --force   # after editing ls-lint/naming.manifest.json
 ```
 
 ## Governance Extensions
@@ -42,6 +45,7 @@ manifest (`package.json`).
 - `observation-bus.ts` - normalized HarnessObservation envelopes
 - `drift-monitor.ts` - interactive replan/proceed on high plan drift
 - `sentrux-rules-sync.ts` - sync `.sentrux/rules.toml` from `sentrux/architecture.manifest.json`
+- `ls-lint-rules-sync.ts` - sync `.ls-lint.yml` from `ls-lint/naming.manifest.json`
 - `review-integrity.ts` - executor/reviewer session-isolation enforcement
 - `test-diff-integrity.ts` - suspicious test-diff detection + adversary escalation
 - `debate-orchestrator.ts` - headless debate bus + consensus packet emission
