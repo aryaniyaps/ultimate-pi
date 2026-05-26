@@ -203,12 +203,44 @@ agents:
     max_turns: 14
     thinking: medium
     submit_tool: submit_hypothesis_brief
+  harness/web-retrieval/web-query-expander:
+    kind: other
+    extensions: false
+    max_turns: 8
+    thinking: low
+  harness/web-retrieval/web-query-expander-fast:
+    kind: other
+    extensions: false
+    max_turns: 5
+    thinking: off
+  harness/web-retrieval/web-gap-analyzer:
+    kind: other
+    extensions: false
+    max_turns: 8
+    thinking: low
+  harness/web-retrieval/web-answerer:
+    kind: other
+    extensions: false
+    max_turns: 12
+    thinking: medium
+  harness/web-retrieval/web-summarizer:
+    kind: other
+    extensions: false
+    max_turns: 6
+    thinking: low
+  harness/web-retrieval/web-criteria-verifier:
+    kind: other
+    extensions: false
+    max_turns: 14
+    thinking: medium
   harness/planning/implementation-researcher:
     kind: planner
     tools_add:
       - bash
       - web_search
       - web_fetch
+      - web_find_similar
+      - web_contents
       - submit_implementation_research
     extensions: false
     max_turns: 14
@@ -268,6 +300,8 @@ agents:
       - bash
       - web_search
       - web_fetch
+      - web_find_similar
+      - web_contents
       - submit_stack_brief
     extensions: false
     max_turns: 16

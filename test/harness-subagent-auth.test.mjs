@@ -71,4 +71,23 @@ describe("harness-subagent-auth", () => {
 		);
 		assert.equal(concrete, undefined);
 	});
+
+	it("uses HARNESS_WEB_FAST_MODEL for fast WRS agents", () => {
+		const prev = process.env.HARNESS_WEB_FAST_MODEL;
+		process.env.HARNESS_WEB_FAST_MODEL = "env-provider/env-model";
+		try {
+			const concrete = resolveConcreteSubagentModel(process.cwd(), undefined, {
+				name: "harness/web-retrieval/web-gap-analyzer",
+				thinking: "low",
+				description: "",
+				systemPrompt: "",
+				source: "package",
+				filePath: "x",
+			});
+			assert.equal(concrete?.modelRef, "env-provider/env-model");
+		} finally {
+			if (prev === undefined) delete process.env.HARNESS_WEB_FAST_MODEL;
+			else process.env.HARNESS_WEB_FAST_MODEL = prev;
+		}
+	});
 });

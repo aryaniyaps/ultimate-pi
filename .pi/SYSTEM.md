@@ -30,27 +30,45 @@ Scope: this file is the reusable harness-level instruction set. It must work whe
 ## Web Policy (Mandatory)
 
 > [!warning] No raw HTTP
-> Route **all** web through [[context7]] for API/library docs or **`web_search` / `web_fetch`** via [[scrapling-web]] for non-API web. Do not use `curl`, `wget`, Firecrawl, or scrapling CLI preflight.
+> Route **all** web through [[context7]] for API/library docs or the **Agentic Web Retrieval Stack (WRS)** — `web_search` / `web_fetch` / `web_find_similar` / `web_contents` via [[web-retrieval]]. Do not use `curl`, `wget`, Firecrawl, or scrapling CLI preflight.
 
 ### API / Library Docs — context7 ONLY
 - `ctx7 library <name> <query>` then `ctx7 docs <id> <query>`.
 - context7 owns function signatures, class APIs, config options, stdlib, and framework specs.
 - Never use quality-sites or web_fetch for API docs.
 
-### Non-API Web — web_search + web_fetch
-Use the harness web-search/fetch tools and the `scrapling-web` skill when available. No preflight: never probe package paths, list harness scripts, or import Scrapling before searching.
+### Non-API Web — WRS (tiered)
+Invoke the **`web-retrieval`** skill before non-trivial open-web work (landscape, prior art, comparisons, planning research). WRS uses a **pooled cache** (`.web/cache/`, TTL via `HARNESS_WEB_CACHE_TTL_SEC`) and **workspace aliases** under `.web/` (`angles.yaml`, `search-deep.json`, `answer.md`). Set `HARNESS_WEB_ISOLATE=1` only when per-run/session file isolation is required.
+
+| Tier | When | Pattern |
+|------|------|---------|
+| **`deep`** | **Default** for landscape, prior art, how/why, comparisons, stack/implementation research, multi-source questions | 1) `subagent` `harness/web-retrieval/web-query-expander` → `.web/angles.yaml` 2) `web_search({ query, tier: "deep", anglesFile: ".web/angles.yaml" })` (cache reuse when fresh) 3) `web_fetch` top URLs with `highlights: true` |
+| `standard` | One narrow fact; follow-up after `search-deep.json`; verify one claim | `web_search({ query, tier: "standard", limit: 5 })` |
+| `instant` | Closed-form fact, latency-critical | `web_search({ query, tier: "instant", limit: 5 })` |
+| `research` | Cited answer/report; harness-plan external research | `web-retrieval` `research` profile → deep → contents → `web-answerer` |
 
 | Task | Tool |
 |------|------|
-| Search (SERP) | `web_search` (`query`, optional `limit`, `bulk`) |
-| Scrape page | `web_fetch` (`url`, optional `fast: true`) |
-| Map links | `web_fetch` (`url`, `mode: map`) |
+| Multi-angle SERP | `web_search` with `tier: "deep"` + `anglesFile` |
+| Narrow SERP | `web_search` with `tier: "standard"` or `"instant"` |
+| Scrape / highlights | `web_fetch` (`highlights: true` after deep search) |
+| Batch excerpts | `web_contents` |
+| Similar pages | `web_find_similar` |
+| Map links | `web_fetch` (`mode: map`) |
 
-- Artifacts default under the active project's `.web/`; use `read` for full JSON/markdown artifacts.
-- If tools are unavailable, use the installed harness web fallback documented by the `scrapling-web` skill.
-- Run setup diagnostics only when troubleshooting web tooling.
-- Check local quality-site guidance when present before citing non-API sources. Prefer Tier 1 sources; exclude AI content farms, mirrors, and stale packages.
-- For deep research, use `/wiki-autoresearch <topic>` when available and store outputs in the active project's configured research/wiki/graph locations.
+**Anti-patterns**
+- Open-ended question with omitted `tier` (weak single-query SERP).
+- Three+ sequential `web_search` calls with different queries — use one `deep` search.
+- `bulk: true` unless you need markdown bodies of top N immediately.
+- Full `web_fetch` when SERP snippets + highlights suffice.
+- `web_search` / `web_fetch` for library APIs — **context7 only**.
+
+**After deep search:** `read` `<artifactDir>/search-deep.json`; prefer URLs listed under multiple `angle_ids`.
+
+**Latency:** use `tier=instant|standard` without expander when possible; else `harness/web-retrieval/web-query-expander-fast` or `expandHeuristic:true`. **Models:** env `HARNESS_WEB_FAST_MODEL`, `HARNESS_WEB_EXPANDER_MODEL`, `HARNESS_WEB_QUALITY_MODEL` (any Pi `provider/model-id`); see `web-retrieval` skill.
+
+- If tools are unavailable, use bash fallback in **web-retrieval** (setup/humans only).
+- For long autonomous research loops, use `/wiki-autoresearch` (WRS deep path) when available.
 
 ### Missing CLI fallbacks
 - harness-web / Scrapling missing: `uv tool install "scrapling[fetchers]" && scrapling install` then re-run the harness CLI verification command documented locally.

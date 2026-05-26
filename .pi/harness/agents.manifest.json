@@ -1,9 +1,9 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.18.1",
-	"generated_at": "2026-05-24T19:33:40.491Z",
-	"policy_sha256": "4c1cf8f0377e70bbcd34eecc26a2e02717fea950af3898ef03ebbab9260dfd17",
+	"package_version": "0.19.0",
+	"generated_at": "2026-05-26T06:39:19.250Z",
+	"policy_sha256": "f0eb41bc6a877a237087e87762ce11908e93755a42d58f19d6573665b198665f",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -61,6 +61,30 @@
 			"path": ".pi/agents/harness/trace-librarian.md",
 			"sha256": "083ce6a3508bab2f5bc57e8ab13256c55fff58e0eac95cb6542bdd47fd02de65"
 		},
+		"harness/web-retrieval/web-answerer": {
+			"path": ".pi/agents/harness/web-retrieval/web-answerer.md",
+			"sha256": "c9876fb34aa6704c1a8eb9f4db4ada71c5a762790db411a1b01104a81745215d"
+		},
+		"harness/web-retrieval/web-criteria-verifier": {
+			"path": ".pi/agents/harness/web-retrieval/web-criteria-verifier.md",
+			"sha256": "bb0a9b514964f6f64ef539c1d766ff28ee23c4d9199dc4cae0f41b0fe7fdc860"
+		},
+		"harness/web-retrieval/web-gap-analyzer": {
+			"path": ".pi/agents/harness/web-retrieval/web-gap-analyzer.md",
+			"sha256": "f4487993f561c7141b22c79f9afff52986466c5b3af4f3ffb0e75e30a6da025a"
+		},
+		"harness/web-retrieval/web-query-expander-fast": {
+			"path": ".pi/agents/harness/web-retrieval/web-query-expander-fast.md",
+			"sha256": "161c5ce82e013af7aaec219b4ccb6b8c557bf5768f8e0c85b1d8f243056b015c"
+		},
+		"harness/web-retrieval/web-query-expander": {
+			"path": ".pi/agents/harness/web-retrieval/web-query-expander.md",
+			"sha256": "b522532e15759c747ff92198aa6db2624accd0998a4e0af4cb086617734f5ce7"
+		},
+		"harness/web-retrieval/web-summarizer": {
+			"path": ".pi/agents/harness/web-retrieval/web-summarizer.md",
+			"sha256": "0c25f814ded534f6d190cc50ff141306d26dba98eff2ad6d51b56e42c143861d"
+		},
 		"harness/running/executor": {
 			"path": ".pi/agents/harness/running/executor.md",
 			"sha256": "219c9307567acc95a9c1b1340f899fac860406fb2c2e84f51b4a8c3ba3a0e2ec"
@@ -95,7 +119,7 @@
 		},
 		"harness/planning/implementation-researcher": {
 			"path": ".pi/agents/harness/planning/implementation-researcher.md",
-			"sha256": "8664ad35c63adcc3a6c52b84360d5e8217f9f581b0a9f23b565187a8f7c7bf22"
+			"sha256": "4559fc93ccf867ee199821a781cfd1b4a863e1f35ea8520d15ff389e61e17fd2"
 		},
 		"harness/planning/plan-adversary": {
 			"path": ".pi/agents/harness/planning/plan-adversary.md",
@@ -123,7 +147,7 @@
 		},
 		"harness/planning/stack-researcher": {
 			"path": ".pi/agents/harness/planning/stack-researcher.md",
-			"sha256": "641bcd714df327579ff28db04aeabf5d7ee5f36e333e5ae6971967c591863ca4"
+			"sha256": "0f19febc96bc65fd22b2d3f1c3bbed02e021f7c8129a7bb21423ea29d8429d67"
 		}
 	}
 }

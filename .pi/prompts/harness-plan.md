@@ -120,6 +120,7 @@ Gate: `harness_artifact_ready({ paths: ["artifacts/hypothesis.yaml"] })`.
 - Merge both into `research-brief.yaml` (`implementation:` + `stack:`) via parent `write_harness_yaml`.
 - **Partial failure:** if one lane fails, re-spawn that lane once; if still failing write `artifacts/plan-phase-status.yaml` with `plan_status: partial` and `ask_user`. Do not proceed to Phase 4b without both research artifacts unless `artifacts/plan-phase-waiver.yaml` records an explicit waiver.
 - **Web dedup:** implementation owns patterns/repos; stack owns libraries/versions — no overlapping queries.
+- **WRS bundle (parent pre-research):** When running web inline before spawn, use `web-retrieval` deep path: `.web/angles.yaml`, `.web/search-deep.json`, highlight fetches — attach paths in research task context so debate can cite fused SERP scores.
 
 Document `human_required` waiver in the run trace only when research is genuinely blocked.
 

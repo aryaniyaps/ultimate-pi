@@ -67,6 +67,8 @@ function normalizeKindEntry(raw) {
 			typeof raw.thinking === "string" && raw.thinking.trim()
 				? raw.thinking.trim()
 				: undefined,
+		model:
+			typeof raw.model === "string" && raw.model.trim() ? raw.model.trim() : undefined,
 	};
 }
 
@@ -99,6 +101,8 @@ function normalizeAgentEntry(raw) {
 			typeof raw.thinking === "string" && raw.thinking.trim()
 				? raw.thinking.trim()
 				: undefined,
+		model:
+			typeof raw.model === "string" && raw.model.trim() ? raw.model.trim() : undefined,
 	};
 }
 
@@ -165,6 +169,7 @@ export function resolveEffectiveTools(agentId, merged) {
 		readOnly: kind.readOnly,
 		maxTurns: entry.maxTurns ?? kind.maxTurns,
 		thinking: entry.thinking ?? kind.thinking,
+		model: entry.model ?? kind.model,
 		submitTool: entry.submitTool,
 	};
 }
@@ -301,6 +306,7 @@ export function applyAgentPolicyToConfig(agent, packageRoot, projectRoot) {
 		extensionsOff: spec.extensionsOff,
 		maxTurns: spec.maxTurns ?? agent.maxTurns,
 		thinking: spec.thinking ?? agent.thinking,
+		model: spec.model ?? agent.model,
 	};
 }
 

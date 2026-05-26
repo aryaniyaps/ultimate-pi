@@ -24,6 +24,7 @@ def write_search_results(
     query: str,
     *,
     engine: str,
+    tier: str = "standard",
 ) -> None:
     """Firecrawl-compatible envelope: data.web[].url|title|description."""
     write_json(
@@ -31,6 +32,7 @@ def write_search_results(
         {
             "query": query,
             "engine": engine,
+            "tier": tier,
             "data": {
                 "web": [
                     {
@@ -41,6 +43,28 @@ def write_search_results(
                     for r in results
                 ]
             },
+        },
+    )
+
+
+def write_deep_search_results(
+    path: Path,
+    *,
+    query: str,
+    engine: str,
+    tier: str,
+    plan_angles: list[dict],
+    ranked_web: list[dict],
+) -> None:
+    write_json(
+        path,
+        {
+            "query": query,
+            "engine": engine,
+            "mode": tier,
+            "tier": tier,
+            "angles": plan_angles,
+            "data": {"web": ranked_web},
         },
     )
 

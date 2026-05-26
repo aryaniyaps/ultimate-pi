@@ -36,6 +36,10 @@ import {
 } from "./harness-spawn-budget.js";
 import { parseSpawnContextFromTask } from "./harness-spawn-parse.js";
 import {
+	getRememberedSessionWebArtifactDir,
+	resolveWebArtifactScope,
+} from "./harness-web/artifacts.js";
+import {
 	isUsableApiKey,
 	resolveConcreteSubagentModel,
 } from "./harness-subagent-auth.js";
@@ -130,6 +134,23 @@ export function createHarnessSubagentsExtension(
 				HARNESS_PKG_ROOT: packageRoot,
 				HARNESS_PROJECT_ROOT: projectRoot,
 			};
+			if (agent.name.startsWith("harness/web-retrieval/")) {
+				const ctx = parseSpawnContextFromTask(task);
+				const remembered = getRememberedSessionWebArtifactDir(lastSessionId);
+				if (remembered) {
+					base.HARNESS_WEB_ARTIFACT_DIR = remembered;
+				} else if (ctx?.run_id) {
+					base.HARNESS_WEB_ARTIFACT_DIR = resolveWebArtifactScope({
+						projectRoot,
+						explicitArtifactDir: `.web/runs/${ctx.run_id}`,
+					}).artifactDir;
+				} else {
+					base.HARNESS_WEB_ARTIFACT_DIR = resolveWebArtifactScope({
+						projectRoot,
+						piSessionId: lastSessionId,
+					}).artifactDir;
+				}
+			}
 			const ctx = parseSpawnContextFromTask(task);
 			if (!ctx?.run_id) return base;
 			if (spawnCircuitOpen(ctx.run_id)) {

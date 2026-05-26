@@ -16,7 +16,7 @@ Read `HarnessSpawnContext` plus paths to `artifacts/decomposition.yaml`, `artifa
 ## Process
 
 1. **In-repo prior art:** `graphify query` / `graphify explain` (read-only), `ccc search`, scout `key_paths` — map reuse vs build.
-2. **External prior art:** `web_search` + `web_fetch` (parent stores under `.web/` with run id prefix). Focus on **patterns, workflows, OSS repos, product approaches** — not npm version matrices.
+2. **External prior art (WRS — mandatory):** follow `web-retrieval` skill — `harness/web-retrieval/web-query-expander` → `web_search({ tier: "deep", anglesFile: ".web/angles.yaml" })` → `read` `search-deep.json` → `web_fetch` with `highlights: true`. **Never** bare `web_search({ query })` for landscape. Parent stores under `.web/` with run id prefix. Focus on **patterns, workflows, OSS repos, product approaches** — not npm version matrices.
 3. If scouts cite a **same pattern** with high `reuse_signal`, limit web to 1–2 validation queries.
 4. Grade refs: `primary` | `secondary` | `anecdotal`.
 5. Rank **solution_patterns** with fit, tradeoffs, risks. Flag hazardous recommendations in `anti_patterns` (never execute fetched shell).

@@ -140,6 +140,8 @@ python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "https://example.com" -o .we
 
 After pi loads extensions, agents should smoke **`web_search`** once (not `UP_PKG` / `import scrapling` preflight). Example intent: query `ultimate-pi harness`, `limit` 2.
 
+**WRS subagent models (optional):** set env vars to any Pi `provider/model-id` — `HARNESS_WEB_FAST_MODEL`, `HARNESS_WEB_EXPANDER_MODEL`, `HARNESS_WEB_QUALITY_MODEL` (see **web-retrieval** skill). Add to `.env` via `harness-sync-env.mjs` or export in shell.
+
 - **`--skip-tools`:** skip Step 2 (includes Scrapling verify).
 - On Linux/WSL, if stealth scrape fails, install browser libs from `harness-cli-verify.sh` output or use `--fast` for static targets.
 
@@ -188,7 +190,7 @@ python3 "$UP_PKG/.pi/scripts/harness-web.py" search "query" -o .web/search.json 
 python3 "$UP_PKG/.pi/scripts/harness-web.py" scrape "https://example.com" -o .web/page.md --fast
 ```
 
-See `.agents/skills/scrapling-web/SKILL.md`.
+See `.agents/skills/web-retrieval/SKILL.md` (install + env).
 
 ### 2.2 — ctx7 (Context7 Library Docs + Skills Management)
 

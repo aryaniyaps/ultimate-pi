@@ -127,16 +127,16 @@ When the user invokes the trigger with NO topic after it, ask:
 ```
 Input: topic (from Topic Selection, above)
 
-Round 1. Broad search
-1. Decompose topic into 3-5 distinct search angles
-2. For each angle: run 2-3 `web_search` queries
-3. For top 2-3 results per angle: `web_fetch` each URL (or `read` `.web/` artifacts)
+Round 1. Broad search (WRS deep — do not loop manual SERP)
+1. Invoke **web-retrieval** skill: `harness/web-retrieval/web-query-expander` → `.web/angles.yaml`
+2. One `web_search({ query: topic, tier: "deep", anglesFile: ".web/angles.yaml" })` → `.web/search-deep.json`
+3. For top 2-3 fused URLs: `web_fetch` with `highlights: true` (or `read` `.web/` artifacts)
 4. Save each fetched page to ./raw/ as a markdown file
 5. Extract from each: key claims, entities, concepts, open questions
 
 Round 2. Gap fill
-6. Identify what's missing or contradicted from Round 1
-7. Run targeted searches for each gap (max 5 queries)
+6. Identify what's missing or contradicted from Round 1 (`read` `search-deep.json`)
+7. Optional: `harness/web-retrieval/web-gap-analyzer` → second `web_search` deep with new angles (max one extra deep pass)
 8. Fetch top results for each gap, save to ./raw/
 9. Run `graphify extract ./raw --out .` to incorporate new sources
    (NOTE: `graphify update` only works for code files. Research sources are docs

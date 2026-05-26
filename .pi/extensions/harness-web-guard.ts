@@ -5,7 +5,8 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const BLOCK_REASON =
-	"harness-web-guard: use web_search (SERP) or web_fetch (page content) instead of raw curl/wget/firecrawl/scrapling fetch. " +
+	"harness-web-guard: use web_search (tier=deep for research), web_fetch, web_find_similar, or web_contents — " +
+	"not raw curl/wget/firecrawl/scrapling fetch. See web-retrieval skill. " +
 	"Setup may use harness-web.py status directly.";
 
 const ALLOW_PATTERNS = [

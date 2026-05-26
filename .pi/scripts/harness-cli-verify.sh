@@ -214,6 +214,11 @@ verify_scrapling() {
 	else
 		fail "harness-web search smoke failed (ddg_html)"
 	fi
+	if python3 "$_hw" search-deep "ultimate-pi harness" --expand-heuristic -o .web/verify-search-deep.json --limit 3 2>/dev/null | grep -q wrote; then
+		pass "harness-web search-deep smoke (heuristic angles)"
+	else
+		fail "harness-web search-deep smoke failed"
+	fi
 	if python3 "$_hw" scrape "https://example.com" -o .web/verify-page.md --fast 2>/dev/null | grep -q wrote; then
 		pass "harness-web scrape --fast smoke"
 	else
