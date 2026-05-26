@@ -16,26 +16,28 @@ description: Agent-native harness plans — lakes/context bundles, planning cont
 1. **Parallelism law** — Parallel `tasks` only for independent lanes (implementation ∥ stack ≤2). Never parallelize debate or decompose ∥ hypothesis.
 2. **Two-pizza cap** — Max 1 debate agent, 1 optional planning-context subagent, per `subagent` call.
 3. **No redundant thinkers** — Read upstream YAML; do not re-run graphify in decompose when `planning-context` architecture coverage is ok.
-4. **Sequential chain** — planning context → decompose → hypothesis → research → author → DAG → debate → approve.
+4. **Sequential chain** — task clarification → planning context → decompose → hypothesis → research → author → DAG → debate → approve.
 5. **Tool intelligence** — Parent picks graphify, sg, ccc by task; no mandatory tool-tied scout subprocesses.
 
 ## Workflow (parent orchestrator)
 
-1. **Phase 1:** Compile `artifacts/planning-context.yaml` with tools (default) or optional `planning-context` subagent.
-2. **Sequential** decompose → gate `artifacts/decomposition.yaml`.
-3. **Sequential** hypothesis (requires decomposition).
-4. **Phase 3.5:** `implementation-research.yaml` + `stack.yaml` (parent inline and/or parallel researchers).
-5. Draft `PlanPacket` shell; `ask_user` on material fork **after** Phase 3.5.
-6. `execution-plan-author` → merge `execution_plan`.
-7. **`validate-plan-dag.mjs`** (must pass).
-8. **`harness_plan_debate_eligibility`** — `parallel_probes` spawns plan-evaluator ∥ plan-adversary, then integrator round.
-9. **`approve_plan({ human_summary? })`** / **`create_plan()`** — packet from `plan_packet_path` on disk (path-first).
+1. **Phase 0:** `artifacts/task-clarification.yaml` — investigate (code + web OK), `ask_user` until unambiguous, gate before any planning subagent (**ADR 0053**).
+2. **Phase 1:** Compile `artifacts/planning-context.yaml` with tools (default) or optional `planning-context` subagent; inherit Phase 0 grounding.
+3. **Sequential** decompose → gate `artifacts/decomposition.yaml`.
+4. **Sequential** hypothesis (requires decomposition).
+5. **Phase 3.5:** `implementation-research.yaml` + `stack.yaml` (parent inline and/or parallel researchers).
+6. Draft `PlanPacket` shell; `ask_user` on material fork **after** Phase 3.5 (research-backed; not Phase 0).
+7. `execution-plan-author` → merge `execution_plan`.
+8. **`validate-plan-dag.mjs`** (must pass).
+9. **`harness_plan_debate_eligibility`** — `parallel_probes` spawns plan-evaluator ∥ plan-adversary, then integrator round.
+10. **`approve_plan({ human_summary? })`** / **`create_plan()`** — packet from `plan_packet_path` on disk (path-first).
 
 `--quick` skips semantic coverage in planning context and post-run adversary only — **not** adequate reconnaissance, implementation/stack artifacts (med/high risk), or plan debate.
 
 ## Rules
 
-- On-disk plan artifacts are **YAML** (`plan-packet.yaml`, `research-brief.yaml`, `planning-context.yaml`).
+- On-disk plan artifacts are **YAML** (`task-clarification.yaml`, `plan-packet.yaml`, `research-brief.yaml`, `planning-context.yaml`).
+- Phase 0 allows codebase + web reads; blocks planning subagents and plan artifacts until clarification is `ready`.
 - Subagents read-only; parent writes run artifacts and calls `approve_plan` / `create_plan`.
 - context-mode only on harness paths.
 - Phase 3.5 artifacts required for med/high risk unless documented waiver.

@@ -1,22 +1,4 @@
-export function packageAgentsPolicyPath(packageRoot: string): string;
-export function projectAgentsPolicyPath(projectRoot: string): string;
-export function projectPoliciesDir(projectRoot: string): string;
-
-export interface AgentPolicySpec {
-	kind: string;
-	effectiveTools: string[];
-	extensionsOff: boolean;
-	/** Subprocess-only: load curated -e extensions instead of full .pi/extensions. */
-	extensionBundle?: string;
-	extensionsFull: boolean;
-	noBuiltinTools: boolean;
-	readOnly: boolean;
-	maxTurns?: number;
-	thinking?: string;
-	submitTool?: string;
-}
-
-export interface AllowsAgentToolInput {
+export type AllowsAgentToolInput = {
 	packageRoot: string;
 	projectRoot: string;
 	agentId: string;
@@ -24,51 +6,44 @@ export interface AllowsAgentToolInput {
 	toolInput?: Record<string, unknown>;
 	isSubprocess?: boolean;
 	isParentOrchestrator?: boolean;
-}
-
-export function loadAgentsPolicyMerged(
-	packageRoot: string,
-	projectRoot: string,
-): {
-	schemaVersion: string;
-	kinds: Map<string, unknown>;
-	agents: Map<string, unknown>;
-	defaults: unknown;
 };
 
-export function resolveEffectiveTools(
-	agentId: string,
-	merged: ReturnType<typeof loadAgentsPolicyMerged>,
-): AgentPolicySpec;
-
-export function getAgentPolicySpec(
+export function allowsAgentTool(input: AllowsAgentToolInput): boolean;
+export function applyAgentPolicyToConfig(
+	agent: Record<string, unknown>,
 	packageRoot: string,
 	projectRoot: string,
-	agentId: string,
-): AgentPolicySpec | null;
-
+): Record<string, unknown>;
+export function findProjectRootFromAgentsDir(projectAgentsDir: string): string;
 export function getAgentKind(
 	packageRoot: string,
 	projectRoot: string,
 	agentId: string,
 ): string;
-
-export function isHarnessPlanningAgent(agentId: string): boolean;
-
+export function getAgentPolicySpec(
+	packageRoot: string,
+	projectRoot: string,
+	agentId: string,
+): unknown;
 export function harnessSubagentPhaseHint(
 	packageRoot: string,
 	projectRoot: string,
 	agentId: string,
-): string | null;
-
-export function allowsAgentTool(input: AllowsAgentToolInput): boolean;
-
-export function applyAgentPolicyToConfig<T extends { name: string }>(
-	agent: T,
+): string | undefined;
+export function isAgtGovernanceActive(projectRoot: string): boolean;
+export function isHarnessPlanningAgent(agentId: string): boolean;
+export function loadAgentsPolicyMerged(
 	packageRoot: string,
 	projectRoot: string,
-): T;
-
-export function findProjectRootFromAgentsDir(projectAgentsDir: string): string;
-
-export function isAgtGovernanceActive(projectRoot: string): boolean;
+): unknown;
+export function packageAgentsPolicyPath(packageRoot: string): string;
+export function projectAgentsPolicyPath(projectRoot: string): string;
+export function projectPoliciesDir(projectRoot: string): string;
+export function resolveEffectiveTools(
+	agentId: string,
+	merged: unknown,
+): string[];
+export function resolveExtensionBundlePaths(
+	packageRoot: string,
+	bundleName: string,
+): string[];

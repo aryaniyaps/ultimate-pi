@@ -6,6 +6,7 @@ import { constants } from "node:fs";
 import { access } from "node:fs/promises";
 import { join } from "node:path";
 import type { HarnessPhase } from "./harness-run-context.js";
+import { isTaskClarificationReady } from "./plan-task-clarification.js";
 
 export interface SpawnTopologyResult {
 	ok: boolean;
@@ -28,6 +29,18 @@ const PLANNING_CONTEXT_AGENT = "harness/planning/planning-context";
 const PARALLEL_RESEARCH_AGENTS = new Set([
 	"harness/planning/implementation-researcher",
 	"harness/planning/stack-researcher",
+]);
+
+const CLARIFICATION_GATED_AGENTS = new Set([
+	PLANNING_CONTEXT_AGENT,
+	DECOMPOSE_AGENT,
+	HYPOTHESIS_AGENT,
+	...PARALLEL_RESEARCH_AGENTS,
+	...DEBATE_LANE_AGENTS,
+	"harness/planning/plan-synthesizer",
+	"harness/planning/execution-plan-author",
+	"harness/sentrux-steward",
+	"harness/ls-lint-steward",
 ]);
 
 function countInSet(names: string[], allowed: Set<string>): number {
@@ -136,6 +149,28 @@ export async function validateHarnessSpawnTopology(
 				message:
 					"At most 2 research lanes (implementation-researcher, stack-researcher) per parallel batch.",
 			};
+		}
+	}
+
+	if (phase === "plan" && opts?.projectRoot && opts?.runId) {
+		const needsClar = names.some((n) => CLARIFICATION_GATED_AGENTS.has(n));
+		if (needsClar) {
+			const runDir = join(
+				opts.projectRoot,
+				".pi",
+				"harness",
+				"runs",
+				opts.runId,
+			);
+			const clar = await isTaskClarificationReady(runDir);
+			if (!clar.ok) {
+				return {
+					ok: false,
+					message:
+						"Cannot spawn planning subagents before task clarification is ready. " +
+						`Complete Phase 0 and harness_artifact_ready on artifacts/task-clarification.yaml. ${clar.errors.join("; ")}`,
+				};
+			}
 		}
 	}
 

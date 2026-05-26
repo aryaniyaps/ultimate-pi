@@ -6,6 +6,10 @@ import { constants } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import {
+	isTaskClarificationReady,
+	TASK_CLARIFICATION_ARTIFACT,
+} from "./plan-task-clarification.js";
 
 export interface PlanApprovalReadiness {
 	ok: boolean;
@@ -140,6 +144,14 @@ export async function validatePlanApprovalReadiness(
 	const risk = String(opts?.risk_level ?? "med").toLowerCase();
 	const quick = opts?.quick === true;
 
+	const clarReady = await isTaskClarificationReady(runDir);
+	if (!clarReady.ok) {
+		const waived = await hasPhaseWaiver(runDir, "missing:task-clarification");
+		if (!waived) {
+			errors.push(...clarReady.errors);
+		}
+	}
+
 	const statusPath = join(runDir, "artifacts", "plan-phase-status.yaml");
 	const statusDoc = await readYamlObject(statusPath);
 	if (statusDoc) {
@@ -159,6 +171,26 @@ export async function validatePlanApprovalReadiness(
 		quick,
 		errors,
 	);
+
+	if (hasPlanningContext) {
+		const ctxDoc = await readYamlObject(
+			join(runDir, PLANNING_CONTEXT_ARTIFACT),
+		);
+		const taskRef = String(ctxDoc?.task_ref ?? "").trim();
+		if (
+			taskRef &&
+			taskRef !== TASK_CLARIFICATION_ARTIFACT &&
+			!taskRef.endsWith("task-clarification.yaml")
+		) {
+			warnings.push(
+				`${PLANNING_CONTEXT_ARTIFACT}: task_ref should point at ${TASK_CLARIFICATION_ARTIFACT}`,
+			);
+		} else if (!taskRef) {
+			warnings.push(
+				`${PLANNING_CONTEXT_ARTIFACT}: set task_ref to ${TASK_CLARIFICATION_ARTIFACT}`,
+			);
+		}
+	}
 
 	if (!hasPlanningContext) {
 		const waived = await hasPhaseWaiver(

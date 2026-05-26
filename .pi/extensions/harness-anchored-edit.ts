@@ -85,14 +85,10 @@ export default function harnessAnchoredEdit(pi: ExtensionAPI): void {
 		parameters: readSchema,
 		async execute(toolCallId, params, signal, onUpdate, ctx) {
 			const base = getReadTool(ctx.cwd);
-			const result = await base.execute(
-				toolCallId,
-				params,
-				signal,
-				onUpdate,
-				ctx,
-			);
-			const taskId = anchoredEditTaskId(ctx);
+			const result = await base.execute(toolCallId, params, signal, onUpdate);
+			const taskId = anchoredEditTaskId({
+				sessionId: (ctx as { sessionId?: string }).sessionId,
+			});
 			const absolutePath = resolve(ctx.cwd, params.path);
 			for (const block of result.content) {
 				if (block.type !== "text") continue;
@@ -116,7 +112,9 @@ export default function harnessAnchoredEdit(pi: ExtensionAPI): void {
 		],
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			const absolutePath = resolve(ctx.cwd, params.path);
-			const taskId = anchoredEditTaskId(ctx);
+			const taskId = anchoredEditTaskId({
+				sessionId: (ctx as { sessionId?: string }).sessionId,
+			});
 			const edits = params.edits as AnchoredEdit[];
 
 			const result = await applyAnchoredEditsToFile(

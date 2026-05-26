@@ -64,9 +64,9 @@ If `/harness-review` returns `implementation_gap`, run:
 
 | Command | Purpose |
 |---|---|
-| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, harness lens, and verification. |
+| `/harness-setup [--skip-graphify] [--skip-tools] [--non-interactive] [--force]` | Idempotent project bootstrap: Graphify, harness-web/Scrapling, CLI tools, settings, contracts, Sentrux, ls-lint naming, harness lens, and verification. |
 | `/harness-auto "<task>" [--quick] [--risk low\|med\|high]` | Strict full pipeline: plan, execute, review, steer when appropriate. |
-| `/harness-plan "<task>" [--risk low\|med\|high] [--quick]` | PM-grade planning: reconnaissance, decomposition, hypothesis, external research, ExecutionPlan, DAG validation, Review Gate debate, `approve_plan`, `create_plan`. |
+| `/harness-plan "<task>" [--risk low\|med\|high] [--quick]` | PM-grade planning: clarifies the task with you first, then reconnaissance, decomposition, hypothesis, external research, ExecutionPlan, DAG validation, Review Gate debate, `approve_plan`, `create_plan`. |
 | `/harness-run` | Executes the approved active PlanPacket by spawning `harness/running/executor`; no inline implementation. |
 | `/harness-review [--run <id>] [--quick] [--readonly] [--trace <ref>]` | Post-run verification gate: deterministic checks, benchmark evaluator, policy verdict, adversary, optional tie-breaker. |
 | `/harness-steer [--attempt N]` | Post-review repair pass for `implementation_gap`; executor reads `repair-brief.yaml`, then you re-run `/harness-review`. |
@@ -74,6 +74,8 @@ If `/harness-review` returns `implementation_gap`, run:
 | `/harness-trace [--run <id>] [--phase plan\|execute\|evaluate\|adversary\|merge]` | Summarizes run traces and artifact handoffs for replay/forensics. |
 | `/harness-incident --trigger <reason> [--run <id>] [--severity low\|med\|high\|critical]` | Records incident, rollback, and override trail for harness failures. |
 | `/harness-sentrux-steward [--run <id>]` | Ad-hoc architectural intent review for Sentrux manifest/rule alignment. |
+| `/harness-ls-lint-sync` | Regenerate `.ls-lint.yml` from `.pi/harness/ls-lint/naming.manifest.json`. |
+| `/harness-ls-lint-steward [--run <id>]` | Ad-hoc naming-intent review for ls-lint manifest/rule alignment. |
 | `/graphify [directory]` | Bootstraps or updates the Graphify knowledge graph. |
 | `/wiki-autoresearch [topic]` | Runs autonomous web research and builds a Graphify-backed research wiki. |
 | `/wiki-save` | Saves the current conversation or insight as a structured wiki note. |
@@ -84,7 +86,7 @@ If `/harness-review` returns `implementation_gap`, run:
 - **Planning** uses agents under `.pi/agents/harness/planning/` plus parent-led Graphify → `sg` → `ccc` reconnaissance. Legacy tool-tied `planning/scout-*` agents have been removed; planning context is captured in `artifacts/planning-context.yaml`.
 - **Running** uses `.pi/agents/harness/running/executor.md` via agent id `harness/running/executor`.
 - **Reviewing** uses `.pi/agents/harness/reviewing/` via `harness/reviewing/evaluator`, `harness/reviewing/adversary`, and `harness/reviewing/tie-breaker`.
-- **Support agents** such as `harness/incident-recorder`, `harness/sentrux-steward`, and `harness/trace-librarian` remain under `.pi/agents/harness/`.
+- **Support agents** such as `harness/incident-recorder`, `harness/sentrux-steward`, `harness/ls-lint-steward`, and `harness/trace-librarian` remain under `.pi/agents/harness/`.
 
 Subagents run isolated from the parent session. They persist canonical YAML through `submit_*` tools; the parent gates with `harness_artifact_ready` and writes only orchestrator-owned merge artifacts.
 
@@ -95,7 +97,7 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 | `.pi/harness/active-run.json` | Active run pointer for happy-path commands. |
 | `.pi/harness/runs/<run_id>/plan-packet.yaml` | Approved execution baseline. |
 | `.pi/harness/runs/<run_id>/research-brief.yaml` | Planning evidence and research merge. |
-| `.pi/harness/runs/<run_id>/artifacts/` | Planning context, decomposition, research, benchmark, verdict, adversary, repair, and Sentrux artifacts. |
+| `.pi/harness/runs/<run_id>/artifacts/` | Planning context, decomposition, research, benchmark, verdict, adversary, repair, Sentrux, and ls-lint signal artifacts. |
 | `.pi/harness/runs/<run_id>/handoff/executor-summary.yaml` | Executor handoff written by `submit_executor_handoff`. |
 | `.pi/harness/incidents/` | Incident records and rollback/override trail. |
 | `.pi/harness/docs/adrs/` | Harness architectural decisions. |
@@ -109,6 +111,7 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 - **No inline review:** `/harness-review` delegates verdicts to isolated reviewing agents.
 - **No auto-merge:** final merge remains a human/operator decision.
 - **Sentrux is the architecture signal:** structural baselines and gates inform review; executor does not optimize metrics as a goal.
+- **ls-lint is the naming signal:** manifest-driven `.ls-lint.yml` enforces filesystem conventions; steward evolves rules via chair-approved proposals (ADR 0052).
 - **pi-lens is edit-time diagnostics:** LSP/lint/format/ast feedback complements Sentrux and does not replace architecture gating.
 
 ## Troubleshooting
@@ -122,6 +125,7 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 | Review says `implementation_gap` | Run `/harness-steer`, then `/harness-review`. |
 | Review says `plan_gap` | Revise with `/harness-plan "<updated task>"`. |
 | Sentrux missing | Install/configure Sentrux or keep it skipped; harness verification still reports the status. |
+| ls-lint failures | Run `node .pi/scripts/harness-ls-lint-cli.mjs`, fix paths or propose manifest changes via `/harness-ls-lint-steward`. |
 
 Optional integrations can be configured by copying `.env.example` to `.env`; `/harness-setup` appends missing keys without overwriting existing values.
 

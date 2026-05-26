@@ -80,6 +80,11 @@ import {
 } from "../lib/harness-yaml.js";
 import { isReviewRoundArtifactPath } from "../lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js";
+import {
+	assertTaskClarificationReadyForPlanWrite,
+	readTaskClarificationDoc,
+	TASK_CLARIFICATION_ARTIFACT,
+} from "../lib/plan-task-clarification.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -113,6 +118,7 @@ const PLAN_REVISION_ARTIFACT_FILES = new Set([
 	"plan-phase-status.yaml",
 	"plan-phase-waiver.yaml",
 	"sentrux-manifest-proposal.yaml",
+	"ls-lint-manifest-proposal.yaml",
 ]);
 
 const PLAN_REVISION_ARTIFACT_PREFIXES = [
@@ -455,8 +461,14 @@ async function maybeHandleClarificationFollowUp(input: {
 		false,
 	);
 	persistContext(input.pi, input.activeCtx);
+	const amendHint = packet
+		? "Reply with clarification answers; the harness will treat this as plan amend."
+		: `Reply with clarification answers; the harness will merge them into ${TASK_CLARIFICATION_ARTIFACT} and continue Phase 0 (task contract), not full planning yet.`;
+	const planBlock = packet
+		? formatActivePlanBlock(input.activeCtx, "revise", summary)
+		: `[HarnessTaskClarification] status=needs_user — complete ${TASK_CLARIFICATION_ARTIFACT} before reconnaissance.`;
 	return {
-		systemPrompt: `${input.systemPrompt}\n\n${formatPlanContextBlock(input.activeCtx)}\n\n${formatActivePlanBlock(input.activeCtx, "revise", summary)}\n\nReply with clarification answers; the harness will treat this as plan amend.`,
+		systemPrompt: `${input.systemPrompt}\n\n${formatPlanContextBlock(input.activeCtx)}\n\n${planBlock}\n\n${amendHint}`,
 	};
 }
 
@@ -1665,6 +1677,24 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 					isError: true,
 				};
 			}
+			const runRootWrite = join(
+				projectRoot,
+				".pi",
+				"harness",
+				"runs",
+				runCtx.run_id,
+			);
+			const clarWrite = await assertTaskClarificationReadyForPlanWrite(
+				runRootWrite,
+				relForGate,
+			);
+			if (!clarWrite.ok) {
+				return {
+					content: [{ type: "text", text: clarWrite.message ?? "Blocked." }],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
 			let doc: unknown;
 			try {
 				doc = parseStructuredDocument(content, pathArg);
@@ -1678,6 +1708,16 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			}
 			await mkdir(dirname(absPath), { recursive: true });
 			await writeYamlFile(absPath, doc);
+			if (relForGate === TASK_CLARIFICATION_ARTIFACT) {
+				const clarDoc = doc as Record<string, unknown>;
+				if (String(clarDoc.status ?? "").toLowerCase() === "ready") {
+					const clarified = String(clarDoc.clarified_task ?? "").trim();
+					if (clarified) {
+						runCtx.task_summary = clarified;
+						persistContext(pi, runCtx);
+					}
+				}
+			}
 			return {
 				content: [
 					{
@@ -1767,6 +1807,18 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				"runs",
 				runCtx.run_id,
 			);
+			const relMerge = pathArg.replace(/\\/g, "/");
+			const clarMerge = await assertTaskClarificationReadyForPlanWrite(
+				runRoot,
+				relMerge,
+			);
+			if (!clarMerge.ok) {
+				return {
+					content: [{ type: "text", text: clarMerge.message ?? "Blocked." }],
+					details: { path: pathArg },
+					isError: true,
+				};
+			}
 			let existing: Record<string, unknown> = {};
 			try {
 				const { readYamlFile } = await import("../lib/harness-yaml.js");
@@ -1957,6 +2009,17 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 				"../lib/harness-artifact-gate.js"
 			);
 			const gate = await validateHarnessArtifactPaths(runRoot, paths, specsDir);
+			if (
+				gate.ok &&
+				paths.some((p) => p.replace(/\\/g, "/") === TASK_CLARIFICATION_ARTIFACT)
+			) {
+				const clarDoc = await readTaskClarificationDoc(runRoot);
+				const clarified = String(clarDoc?.clarified_task ?? "").trim();
+				if (clarified && runCtx.task_summary !== clarified) {
+					runCtx.task_summary = clarified;
+					persistContext(pi, runCtx);
+				}
+			}
 			const text = gate.ok
 				? `All ${gate.present.length} artifact(s) present and valid.`
 				: [

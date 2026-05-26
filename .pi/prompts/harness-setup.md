@@ -15,7 +15,7 @@ Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, C
 |---------|------------------|
 | `UP_PKG="$(pwd)"` in an **external** repo | Wrong — scripts live in the npm package. Resolve via `harness-resolve-up-pkg.mjs` (see Step 0). |
 | Re-running 2.1–2.8 manually after CLI verify | Wasteful — trust `harness-cli-verify.sh` output; only fix reported ✗ lines. |
-| Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.3). |
+| Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.4). |
 | `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.2) — seeds manifest + idempotent rules sync. |
 | Re-running bootstrap with `--force` on unchanged manifest | Wasteful but safe — default bootstrap skips when hash unchanged; `--force` only after manifest edits. |
 | `graph.json` uses `links`, not `edges` | Step 6 stats: `g.get('edges', g.get('links', []))`. |
@@ -155,7 +155,7 @@ bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh"
 # Reinstall everything: bash "$UP_PKG/.pi/scripts/harness-cli-verify.sh" --force
 ```
 
-**Required (script must exit 0):** scrapling + harness-web smoke, ctx7, ast-grep (`sg`), sentrux (when harness manifest present).
+**Required (script must exit 0):** scrapling + harness-web smoke, ctx7, ast-grep (`sg`), sentrux (when harness manifest present), ls-lint (when naming manifest present).
 
 **Warnings allowed:** biome (optional; skipped for non-JS/TS repos or if install fails), gh (if not authenticated), agent-browser (if OS libs need manual `sudo apt-get install`), cocoindex-code (empty corpus on tiny repos; first `[full]` install downloads local embedding model).
 
@@ -326,6 +326,12 @@ sentrux plugin add-standard 2>/dev/null || echo "Plugins already installed or fa
 
 **Rules.toml bootstrap runs in Step 4.2** (idempotent, merge-safe). Sentrux CLI workflows use the package **`sentrux`** skill (`.agents/skills/sentrux`); no symlink into `.pi/skills/` required.
 
+### 2.9 — ls-lint (Filename / Directory Naming)
+
+Installed and smoke-tested by `harness-cli-verify.sh` (`npm install -g @ls-lint/ls-lint@2.3.1`).
+
+**`.ls-lint.yml` bootstrap runs in Step 4.3** (idempotent, merge-safe). Use skill **`harness-ls-lint-setup`**; sync via `/harness-ls-lint-sync` in pi.
+
 ## Step 3 — Pi Extension Packages
 
 Bundled extensions load from the installed `ultimate-pi` package. The harness lens wrapper at `.pi/extensions/harness-lens.ts` loads `.pi/extensions/lib/harness-lens/` for edit autopatch, secrets blocking, deferred format, and LSP tools. Structural search uses shell `sg` (installed globally by setup); architecture gates use Sentrux. See [ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md).
@@ -484,6 +490,10 @@ Ensure `.gitignore` contains harness runtime entries (see repo root `.gitignore`
 .sentrux/*
 !.sentrux/
 !.sentrux/rules.toml
+
+# ls-lint sync meta (.ls-lint.yml is committed)
+.ls-lint/*
+!.ls-lint/
 ```
 
 ### 4.2 — Sentrux rules bootstrap (required)
@@ -521,7 +531,34 @@ Set up structural regression baseline (optional):
 node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save 2>/dev/null || echo "Baseline will be saved on first gate run"
 ```
 
-### 4.3 — Project AGENTS.md
+### 4.3 — ls-lint naming bootstrap (required)
+
+**Skill:** invoke **harness-ls-lint-setup** before hand-editing `.ls-lint.yml` or `naming.manifest.json`.
+
+From **project root**, run the bundled bootstrap (seeds manifest when missing, syncs `.ls-lint.yml` without clobbering custom YAML):
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs"
+# After editing naming.manifest.json:
+node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs" --force
+# In pi: /harness-ls-lint-sync  (always --force sync)
+```
+
+| Command | When |
+|---------|------|
+| `harness-ls-lint-bootstrap.mjs` (no flags) | `/harness-setup`, first install, re-run safe |
+| `harness-ls-lint-bootstrap.mjs --force` | Manifest rules/ignores changed |
+| `ls-lint-rules-sync.mjs --check` | CI / harness-verify drift only |
+| `harness-ls-lint-cli.mjs` | Root-resolving filename checks from harness run dirs |
+| `/harness-ls-lint-sync` | Interactive re-sync from pi |
+
+Verify naming:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" && echo "✓ ls-lint pass" || echo "✗ ls-lint failed"
+```
+
+### 4.4 — Project AGENTS.md
 
 **Do not overwrite** an existing `AGENTS.md` — graphify bootstrap may have appended a `## Graphify` section. If missing, create minimal onboarding content; if present, only add harness subsections that are absent.
 
@@ -652,6 +689,7 @@ Output summary table:
 | ast-grep | ✓/✗ | AST-aware code search (`sg`)
 | gh CLI | ✓/✗ | Auth: yes/no |
 | sentrux | ✓/✗ | CLI + plugins; rules via Step 4.2 bootstrap |
+| ls-lint | ✓/✗ | CLI; `.ls-lint.yml` via Step 4.3 bootstrap |
 | Sentrux rules.toml | ✓/✗ | `.sentrux/rules.toml` synced from manifest |
 | pi extensions | ✓/✗ | bundled extensions + harness lens wrapper |
 | harness lens | ✓/✗ | `.pi/extensions/harness-lens.ts`; PostHog owns lens telemetry; complements Sentrux architecture signal |

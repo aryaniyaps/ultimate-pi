@@ -66,6 +66,47 @@ test("validateAgainstHarnessSchema compiles sentrux-signal", async () => {
 	assert.equal(result.ok, true);
 });
 
+test("validateAgainstHarnessSchema compiles ls-lint-manifest-proposal", async () => {
+	const result = await validateAgainstHarnessSchema(
+		SPECS,
+		"ls-lint-manifest-proposal.schema.json",
+		{
+			schema_version: "1.0.0",
+			change_class: "none",
+			summary: "Existing naming rules cover scope",
+			evidence: [
+				{
+					source: "ls-lint",
+					ref: "harness-ls-lint-cli.mjs",
+					summary: "No violations on planned paths",
+				},
+			],
+			manifest_patch: {},
+			adr_required: false,
+			human_required: false,
+		},
+	);
+	assert.equal(result.ok, true);
+});
+
+test("validateAgainstHarnessSchema compiles ls-lint-signal", async () => {
+	const result = await validateAgainstHarnessSchema(
+		SPECS,
+		"ls-lint-signal.schema.json",
+		{
+			schema_version: "1.0.0",
+			run_id: "run-test",
+			lint_pass: true,
+			violation_count: 0,
+			status: "pass",
+			quality_signal_summary: "pass",
+			recorded_at: "2026-05-23T00:00:00.000Z",
+			phase: "execute",
+		},
+	);
+	assert.equal(result.ok, true);
+});
+
 test("validateAgainstHarnessSchema compiles plan-decomposition-brief schema", async () => {
 	const result = await validateAgainstHarnessSchema(
 		SPECS,

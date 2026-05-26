@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/ls-lint-signal.schema.json",
+	"title": "LsLintSignal",
+	"description": "Per-run ls-lint CLI observation for evaluator and harness-verify promotion.",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"run_id",
+		"lint_pass",
+		"status",
+		"recorded_at"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"run_id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"lint_pass": {
+			"type": "boolean"
+		},
+		"violation_count": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"status": {
+			"type": "string",
+			"enum": ["pass", "fail", "skipped", "not_installed"]
+		},
+		"quality_signal_summary": {
+			"type": "string"
+		},
+		"recorded_at": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"phase": {
+			"type": "string",
+			"enum": ["execute", "evaluate", "review"]
+		}
+	}
+}

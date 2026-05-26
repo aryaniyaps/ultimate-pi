@@ -22,9 +22,13 @@ const REQUIRED_SCHEMAS = [
 	"run-trace.schema.json",
 	"eval-verdict.schema.json",
 	"harness-spawn-context.schema.json",
+	"plan-task-clarification.schema.json",
 	"harness-turn.schema.json",
 	"sentrux-manifest-proposal.schema.json",
 	"sentrux-signal.schema.json",
+	"naming-manifest.schema.json",
+	"ls-lint-manifest-proposal.schema.json",
+	"ls-lint-signal.schema.json",
 ];
 
 const REQUIRED_ADRS = [
@@ -46,6 +50,7 @@ const REQUIRED_ADRS = [
 	"0046-agt-policy-engine.md",
 	"0047-agt-layered-security.md",
 	"0048-tool-call-hook-order.md",
+	"0052-ls-lint-naming-lifecycle.md",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -55,6 +60,7 @@ const REQUIRED_EXTENSIONS = [
 	"observation-bus.ts",
 	"drift-monitor.ts",
 	"sentrux-rules-sync.ts",
+	"ls-lint-rules-sync.ts",
 	"harness-subagents.ts",
 ];
 
@@ -68,6 +74,14 @@ const SENTRUX_MANIFEST = join(
 	"architecture.manifest.json",
 );
 const SENTRUX_RULES = join(ROOT, ".sentrux", "rules.toml");
+const LS_LINT_MANIFEST = join(
+	ROOT,
+	".pi",
+	"harness",
+	"ls-lint",
+	"naming.manifest.json",
+);
+const LS_LINT_YML = join(ROOT, ".ls-lint.yml");
 
 function fail(msg) {
 	console.error(`harness:verify FAIL: ${msg}`);
@@ -258,6 +272,74 @@ async function checkHarnessAnchoredEdit(pkgJson) {
 		fail("harness-anchored-edit must call applyAnchoredEditsToFile");
 	}
 	ok("harness-anchored-edit first-class contract");
+}
+
+async function checkLsLintRules() {
+	if (!(await fileExists(LS_LINT_MANIFEST))) {
+		fail("missing .pi/harness/ls-lint/naming.manifest.json");
+	}
+	ok("ls-lint naming.manifest.json");
+
+	const syncScript = join(ROOT, ".pi", "scripts", "ls-lint-rules-sync.mjs");
+	const { code: checkCode, out: checkOut } = await runNodeScript(syncScript, [
+		"--check",
+	]);
+	if (checkCode !== 0) {
+		fail(
+			checkOut.trim() ||
+				'.ls-lint.yml out of date — run node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --force',
+		);
+	}
+	ok(".ls-lint.yml in sync with manifest");
+
+	if (!(await fileExists(LS_LINT_YML))) {
+		fail(
+			'missing .ls-lint.yml — run node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --force',
+		);
+	}
+	ok(".ls-lint.yml present");
+}
+
+async function checkLsLintGate() {
+	await checkLsLintRules();
+
+	if (process.env.HARNESS_LS_LINT_REQUIRED !== "true") {
+		ok("ls-lint signal gate skipped (HARNESS_LS_LINT_REQUIRED not set)");
+		return;
+	}
+	const runDir = process.env.HARNESS_RUN_DIR?.trim();
+	const runSignalPath = runDir
+		? join(runDir, "artifacts", "ls-lint-signal.yaml")
+		: null;
+	if (runSignalPath && (await fileExists(runSignalPath))) {
+		ok(`ls-lint run signal present (${runSignalPath})`);
+	} else {
+		const stubPath = join(
+			ROOT,
+			".pi",
+			"harness",
+			"evals",
+			"smoke",
+			"ls-lint-stub.json",
+		);
+		if (!(await fileExists(stubPath))) {
+			fail(
+				"HARNESS_LS_LINT_REQUIRED=true but no artifacts/ls-lint-signal.yaml and .pi/harness/evals/smoke/ls-lint-stub.json missing",
+			);
+		}
+		ok("ls-lint stub present (run signal absent — prefer artifacts/ls-lint-signal.yaml from /harness-run)");
+	}
+
+	const cliScript = join(ROOT, ".pi", "scripts", "harness-ls-lint-cli.mjs");
+	const { code, out } = await runNodeScript(cliScript, []);
+	if (code === 127 || (out && out.includes("not installed"))) {
+		ok("ls-lint CLI check skipped (not installed)");
+		return;
+	}
+	if (code !== 0) {
+		fail(out.trim() || "ls-lint check failed — fix path violations or update manifest");
+	}
+	ok("ls-lint check passed");
 }
 
 async function checkSentruxGate() {
@@ -455,6 +537,7 @@ async function main() {
 	ok("test-diff-golden.json");
 
 	await checkSentruxGate();
+	await checkLsLintGate();
 
 	const AGENTS_POLICY = join(ROOT, ".pi", "harness", "agents.policy.yaml");
 	if (!(await fileExists(AGENTS_POLICY))) {

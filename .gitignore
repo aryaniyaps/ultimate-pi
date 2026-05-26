@@ -49,6 +49,10 @@ skills-lock.json
 !.sentrux/
 !.sentrux/rules.toml
 
+# ls-lint sync meta (.ls-lint.yml is committed — sync via ls-lint-rules-sync.mjs)
+.ls-lint/*
+!.ls-lint/
+
 # Graphify cache (regenerable)
 graphify-out/cache/
 graphify-books-out/cache/

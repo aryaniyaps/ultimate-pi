@@ -32,6 +32,7 @@ const SUBMIT_BY_AGENT = {
 	"harness/trace-librarian": ["submit_human_required"],
 	"harness/incident-recorder": ["submit_human_required"],
 	"harness/sentrux-steward": ["submit_sentrux_manifest_proposal"],
+	"harness/ls-lint-steward": ["submit_ls_lint_manifest_proposal"],
 };
 
 function parseFrontmatter(content) {
@@ -48,7 +49,11 @@ function kindFor(id) {
 	if (id === "harness/reviewing/tie-breaker") return "tie_breaker";
 	if (id === "harness/trace-librarian") return "trace";
 	if (id === "harness/incident-recorder") return "incident";
-	if (id === "harness/sentrux-steward" || id === "harness/sentrux-bootstrap")
+	if (
+		id === "harness/sentrux-steward" ||
+		id === "harness/sentrux-bootstrap" ||
+		id === "harness/ls-lint-steward"
+	)
 		return "planner";
 	return "other";
 }

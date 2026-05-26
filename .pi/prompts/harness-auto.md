@@ -20,7 +20,7 @@ If task missing:
 
 Follow **harness-plan** performance rules (`subagent` with `agentScope: "both"`). Use parallel `tasks` only for Phase 3.5 research (≤2 lanes) when subprocesses are needed. Never parallelize decompose∥hypothesis or debate lanes — precheck enforces this.
 
-1. **Plan** — follow `/harness-plan` (context → lakes/synthesis or sequential framing → research → plan-verify → `approve_plan()` + `create_plan()`). One approval.
+1. **Plan** — follow `/harness-plan` (task clarification gate → context → lakes/synthesis or sequential framing → research → plan-verify → `approve_plan()` + `create_plan()`). One approval.
 2. **Execute** — `harness/running/executor` with `executor_strategy` from packet (default `single_pass` for low/med).
 3. **Review** — always **`/harness-review`** after execute (no benchmark fail-fast).
 4. **Steer loop** — while `review-outcome.remediation_class === implementation_gap` and `steer_attempt < HARNESS_STEER_MAX_ATTEMPTS`: `/harness-steer` → `/harness-review` (tiered adversary on attempts 2+).

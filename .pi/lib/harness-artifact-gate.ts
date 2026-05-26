@@ -7,6 +7,10 @@ import { access, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { validateAgainstHarnessSchema } from "./harness-schema-validate.js";
+import {
+	TASK_CLARIFICATION_ARTIFACT,
+	validateTaskClarificationDoc,
+} from "./plan-task-clarification.js";
 
 export interface ArtifactGateResult {
 	ok: boolean;
@@ -19,12 +23,14 @@ const ARTIFACT_SCHEMA: Record<string, string> = {
 	"artifacts/implementation-research.yaml":
 		"plan-implementation-research-brief.schema.json",
 	"artifacts/stack.yaml": "plan-stack-brief.schema.json",
+	"artifacts/task-clarification.yaml": "plan-task-clarification.schema.json",
 	"artifacts/planning-context.yaml": "plan-planning-context.schema.json",
 	"artifacts/eval-verdict.yaml": "eval-verdict.schema.json",
 	"artifacts/adversary-report.yaml": "adversary-report.schema.json",
 };
 
 const PREREQUISITE_ORDER: Record<string, string[]> = {
+	"artifacts/planning-context.yaml": [TASK_CLARIFICATION_ARTIFACT],
 	"artifacts/hypothesis.yaml": ["artifacts/decomposition.yaml"],
 	"artifacts/implementation-research.yaml": [
 		"artifacts/decomposition.yaml",
@@ -102,6 +108,13 @@ export async function validateHarnessArtifactFile(
 		}
 	}
 
+	if (doc && normalized === TASK_CLARIFICATION_ARTIFACT) {
+		const clar = validateTaskClarificationDoc(doc, { requireReady: true });
+		if (!clar.ok) {
+			errors.push(...clar.errors.map((e) => `${normalized}: ${e}`));
+		}
+	}
+
 	if (doc && normalized === "artifacts/planning-context.yaml") {
 		const statusErr = artifactStatusBad(doc);
 		if (statusErr) {
@@ -123,8 +136,30 @@ export async function validateHarnessArtifactFile(
 
 	const prereqs = PREREQUISITE_ORDER[normalized] ?? [];
 	for (const prereq of prereqs) {
-		if (!(await fileExists(join(runRoot, prereq)))) {
+		const prereqPath = join(runRoot, prereq);
+		if (!(await fileExists(prereqPath))) {
 			errors.push(`${normalized}: prerequisite missing (${prereq})`);
+			continue;
+		}
+		if (prereq === TASK_CLARIFICATION_ARTIFACT) {
+			try {
+				const raw = await readFile(prereqPath, "utf-8");
+				const prereqDoc = parseYaml(raw) as Record<string, unknown>;
+				const clar = validateTaskClarificationDoc(prereqDoc, {
+					requireReady: true,
+				});
+				if (!clar.ok) {
+					errors.push(
+						...clar.errors.map(
+							(e) => `${normalized}: prerequisite ${prereq} — ${e}`,
+						),
+					);
+				}
+			} catch {
+				errors.push(
+					`${normalized}: prerequisite ${prereq} invalid or unreadable`,
+				);
+			}
 		}
 	}
 

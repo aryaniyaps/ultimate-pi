@@ -11,6 +11,8 @@ You are the **planning orchestrator** (agent-native; ADR 0042). Produce an execu
 
 Subagents persist artifacts via scoped **`submit_*`** tools (deterministic YAML under the run dir). Parent uses **`harness_artifact_ready`** to gate phases (no JSON parsing). Parent merges still use **`write_harness_yaml`** for `research-brief.yaml`, `plan-packet.yaml`, `planning-context.yaml`, and integrator patches.
 
+**Phase 0 is mandatory** before reconnaissance or any planning subagent. `write_harness_yaml` and spawn topology enforce `artifacts/task-clarification.yaml` with `status: ready` (ADR 0053).
+
 ## Allowed subagents
 
 - `harness/planning/planning-context` (optional — prefer parent tools for Phase 1)
@@ -53,22 +55,53 @@ Read **harness-debate-plan** skill before Review Gate rounds.
 
 Use `[HarnessActivePlan]` / `[HarnessRunContext]` only. On revise: preserve `plan_id` / `task_id`. Canonical paths: `plan-packet.yaml`, `research-brief.yaml`, `artifacts/*.yaml`.
 
-## Phase 0 — Tooling / fast feedback (automatic)
+## Phase 0 — Task clarification (mandatory; parent-led)
 
-**Practice:** Invest in iteration speed (Pragmatic Programmer).
+**Practice:** Collect requirements / pool of shared meaning before WBS (PMBOK; Crucial Conversations). **ADR 0053.**
 
-Do **not** run `ccc index` or `ccc search --refresh`. The harness runs incremental `ccc index` before subagent spawns when you use subprocesses. Proceed to Phase 1.
+**Goal:** `artifacts/task-clarification.yaml` with `status: ready`, `unresolved_questions: []`, and a canonical `clarified_task`. No full planning until gated.
+
+### Phase 0a — Tooling (automatic)
+
+Do **not** run `ccc index` or `ccc search --refresh`. Incremental `ccc index` runs before subagent spawns when you use subprocesses later.
+
+### Allowed during Phase 0
+
+- **Codebase:** `Read`, `sg -p`, `ccc search`, `graphify query` / `explain` / `path`, `GRAPH_REPORT.md` — to disambiguate what the user wants and what “done” means
+- **Web:** **web-retrieval** — linked specs, APIs, tickets (disambiguate the **task**, not Phase 3.5 landscape/stack commitment)
+- **`ask_user`** — harness-decisions; one call per batch (2–4 options, `allowFreeform: true`)
+
+Prefer minimum investigation; codebase and web are **not** forbidden.
+
+### Not allowed until `task-clarification` is `ready`
+
+- Any **`subagent`** spawn
+- `artifacts/planning-context.yaml`, `decomposition.yaml`, `hypothesis.yaml`, Phase 3.5 research artifacts, `plan-packet.yaml`, debate rounds, `approve_plan` / `create_plan`, DAG validation, Review Gate
+
+### Algorithm
+
+1. Parse task + `--risk` / `--quick`.
+2. **`mode: revise`:** If `artifacts/task-clarification.yaml` exists with `status: ready` and `task_input_hash` matches current args (hash = source task + risk + quick flag), skip to Phase 1. If `last_outcome` is `needs_clarification`, do **not** skip.
+3. Investigate as needed; log `grounding` + `evidence_refs` on the artifact.
+4. Draft `artifacts/task-clarification.yaml` via `write_harness_yaml` (`schema_version: "1.0.0"`, fields per `plan-task-clarification.schema.json`). Set `task_input_hash` from source task + flags. List `unresolved_questions` when scope, success criteria, risk, or target surface are ambiguous.
+5. While `unresolved_questions` non-empty → `ask_user`; merge answers; increment `clarification_rounds`. On cancel → `plan_status: needs_clarification` and stop.
+6. When ready → `status: ready`, empty `unresolved_questions`, copy `acceptance_checks_draft`, set `risk_level` (CLI `--risk` wins when provided).
+7. Gate: `harness_artifact_ready({ paths: ["artifacts/task-clarification.yaml"] })` — updates `task_summary` to `clarified_task` when valid.
+
+**`--quick`:** Same gate. At most **one** `ask_user` round when the task already states explicit acceptance; if still ambiguous after that round, set `needs_clarification` and **do not** enter Phase 1.
 
 ## Phase 1 — Reconnaissance before WBS (parent-led, default)
 
 **Practice:** Shared context before scope decomposition — use the right tools for the job (graphify → sg → ccc → read per `AGENTS.md`).
 
-**Default (no subprocess):** As parent, gather reconnaissance with tools as needed for the task:
+**Requires** Phase 0 gate. Read `artifacts/task-clarification.yaml` first; set `task_ref: artifacts/task-clarification.yaml` on planning context.
+
+**Default (no subprocess):** Extend Phase 0 grounding — do **not** repeat `evidence_refs` or re-fetch URLs unless scope changed after `ask_user`:
 
 1. Read `graphify-out/GRAPH_REPORT.md` when present; use `graphify query` / `explain` / `path` for architecture and cross-module relationships.
 2. Use `sg -p '…'` for structural surfaces (handlers, types, exports).
 3. Use `ccc search` for semantic implementation matches (unless `--quick` — set `coverage.semantic.status: skipped`).
-4. Write `artifacts/planning-context.yaml` via `write_harness_yaml` with `schema_version: "1.0.0"`, `status`, `summary`, `coverage` (architecture + structure required; semantic per risk/quick), `findings`, `evidence_refs`, `open_questions`.
+4. Write `artifacts/planning-context.yaml` via `write_harness_yaml` with `schema_version: "1.0.0"`, `status`, `summary`, `coverage` (architecture + structure required; semantic per risk/quick), `findings`, `evidence_refs`, `open_questions` (**technical** unknowns only — do not re-ask scope closed in Phase 0).
 
 **Optional subprocess:** Spawn **at most one** `harness/planning/planning-context` when the brief is large or you need context isolation.
 
@@ -79,12 +112,12 @@ Gate: `harness_artifact_ready({ paths: ["artifacts/planning-context.yaml"] })`.
 **Practice:** PMBOK scope / WBS; Berkun — how the team divides work.
 
 ```
-subagent({ agentScope: "both", agent: "harness/planning/decompose", task: "<HarnessSpawnContext + path to planning-context.yaml>" })
+subagent({ agentScope: "both", agent: "harness/planning/decompose", task: "<HarnessSpawnContext + planning-context.yaml + task-clarification.yaml (clarified_task, in_scope, out_of_scope, acceptance_checks_draft)>" })
 ```
 
 Gate: `harness_artifact_ready({ paths: ["artifacts/decomposition.yaml"] })`.
 
-Decompose **prior_art** is **internal only** (from Phase 1). External prior art arrives in Phase 3.5.
+Decompose treats **`task-clarification.yaml` as authoritative** for scope; §1.1 is **delta-only** (tensions/gaps), not a second full restatement. **prior_art** is **internal only** (from Phase 1). External prior art arrives in Phase 3.5.
 
 ## Phase 2b — Hypothesis-driven approach (sequential)
 
@@ -137,7 +170,9 @@ Build draft `PlanPacket` (`contract_version: "1.1.0"`):
 
 Initialize `research-brief.yaml` with decomposition + hypothesis + Phase 3.5 merges (`write_harness_yaml`).
 
-**`ask_user` on material `dialectical_fork`** after Phase 3.5 merge (evidence-backed — conflicting external patterns may trigger `human_required` from eligibility).
+Copy `acceptance_checks` from `task-clarification.acceptance_checks_draft` unless debate patches change them.
+
+**`ask_user` on material `dialectical_fork`** after Phase 3.5 merge (evidence-backed research fork — **not** a substitute for Phase 0 task contract).
 
 ## Phase 4b — Schedule + WBS detail
 
@@ -178,6 +213,21 @@ Gate: `harness_artifact_ready({ paths: ["artifacts/sentrux-manifest-proposal.yam
 If `change_class` ≠ `none` and `human_required` → `ask_user` before manifest edits. Chair applies patch, runs `harness-sentrux-bootstrap.mjs --force`, emits `harness-architecture-changed`. See `/harness-sentrux-steward`.
 
 Do **not** spawn on every plan or when changes stay inside existing layer globs.
+
+### Phase 4e′ — Naming intent (optional)
+
+Spawn **`harness/ls-lint-steward`** when **any** apply (after Phase 4b, before Phase 4c):
+
+- Execution plan adds top-level paths or file types not covered by `naming.manifest.json`
+- Prior run reported `ls-lint` failures on new directories or extensions
+
+```
+subagent({ agentScope: "both", agent: "harness/ls-lint-steward", task: "<HarnessSpawnContext + planning-context + execution-plan-draft + scope paths>" })
+```
+
+Gate: `harness_artifact_ready({ paths: ["artifacts/ls-lint-manifest-proposal.yaml"] })`.
+
+If `change_class` ≠ `none` and `human_required` → `ask_user` before manifest edits. Chair applies patch, runs `harness-ls-lint-bootstrap.mjs --force`, emits `harness-naming-changed`. See `/harness-ls-lint-steward`.
 
 ## Phase 4d — Tailor process to risk
 
