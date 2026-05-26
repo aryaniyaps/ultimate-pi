@@ -9,6 +9,16 @@ All notable changes to this project are documented in this file.
 - **Harness lens:** Integrate selected pi-lens capabilities through a harness-owned extension, store lens state under `.pi/harness/.lens`, and route lens findings through harness PostHog telemetry instead of standalone lens health/telemetry surfaces.
 - **Graphify KB updater:** Productize conservative daily discovery/promotion with explicit repo/release taxonomy, allowlist source-class gates, operator review queue reporting, scheduler smoke validation, and safe Graphify refresh controls.
 
+## [v0.21.0] — 2026-05-26
+
+### ✨ Features
+
+- **Harness:** Add ls-lint filename fitness (manifest, sync, steward agent, harness-verify) and plan-phase task clarification gate before execution.
+
+### 🔧 Chores
+
+- Add `agents-policy.d.mts` and hash-anchored edit typecheck fixes so `npm run check:ts` passes on main.
+
 ## [v0.20.0] — 2026-05-26
 
 ### ✨ Features
