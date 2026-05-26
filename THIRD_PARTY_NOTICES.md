@@ -1,3 +1,10 @@
+## Dirac hash-anchored edit (vendored subset)
+
+- **Project:** https://github.com/dirac-run/dirac
+- **License:** Apache-2.0
+- **Location:** [`.pi/lib/harness-anchored-edit/`](.pi/lib/harness-anchored-edit/) (anchor state, line protocol, edit resolve/apply)
+- **Integration:** [`.pi/extensions/harness-anchored-edit.ts`](.pi/extensions/harness-anchored-edit.ts) — first-class harness `read`/`edit` (always on when harness extensions load). harness-lens autopatches anchored `edit.text` at `tool_call`; native apply via `applyAnchoredEditsToFile`.
+
 ## pi-vcc (vendored)
 
 - **Project:** https://github.com/sting8k/pi-vcc

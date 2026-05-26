@@ -7,6 +7,11 @@ import * as nodeFs from "node:fs";
 import * as path from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { isToolCallEventType } from "@earendil-works/pi-coding-agent";
+import { anchoredEditTaskId } from "../harness-anchored-edit/task-id.js";
+import {
+	applyAnchoredEditAutopatch,
+	isAnchoredEditToolInput,
+} from "./clients/anchored-edit-autopatch.js";
 import {
 	tryCorrectIndentationMismatch,
 	tryCorrectIndentationMismatchFromContent,
@@ -496,13 +501,25 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 				event as Parameters<typeof isToolCallEventType>[1],
 			)
 		) {
-			const editInput = (event as { input?: unknown }).input as {
-				oldText?: string;
-				newText?: string;
-				edits?: Array<{ oldText?: string; newText?: string }>;
-			};
-			const block = applyEditAutopatch(filePath, editInput);
-			if (block) return block;
+			const editInput = (event as { input?: unknown }).input;
+			if (isAnchoredEditToolInput(editInput)) {
+				const block = applyAnchoredEditAutopatch(
+					filePath,
+					editInput,
+					anchoredEditTaskId({
+						sessionId: (ctx as { sessionId?: string }).sessionId,
+					}),
+				);
+				if (block) return block;
+			} else {
+				const legacyInput = editInput as {
+					oldText?: string;
+					newText?: string;
+					edits?: Array<{ oldText?: string; newText?: string }>;
+				};
+				const block = applyEditAutopatch(filePath, legacyInput);
+				if (block) return block;
+			}
 		}
 	});
 

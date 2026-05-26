@@ -207,6 +207,59 @@ async function checkHarnessLens(pkgJson) {
 	ok("no harness-lens UPSTREAM_PIN.md");
 }
 
+async function checkHarnessAnchoredEdit(pkgJson) {
+	if (!pkgJson.files?.includes(".pi/lib/harness-anchored-edit")) {
+		fail(
+			'package.json "files" must include .pi/lib/harness-anchored-edit',
+		);
+	}
+	ok('package.json files includes .pi/lib/harness-anchored-edit');
+
+	const resolvePath = join(
+		ROOT,
+		".pi",
+		"lib",
+		"harness-anchored-edit",
+		"resolve-to-pi-edit.ts",
+	);
+	if (await fileExists(resolvePath)) {
+		fail("resolve-to-pi-edit.ts must not exist (native anchored apply)");
+	}
+
+	const applyPath = join(
+		ROOT,
+		".pi",
+		"lib",
+		"harness-anchored-edit",
+		"apply-anchored-edits.ts",
+	);
+	if (!(await fileExists(applyPath))) {
+		fail("missing .pi/lib/harness-anchored-edit/apply-anchored-edits.ts");
+	}
+
+	const extPath = join(ROOT, ".pi", "extensions", "harness-anchored-edit.ts");
+	if (!(await fileExists(extPath))) {
+		fail("missing .pi/extensions/harness-anchored-edit.ts");
+	}
+	const extSrc = await readFile(extPath, "utf8");
+	if (extSrc.includes("HARNESS_ANCHORED_EDIT")) {
+		fail("harness-anchored-edit must not gate on HARNESS_ANCHORED_EDIT");
+	}
+	if (extSrc.includes("createEditTool")) {
+		fail("harness-anchored-edit must not delegate to createEditTool");
+	}
+	if (extSrc.includes("resolveAnchoredInputToPiEdit")) {
+		fail("harness-anchored-edit must not use resolveAnchoredInputToPiEdit");
+	}
+	if (extSrc.includes('pi.on("tool_call"')) {
+		fail("harness-anchored-edit must not mutate edit input on tool_call");
+	}
+	if (!extSrc.includes("applyAnchoredEditsToFile")) {
+		fail("harness-anchored-edit must call applyAnchoredEditsToFile");
+	}
+	ok("harness-anchored-edit first-class contract");
+}
+
 async function checkSentruxGate() {
 	await checkSentruxRules();
 
@@ -278,6 +331,7 @@ async function main() {
 		await readFile(join(ROOT, "package.json"), "utf-8"),
 	);
 	await checkHarnessLens(pkgJson);
+	await checkHarnessAnchoredEdit(pkgJson);
 
 	if (!pkgJson.files?.includes("vendor/pi-subagents")) {
 		fail(
@@ -407,6 +461,19 @@ async function main() {
 		fail("missing .pi/harness/agents.policy.yaml");
 	}
 	ok("agents.policy.yaml present");
+
+	const policyYaml = await readFile(AGENTS_POLICY, "utf8");
+	if (!/^\s+extension_bundle:\s+executor/m.test(policyYaml)) {
+		fail("agents.policy.yaml kinds.executor must set extension_bundle: executor");
+	}
+	if (
+		/harness\/running\/executor:[\s\S]*?extensions:\s+true/m.test(policyYaml)
+	) {
+		fail(
+			"harness/running/executor must not set extensions: true (use kind extension_bundle)",
+		);
+	}
+	ok("executor extension_bundle policy");
 
 	if (!(await fileExists(AGENTS_MANIFEST))) {
 		fail(

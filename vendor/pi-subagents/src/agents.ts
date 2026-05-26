@@ -19,6 +19,11 @@ export interface AgentConfig {
 	thinking?: string;
 	maxTurns?: number;
 	extensionsOff?: boolean;
+	/** Curated subprocess extensions (agents.policy.yaml `extension_bundle`). */
+	extensionBundle?: string;
+	extensionsFull?: boolean;
+	/** When true, subprocess uses --no-builtin-tools so extension read/edit replace builtins. */
+	noBuiltinTools?: boolean;
 	skillsOff?: boolean;
 	systemPrompt: string;
 	source: AgentSource;

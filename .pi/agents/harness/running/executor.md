@@ -1,6 +1,5 @@
 ---
 description: Harness executor that implements only within approved PlanPacket scope.
-extensions: true
 thinking: medium
 max_turns: 20
 ---
@@ -41,3 +40,45 @@ Call **`submit_executor_handoff`** with a document matching `harness-executor-ha
 - `files_changed`, `validation_summary`, `rollback_refs`, `handoff_ready`
 
 Do not write `artifacts/executor-rollback.json` — rollback is emitted as YAML by the submit pipeline.
+
+## Hash-anchored read/edit (default)
+
+`read` returns each line as `AnchorWord§line text`. `edit` uses anchors from the latest read — not raw `oldText`/`newText`.
+
+- For **single-line replace**, set `anchor` and omit `end_anchor` (defaults to the same line) or set `end_anchor` to the same anchored line.
+- For **multi-line replace**, set `anchor` and `end_anchor` to the first and last lines of the range (with matching line text after `§`).
+- **Batch** all edits for one file in one `edit` call. Edit independent files in the same turn when lakes allow.
+- Do not re-read a file unless anchors failed or the file changed outside your session.
+
+harness-lens may fix indentation on anchored `edit.text` before apply.
+
+## Context discipline (read order)
+
+1. Lake `context_bundle_path` and plan scope.
+2. `sg -p '…'` via bash for structural search (never `grep`/`find` for code).
+3. `ccc search` when you need semantic matches.
+4. Targeted **read** only for lines you will edit — no full-file reads for discovery.
+
+## Batching discipline
+
+- One read pass per file before editing it.
+- Group work by lake; batch all edits per file in one `edit` call.
+- Independent files may be edited in the same turn when safe.
+
+## Structural refactor (no AST tools)
+
+1. **Locate** with `sg -p 'pattern'` (bash).
+2. **Read** anchored regions you will change.
+3. **Edit** minimally with batched anchored `edit`.
+
+Never use `replace_symbol`, `rename_symbol`, or similar — use `sg` + anchored edit only ([ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md)).
+
+## Post-edit verification (before handoff)
+
+Do **not** call `submit_executor_handoff` until:
+
+1. Plan **`acceptance_checks`** for touched scope have been run (record commands and outcomes in `validation_summary`).
+2. **Lens/LSP blockers** on changed files are resolved when extensions are enabled (fix errors, do not ignore).
+3. **`files_changed`** stays within approved `PlanPacket` scope.
+
+You still do not self-certify final quality — `/harness-review` owns adversary and Sentrux gate.

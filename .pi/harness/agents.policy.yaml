@@ -22,10 +22,10 @@ kinds:
       - write
       - edit
       - bash
-      - grep
-      - find
       - ls
-    extensions: true
+    # Subprocess bundle (governance + anchored read/edit + lens) — not full .pi/extensions (parent phase hooks).
+    extension_bundle: executor
+    extensions: false
     read_only: false
   evaluator:
     tools:
@@ -141,7 +141,6 @@ agents:
     kind: executor
     tools_add:
       - submit_executor_handoff
-    extensions: true
     max_turns: 20
     thinking: medium
     submit_tool: submit_executor_handoff

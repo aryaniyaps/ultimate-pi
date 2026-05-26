@@ -36,6 +36,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0047](0047-agt-layered-security.md) | AGT layered security (rings, prompt defense, CI) | Accepted |
 | [0048](0048-tool-call-hook-order.md) | tool_call hook interaction matrix | Accepted |
 | [0049](0049-agents-policy-manifest.md) | agents.policy.yaml SSOT + native discovery | Accepted |
+| [0050](0050-agentic-web-retrieval-stack.md) | Agentic Web Retrieval Stack (WRS) | Accepted |
+| [0051](0051-hash-anchored-executor-edits.md) | Hash-anchored read/edit (Dirac-inspired) | Accepted |
 
 ## Practice map
 

@@ -75,6 +75,17 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | Handoff | Generator–evaluator | `submit_executor_handoff` | Executor |
 | Next | Always verify | **`/harness-review`** (not replan on blocked) | Parent routing |
 
+
+### Executor edit discipline (ADR 0051)
+
+| Practice | Agent rule |
+|----------|------------|
+| Hash-anchored targeting | `read` → `Anchor§line`; `edit` uses anchors (default harness tools) |
+| Batching | All edits per file in one `edit`; independent files same turn when safe |
+| Pre-handoff verify | Run `acceptance_checks`; clear lens blockers; then `submit_executor_handoff` |
+| Structural refactor | `sg -p` locate → read slice → anchored edit — no `replace_symbol` tools |
+| Code search | `sg` / `ccc` only — not `grep`/`find` on executor |
+
 ## `/harness-review` — Monitoring and Controlling
 
 | Phase | Practice | Agent translation | Actor |
