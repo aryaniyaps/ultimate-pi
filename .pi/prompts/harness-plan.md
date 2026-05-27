@@ -69,7 +69,7 @@ Do **not** run `ccc index` or `ccc search --refresh`. Incremental `ccc index` ru
 
 - **Codebase:** `Read`, `sg -p`, `ccc search`, `graphify query` / `explain` / `path`, `GRAPH_REPORT.md` — to disambiguate what the user wants and what “done” means
 - **Web:** **web-retrieval** — linked specs, APIs, tickets (disambiguate the **task**, not Phase 3.5 landscape/stack commitment)
-- **`ask_user`** — harness-decisions; one call per batch (2–4 options, `allowFreeform: true`)
+- **`ask_user`** — harness-decisions; **one tool call per clarification round** (flat `options` or questionnaire `questions[]`, ≤8 sub-questions). Prefer questionnaire when scope, success, and risk are independent. After answers, merge via `applyAskUserToTaskClarification` — do not hand-edit structured YAML fields.
 
 Prefer minimum investigation; codebase and web are **not** forbidden.
 
@@ -84,11 +84,11 @@ Prefer minimum investigation; codebase and web are **not** forbidden.
 2. **`mode: revise`:** If `artifacts/task-clarification.yaml` exists with `status: ready` and `task_input_hash` matches current args (hash = source task + risk + quick flag), skip to Phase 1. If `last_outcome` is `needs_clarification`, do **not** skip.
 3. Investigate as needed; log `grounding` + `evidence_refs` on the artifact.
 4. Draft `artifacts/task-clarification.yaml` via `write_harness_yaml` (`schema_version: "1.0.0"`, fields per `plan-task-clarification.schema.json`). Set `task_input_hash` from source task + flags. List `unresolved_questions` when scope, success criteria, risk, or target surface are ambiguous.
-5. While `unresolved_questions` non-empty → `ask_user`; merge answers; increment `clarification_rounds`. On cancel → `plan_status: needs_clarification` and stop.
+5. While `unresolved_questions` non-empty → `ask_user` (batch related forks in one call when possible); merge answers into `task-clarification.yaml` using the merge helper; increment `clarification_rounds`. On cancel → `plan_status: needs_clarification` and stop.
 6. When ready → `status: ready`, empty `unresolved_questions`, copy `acceptance_checks_draft`, set `risk_level` (CLI `--risk` wins when provided).
 7. Gate: `harness_artifact_ready({ paths: ["artifacts/task-clarification.yaml"] })` — updates `task_summary` to `clarified_task` when valid.
 
-**`--quick`:** Same gate. At most **one** `ask_user` round when the task already states explicit acceptance; if still ambiguous after that round, set `needs_clarification` and **do not** enter Phase 1.
+**`--quick`:** Same gate. At most **one** `ask_user` tool call (questionnaire allowed) when the task already states explicit acceptance; if still ambiguous after that round, set `needs_clarification` and **do not** enter Phase 1.
 
 ## Phase 1 — Reconnaissance before WBS (parent-led, default)
 

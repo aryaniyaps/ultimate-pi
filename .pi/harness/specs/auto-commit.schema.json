@@ -1,0 +1,63 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/auto-commit.schema.json",
+	"title": "AutoCommitConfig",
+	"description": "Harness auto-commit: co-author trailers, message templates, branch/push hints.",
+	"type": "object",
+	"additionalProperties": true,
+	"properties": {
+		"dryRun": { "type": "boolean" },
+		"coAuthor": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["login", "email"],
+			"properties": {
+				"login": { "type": "string", "minLength": 1 },
+				"email": { "type": "string", "minLength": 3 },
+				"required": { "type": "boolean" }
+			}
+		},
+		"branch": {
+			"type": "object",
+			"additionalProperties": true,
+			"properties": {
+				"strategy": { "type": "string" },
+				"protected": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		},
+		"push": {
+			"type": "object",
+			"additionalProperties": true,
+			"properties": {
+				"allowedRemotes": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		},
+		"submodules": {
+			"type": "object",
+			"additionalProperties": true,
+			"properties": {
+				"ignore": { "type": "boolean" }
+			}
+		},
+		"message": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["template", "coAuthorTrailer"],
+			"properties": {
+				"template": { "type": "string", "minLength": 1 },
+				"templateNoScope": { "type": "string", "minLength": 1 },
+				"typeDefault": { "type": "string", "minLength": 1 },
+				"scopeDefault": { "type": "string" },
+				"bodySeparator": { "type": "string" },
+				"coAuthorTrailer": { "type": "string", "minLength": 1 },
+				"maxSubjectLength": { "type": "integer", "minimum": 20, "maximum": 200 }
+			}
+		}
+	}
+}

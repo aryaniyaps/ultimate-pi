@@ -87,6 +87,39 @@ Use during **`/harness-plan` Phase 0** only. Purpose: disambiguate the **task** 
 }
 ```
 
+### Example (Phase 0 — questionnaire: scope + success in one call)
+
+Use **`questions[]`** when ≥2 independent dimensions must be resolved together. One tool call per clarification round (not one sub-question per round). After the user answers, merge into `artifacts/task-clarification.yaml` — do not hand-edit YAML for structured fields.
+
+```json
+{
+  "question": "Lock the task contract before reconnaissance",
+  "context": "Phase 0 (ADR 0053). Answer both forks to set scope and acceptance.",
+  "questions": [
+    {
+      "title": "Scope surface",
+      "options": [
+        { "title": "Harness only", "description": ".pi/harness, prompts, verify" },
+        { "title": "Product code", "description": "App/runtime changes + tests" }
+      ]
+    },
+    {
+      "title": "Done means",
+      "options": [
+        { "title": "Tests green", "description": "CI + harness-verify pass" },
+        { "title": "Docs shipped", "description": "User-facing docs updated" }
+      ],
+      "allowMultiple": true
+    }
+  ],
+  "allowComment": true
+}
+```
+
+Parent: map the tool result with `applyAskUserToTaskClarification` (see `.pi/lib/ask-user/merge-task-clarification.ts`) before `write_harness_yaml`.
+
+**Rich UI:** `HARNESS_ASK_USER_UI=auto` tries Glimpse when available; WSL without a display falls back to TUI (`ui_degraded` in tool details). Use `displayMode: "inline"` only for transcript-inline prompts (e.g. under a plan block).
+
 ## Example (plan — scope) — Phase 4 fork, not Phase 0
 
 ```json

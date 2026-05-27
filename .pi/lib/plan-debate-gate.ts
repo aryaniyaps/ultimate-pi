@@ -59,6 +59,143 @@ async function countJsonlKinds(
 	}
 }
 
+async function collectStrategyErrors(args: {
+	runDir: string;
+	coverage: any;
+	reviewStrategy: any;
+	dialogueOpts: { max_exchanges_per_round: number };
+}): Promise<string[]> {
+	const { runDir, coverage, reviewStrategy, dialogueOpts } = args;
+	const errors: string[] = [];
+	const consolidated = isConsolidatedReviewStrategy(reviewStrategy);
+	const parallelProbes = isParallelProbesReviewStrategy(reviewStrategy);
+
+	if (parallelProbes) {
+		for (const rel of laneArtifactPathsForParallelProbesRound()) {
+			if (!(await fileExists(join(runDir, rel)))) errors.push(`missing ${rel}`);
+		}
+		const messengerCheck = messengerRoundDebateReady(
+			await getMessengerRoundState(runDir, 1),
+			false,
+			dialogueOpts,
+		);
+		if (!messengerCheck.ok) {
+			for (const e of messengerCheck.errors) {
+				errors.push(`parallel_probes round messenger: ${e}`);
+			}
+		}
+		return errors;
+	}
+
+	if (consolidated) {
+		if (!(await fileExists(join(runDir, CONSOLIDATED_REVIEW_ARTIFACT)))) {
+			errors.push(`missing ${CONSOLIDATED_REVIEW_ARTIFACT}`);
+		}
+		for (const rel of laneArtifactPathsForConsolidatedRound()) {
+			if (!(await fileExists(join(runDir, rel)))) errors.push(`missing ${rel}`);
+		}
+		const messengerCheck = messengerRoundDebateReady(
+			await getMessengerRoundState(runDir, 1),
+			true,
+			dialogueOpts,
+		);
+		if (!messengerCheck.ok) {
+			for (const e of messengerCheck.errors) {
+				errors.push(`consolidated round messenger: ${e}`);
+			}
+		}
+		return errors;
+	}
+
+	const roundIndices = [
+		...new Set(
+			Object.values(coverage.rounds_by_focus).filter(
+				(v): v is number => typeof v === "number",
+			),
+		),
+	];
+	for (const r of roundIndices) {
+		const focus = coverage.focus_by_round[r] ?? null;
+		for (const rel of laneArtifactPathsForRound(r, focus)) {
+			if (!(await fileExists(join(runDir, rel)))) errors.push(`missing ${rel}`);
+		}
+		const messengerCheck = messengerRoundDebateReady(
+			await getMessengerRoundState(runDir, r),
+			focus === "quality" || r >= 4,
+			dialogueOpts,
+		);
+		if (!messengerCheck.ok) {
+			for (const e of messengerCheck.errors) {
+				errors.push(`round ${r} messenger: ${e}`);
+			}
+		}
+	}
+	return errors;
+}
+
+async function collectBusAndConsensusIssues(args: {
+	debateId: string;
+	debatesDir: string;
+	caps: ReturnType<typeof capsForDebate>;
+	requiredFocuses: readonly PlanDebateFocus[];
+	coverage: any;
+	debateProfile: string;
+}): Promise<{ errors: string[]; warnings: string[] }> {
+	const {
+		debateId,
+		debatesDir,
+		caps,
+		requiredFocuses,
+		coverage,
+		debateProfile,
+	} = args;
+	const errors: string[] = [];
+	const warnings: string[] = [];
+	const { rounds, hasConsensus } = await countJsonlKinds(
+		join(debatesDir, `${debateId}.jsonl`),
+	);
+	if (rounds < caps.min_focus_rounds) {
+		errors.push(
+			`${debateId}.jsonl has ${rounds}/${caps.min_focus_rounds} minimum round events — use harness_debate_submit_round per focus`,
+		);
+	}
+	if (!hasConsensus)
+		errors.push(
+			`missing consensus on ${debateId} — call harness_debate_consensus`,
+		);
+	if (
+		!planDebateOutcomeComplete(coverage, {
+			requiredFocuses,
+			minRoundIndex: caps.min_focus_rounds,
+		})
+	) {
+		errors.push(
+			`debate outcome incomplete: required focuses [${requiredFocuses.join(", ")}] with last review_gate_ready true (profile=${debateProfile})`,
+		);
+	}
+	const consensusPath = join(debatesDir, `${debateId}.consensus.json`);
+	if (!(await fileExists(consensusPath))) {
+		errors.push(`missing ${debateId}.consensus.json`);
+	} else {
+		try {
+			const packet = JSON.parse(await readFile(consensusPath, "utf-8")) as {
+				policy_decision?: string;
+			};
+			if (packet.policy_decision === "block") {
+				errors.push("consensus policy_decision is block — cannot approve");
+			}
+		} catch {
+			errors.push("invalid consensus json");
+		}
+	}
+	if (rounds > caps.max_rounds) {
+		warnings.push(
+			`bus round count ${rounds} exceeds soft max_rounds ${caps.max_rounds}`,
+		);
+	}
+	return { errors, warnings };
+}
+
 export interface PlanDebateGateResult {
 	ok: boolean;
 	errors: string[];
@@ -129,76 +266,14 @@ export async function validatePlanDebateGate(
 		errors.push("last submitted review round has review_gate_ready !== true");
 	}
 
-	if (parallelProbes) {
-		for (const rel of laneArtifactPathsForParallelProbesRound()) {
-			const abs = join(runDir, rel);
-			if (!(await fileExists(abs))) {
-				errors.push(`missing ${rel}`);
-			}
-		}
-		const roundState = await getMessengerRoundState(runDir, 1);
-		const messengerCheck = messengerRoundDebateReady(
-			roundState,
-			false,
+	errors.push(
+		...(await collectStrategyErrors({
+			runDir,
+			coverage,
+			reviewStrategy,
 			dialogueOpts,
-		);
-		if (!messengerCheck.ok) {
-			for (const e of messengerCheck.errors) {
-				errors.push(`parallel_probes round messenger: ${e}`);
-			}
-		}
-	} else if (consolidated) {
-		const absConsolidated = join(runDir, CONSOLIDATED_REVIEW_ARTIFACT);
-		if (!(await fileExists(absConsolidated))) {
-			errors.push(`missing ${CONSOLIDATED_REVIEW_ARTIFACT}`);
-		}
-		for (const rel of laneArtifactPathsForConsolidatedRound()) {
-			const abs = join(runDir, rel);
-			if (!(await fileExists(abs))) {
-				errors.push(`missing ${rel}`);
-			}
-		}
-		const roundState = await getMessengerRoundState(runDir, 1);
-		const messengerCheck = messengerRoundDebateReady(
-			roundState,
-			true,
-			dialogueOpts,
-		);
-		if (!messengerCheck.ok) {
-			for (const e of messengerCheck.errors) {
-				errors.push(`consolidated round messenger: ${e}`);
-			}
-		}
-	} else {
-		const roundIndices = [
-			...new Set(
-				Object.values(coverage.rounds_by_focus).filter(
-					(v): v is number => typeof v === "number",
-				),
-			),
-		];
-		for (const r of roundIndices) {
-			const focus = coverage.focus_by_round[r] ?? null;
-			for (const rel of laneArtifactPathsForRound(r, focus)) {
-				const abs = join(runDir, rel);
-				if (!(await fileExists(abs))) {
-					errors.push(`missing ${rel}`);
-				}
-			}
-			const roundState = await getMessengerRoundState(runDir, r);
-			const requireSprint = focus === "quality" || r >= 4;
-			const messengerCheck = messengerRoundDebateReady(
-				roundState,
-				requireSprint,
-				dialogueOpts,
-			);
-			if (!messengerCheck.ok) {
-				for (const e of messengerCheck.errors) {
-					errors.push(`round ${r} messenger: ${e}`);
-				}
-			}
-		}
-	}
+		})),
+	);
 
 	if (
 		isHarnessBudgetEnforceOn() &&
@@ -224,51 +299,16 @@ export async function validatePlanDebateGate(
 		errors.push(`messenger debate_id ${messenger.debate_id} !== ${debateId}`);
 	}
 
-	const jsonlPath = join(debatesDir, `${debateId}.jsonl`);
-	const { rounds, hasConsensus } = await countJsonlKinds(jsonlPath);
-	const minRounds = caps.min_focus_rounds;
-	if (rounds < minRounds) {
-		errors.push(
-			`${debateId}.jsonl has ${rounds}/${minRounds} minimum round events — use harness_debate_submit_round per focus`,
-		);
-	}
-	if (!hasConsensus) {
-		errors.push(
-			`missing consensus on ${debateId} — call harness_debate_consensus`,
-		);
-	}
-
-	if (
-		!planDebateOutcomeComplete(coverage, {
-			requiredFocuses,
-			minRoundIndex: caps.min_focus_rounds,
-		})
-	) {
-		errors.push(
-			`debate outcome incomplete: required focuses [${requiredFocuses.join(", ")}] with last review_gate_ready true (profile=${debateProfile})`,
-		);
-	}
-
-	const consensusPath = join(debatesDir, `${debateId}.consensus.json`);
-	if (!(await fileExists(consensusPath))) {
-		errors.push(`missing ${debateId}.consensus.json`);
-	} else {
-		try {
-			const raw = await readFile(consensusPath, "utf-8");
-			const packet = JSON.parse(raw) as { policy_decision?: string };
-			if (packet.policy_decision === "block") {
-				errors.push("consensus policy_decision is block — cannot approve");
-			}
-		} catch {
-			errors.push("invalid consensus json");
-		}
-	}
-
-	if (rounds > caps.max_rounds) {
-		warnings.push(
-			`bus round count ${rounds} exceeds soft max_rounds ${caps.max_rounds}`,
-		);
-	}
+	const busChecks = await collectBusAndConsensusIssues({
+		debateId,
+		debatesDir,
+		caps,
+		requiredFocuses,
+		coverage,
+		debateProfile,
+	});
+	errors.push(...busChecks.errors);
+	warnings.push(...busChecks.warnings);
 
 	return {
 		ok: errors.length === 0,

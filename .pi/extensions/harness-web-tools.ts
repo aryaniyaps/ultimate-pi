@@ -10,19 +10,19 @@ import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	rememberSessionWebArtifactDir,
 	resolveWebOutputPath,
-	webArtifactScopeHint,
 	type WebArtifactScope,
+	webArtifactScopeHint,
 } from "../lib/harness-web/artifacts.js";
 import {
+	type FetchCacheContext,
 	fingerprintFile,
 	formatCacheAge,
 	lookupFetchCache,
 	lookupSearchCache,
 	publishWorkspaceAlias,
+	type SearchCacheContext,
 	writeFetchCacheEntry,
 	writeSearchCacheEntry,
-	type FetchCacheContext,
-	type SearchCacheContext,
 } from "../lib/harness-web/cache.js";
 import {
 	harnessWebContextLine,
@@ -32,7 +32,6 @@ import {
 	summarizeSearchJson,
 } from "../lib/harness-web/run-cli.js";
 
-// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 const WEB_SEARCH_GUIDELINES = [
@@ -135,7 +134,8 @@ const WebSearchSchema = Type.Object({
 	),
 	limit: Type.Optional(
 		Type.Number({
-			description: "Max results (tier defaults: instant 5, standard 10, deep 10)",
+			description:
+				"Max results (tier defaults: instant 5, standard 10, deep 10)",
 			minimum: 1,
 			maximum: 20,
 		}),
@@ -181,10 +181,14 @@ const WebFetchSchema = Type.Object({
 		}),
 	),
 	highlightQuery: Type.Optional(
-		Type.String({ description: "Query for highlight scoring (required if highlights)" }),
+		Type.String({
+			description: "Query for highlight scoring (required if highlights)",
+		}),
 	),
 	highlightsOutput: Type.Optional(
-		Type.String({ description: "Highlights JSON path (default .web/highlights.json)" }),
+		Type.String({
+			description: "Highlights JSON path (default .web/highlights.json)",
+		}),
 	),
 	limit: Type.Optional(
 		Type.Number({
@@ -216,7 +220,9 @@ const WebFindSimilarSchema = Type.Object({
 const WebContentsSchema = Type.Object({
 	webScope: WebScopeSchema,
 	urls: Type.Optional(
-		Type.Array(Type.String(), { description: "URLs to fetch (or use fromSearch)" }),
+		Type.Array(Type.String(), {
+			description: "URLs to fetch (or use fromSearch)",
+		}),
 	),
 	fromSearch: Type.Optional(
 		Type.String({
@@ -315,6 +321,586 @@ function resolveTier(params: { tier?: string; bulk?: boolean }): string {
 	return "deep";
 }
 
+function executeWebSearchBulk(args: {
+	ctx: any;
+	cwd: string;
+	webScope: string | undefined;
+	query: string;
+	limit: number | undefined;
+	outputParam: unknown;
+}) {
+	const bulkScoped = resolveScopedOutput(
+		args.ctx,
+		"bulk",
+		args.outputParam ? `${args.outputParam}` : undefined,
+		args.webScope,
+	);
+	const output = bulkScoped.output.endsWith("/bulk")
+		? bulkScoped.output
+		: `${bulkScoped.artifactDir}/bulk`;
+	ensureParentDir(args.cwd, output);
+	const lim = args.limit ?? 3;
+	const argv = [
+		"bulk-scrape",
+		args.query,
+		"-o",
+		output,
+		"--limit",
+		String(lim),
+	];
+	const run = runHarnessWeb(MODULE_URL, argv, args.cwd);
+	if (!run.ok) {
+		return failResult(
+			`web_search bulk failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
+		);
+	}
+	return okResult(
+		`${run.stdout}\n\noutput: ${output}\nartifactDir: ${bulkScoped.artifactDir}`,
+		{
+			output,
+			artifactDir: bulkScoped.artifactDir,
+			query: args.query,
+			bulk: true,
+		},
+	);
+}
+
+function resolveAnglesFile(args: {
+	params: any;
+	ctx: any;
+	cwd: string;
+	query: string;
+	webScope: string | undefined;
+}): string {
+	let anglesFile = String(args.params.anglesFile ?? "").trim();
+	if (anglesFile && !anglesFile.startsWith("/") && !anglesFile.includes("..")) {
+		anglesFile = resolveScopedOutput(
+			args.ctx,
+			"angles.yaml",
+			anglesFile,
+			args.webScope,
+		).output;
+	}
+	if (args.params.angles?.length && !anglesFile) {
+		const inline = resolveScopedOutput(
+			args.ctx,
+			"angles-inline.yaml",
+			undefined,
+			args.webScope,
+		);
+		const tmp = resolve(args.cwd, inline.output);
+		ensureParentDir(args.cwd, inline.output);
+		const yaml =
+			`intent: ${JSON.stringify(args.query)}\nangles:\n` +
+			args.params.angles
+				.map(
+					(q: string, i: number) =>
+						`  - id: angle_${i + 1}\n    query: ${JSON.stringify(q)}`,
+				)
+				.join("\n") +
+			"\n";
+		writeFileSync(tmp, yaml, "utf-8");
+		anglesFile = inline.output;
+	}
+	return anglesFile;
+}
+
+function tryWebSearchCacheHit(args: {
+	refreshCache: boolean;
+	cwd: string;
+	searchCtx: SearchCacheContext;
+	maxAgeSec?: number;
+	basename: string;
+	scopedArtifactDir: string;
+	tier: string;
+	query: string;
+	engine: string;
+}): ReturnType<typeof okResult> | null {
+	if (args.refreshCache) return null;
+	const cached = lookupSearchCache(args.cwd, args.searchCtx, {
+		maxAgeSec: args.maxAgeSec,
+	});
+	if (!(cached.hit && !cached.stale)) return null;
+	const workspaceOutput = publishWorkspaceAlias(
+		args.cwd,
+		cached.artifactPath,
+		args.basename,
+	);
+	const parts = [
+		`[cache hit] age ${formatCacheAge(cached.ageMs)} · key ${cached.cacheKey}`,
+		`cache: ${cached.entryDir}`,
+	];
+	const summary =
+		args.tier === "deep" || args.tier === "research"
+			? summarizeDeepSearchJson(workspaceOutput, args.cwd)
+			: summarizeSearchJson(workspaceOutput, args.cwd);
+	if (summary) parts.push("", summary);
+	parts.push(
+		"",
+		`output: ${workspaceOutput}`,
+		`artifactDir: ${args.scopedArtifactDir}`,
+		`tier: ${args.tier}`,
+	);
+	parts.push("Read output JSON; web_fetch top URLs with highlights:true.");
+	return okResult(parts.join("\n"), {
+		output: workspaceOutput,
+		artifactDir: args.scopedArtifactDir,
+		query: args.query,
+		tier: args.tier,
+		engine: args.engine,
+		cacheHit: true,
+		cacheKey: cached.cacheKey,
+		cachePath: cached.artifactPath,
+		cacheAgeMs: cached.ageMs,
+	});
+}
+
+function buildWebSearchArgv(args: {
+	tier: string;
+	query: string;
+	output: string;
+	resultLimit: number;
+	anglesFile: string;
+	expandHeuristic: boolean;
+	category?: string;
+	limit?: number;
+}): string[] {
+	if (args.tier === "deep" || args.tier === "research") {
+		const argv = [
+			"search-deep",
+			args.query,
+			"-o",
+			args.output,
+			"--limit",
+			String(args.resultLimit),
+		];
+		if (args.anglesFile) {
+			argv.push("--angles-file", args.anglesFile);
+		} else if (args.expandHeuristic) {
+			argv.push("--expand-heuristic");
+		}
+		if (args.category) argv.push("--category", args.category);
+		return argv;
+	}
+	return [
+		"search",
+		args.query,
+		"-o",
+		args.output,
+		"--tier",
+		args.tier,
+		...(args.limit != null ? ["--limit", String(args.limit)] : []),
+	];
+}
+
+async function executeWebSearch(params: any, ctx: any) {
+	const cwd = sessionCwd(ctx);
+	const webScope = String(params.webScope ?? "").trim() || undefined;
+	const query = String(params.query ?? "").trim();
+	if (!query) return failResult("web_search: query is required.");
+
+	const tier = resolveTier(params);
+	const bulk = params.bulk === true;
+	const limit = typeof params.limit === "number" ? params.limit : undefined;
+
+	if (bulk) {
+		return executeWebSearchBulk({
+			ctx,
+			cwd,
+			webScope,
+			query,
+			limit,
+			outputParam: params.output,
+		});
+	}
+
+	const basename =
+		tier === "deep" || tier === "research" ? "search-deep.json" : "search.json";
+	const scoped = resolveScopedOutput(
+		ctx,
+		basename,
+		params.output ? String(params.output) : undefined,
+		webScope,
+	);
+	const output = scoped.output;
+	ensureParentDir(cwd, output);
+	const { refresh: refreshCache, maxAgeSec } = cacheControlFromParams(params);
+	const engine = searchEngineId();
+	const resultLimit = limit ?? 10;
+	const category = params.category ? String(params.category) : undefined;
+
+	const anglesFile = resolveAnglesFile({
+		params,
+		ctx,
+		cwd,
+		query,
+		webScope,
+	});
+
+	if (
+		(tier === "deep" || tier === "research") &&
+		!anglesFile &&
+		params.expandHeuristic !== true &&
+		!params.angles?.length
+	) {
+		return failResult(
+			"web_search tier=deep requires anglesFile (.web/angles.yaml from harness/web-retrieval/web-query-expander) " +
+				"or expandHeuristic:true. Invoke web-retrieval skill first.",
+		);
+	}
+
+	const anglesFingerprint = anglesFile
+		? fingerprintFile(cwd, anglesFile)
+		: undefined;
+
+	const searchCtx: SearchCacheContext = {
+		query,
+		tier,
+		engine,
+		limit: resultLimit,
+		category,
+		expandHeuristic: params.expandHeuristic === true,
+		anglesFingerprint,
+	};
+
+	const cacheHit = tryWebSearchCacheHit({
+		refreshCache,
+		cwd,
+		searchCtx,
+		maxAgeSec,
+		basename,
+		scopedArtifactDir: scoped.artifactDir,
+		tier,
+		query,
+		engine,
+	});
+	if (cacheHit) return cacheHit;
+
+	const argv = buildWebSearchArgv({
+		tier,
+		query,
+		output,
+		resultLimit,
+		anglesFile,
+		expandHeuristic: params.expandHeuristic === true,
+		category,
+		limit,
+	});
+
+	const run = runHarnessWeb(MODULE_URL, argv, cwd);
+	if (!run.ok) {
+		const hint =
+			"\n\nHints: run /harness-setup; for searxng set HARNESS_WEB_SEARXNG_URL; " +
+			"enable json in SearXNG search.formats; for deep spawn web-query-expander first.";
+		return failResult(
+			`web_search failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}${hint}`,
+		);
+	}
+
+	const cacheWrite = writeSearchCacheEntry(cwd, searchCtx, output, {
+		anglesPath: anglesFile,
+	});
+	publishWorkspaceAlias(cwd, `${cacheWrite.entryDir}/${basename}`, basename);
+
+	const parts = [run.stdout];
+	const summary =
+		tier === "deep" || tier === "research"
+			? summarizeDeepSearchJson(output, cwd)
+			: summarizeSearchJson(output, cwd);
+	if (summary) parts.push("", summary);
+	parts.push(
+		"",
+		`output: ${output}`,
+		`artifactDir: ${scoped.artifactDir}`,
+		`tier: ${tier}`,
+		`cache: ${cacheWrite.entryDir}`,
+	);
+	parts.push("Read output JSON; web_fetch top URLs with highlights:true.");
+
+	return okResult(parts.join("\n"), {
+		output,
+		artifactDir: scoped.artifactDir,
+		query,
+		tier,
+		engine,
+		cacheHit: false,
+		cacheKey: cacheWrite.cacheKey,
+		cachePath: `${cacheWrite.entryDir}/${basename}`,
+	});
+}
+
+async function executeWebFetch(params: any, ctx: any) {
+	const cwd = sessionCwd(ctx);
+	const webScope = String(params.webScope ?? "").trim() || undefined;
+	const url = String(params.url ?? "").trim();
+	if (!url) return failResult("web_fetch: url is required.");
+
+	const mode = params.mode === "map" ? "map" : "scrape";
+	const fast = params.fast === true;
+	const limit = typeof params.limit === "number" ? params.limit : 100;
+	const basename = mode === "map" ? "map.json" : "page.md";
+	const scoped = resolveScopedOutput(
+		ctx,
+		basename,
+		params.output ? String(params.output) : undefined,
+		webScope,
+	);
+	const output = scoped.output;
+	ensureParentDir(cwd, output);
+	const highlights = params.highlights === true;
+	const hlQuery = String(params.highlightQuery ?? "").trim();
+	const { refresh: refreshCache, maxAgeSec } = cacheControlFromParams(params);
+
+	const hlScoped =
+		highlights && !params.highlightsOutput
+			? resolveScopedOutput(ctx, "highlights.json", undefined, webScope)
+			: highlights
+				? resolveScopedOutput(
+						ctx,
+						"highlights.json",
+						String(params.highlightsOutput),
+						webScope,
+					)
+				: undefined;
+	if (hlScoped) ensureParentDir(cwd, hlScoped.output);
+
+	const fetchCtx: FetchCacheContext = {
+		url,
+		mode,
+		fast,
+		highlightQuery: hlQuery || undefined,
+		highlights,
+	};
+
+	if (!refreshCache) {
+		const cached = lookupFetchCache(cwd, fetchCtx, { maxAgeSec });
+		if (cached.hit && !cached.stale) {
+			const workspaceBasename = highlights
+				? "highlights.json"
+				: mode === "map"
+					? "map.json"
+					: "page.md";
+			const workspaceOutput = publishWorkspaceAlias(
+				cwd,
+				cached.artifactPath,
+				workspaceBasename,
+			);
+			const parts = [
+				`[cache hit] age ${formatCacheAge(cached.ageMs)} · key ${cached.cacheKey}`,
+				`cache: ${cached.entryDir}`,
+				"",
+				`output: ${workspaceOutput}`,
+				`artifactDir: ${scoped.artifactDir}`,
+			];
+			const excerpt = readTextExcerpt(workspaceOutput, cwd);
+			if (excerpt) parts.push("", "--- excerpt ---", excerpt);
+			return okResult(parts.join("\n"), {
+				output: workspaceOutput,
+				artifactDir: scoped.artifactDir,
+				url,
+				mode,
+				highlights,
+				cacheHit: true,
+				cacheKey: cached.cacheKey,
+				cachePath: cached.artifactPath,
+			});
+		}
+	}
+
+	let argv: string[];
+	if (mode === "map") {
+		argv = [
+			"map",
+			url,
+			"-o",
+			output,
+			"--limit",
+			String(limit),
+			...(fast ? ["--fast"] : []),
+		];
+	} else {
+		argv = ["scrape", url, "-o", output, ...(fast ? ["--fast"] : [])];
+		if (highlights) {
+			if (!hlQuery) {
+				return failResult(
+					"web_fetch: highlightQuery required when highlights=true",
+				);
+			}
+			argv.push("--highlights", "--highlight-query", hlQuery);
+			if (hlScoped) argv.push("--highlights-output", hlScoped.output);
+		}
+	}
+
+	const run = runHarnessWeb(MODULE_URL, argv, cwd);
+	if (!run.ok) {
+		return failResult(
+			`web_fetch failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}\n` +
+				"Try fast:true for static pages, or run harness-cli-verify for Scrapling install.",
+		);
+	}
+
+	const cacheArtifact = highlights && hlScoped ? hlScoped.output : output;
+	const cacheWrite = writeFetchCacheEntry(cwd, fetchCtx, cacheArtifact, {
+		highlightsPath:
+			highlights && hlScoped && hlScoped.output !== cacheArtifact
+				? hlScoped.output
+				: undefined,
+	});
+	const workspaceBasename = highlights
+		? "highlights.json"
+		: mode === "map"
+			? "map.json"
+			: "page.md";
+	publishWorkspaceAlias(
+		cwd,
+		`${cacheWrite.entryDir}/${workspaceBasename}`,
+		workspaceBasename,
+	);
+
+	const parts = [
+		run.stdout,
+		"",
+		`output: ${output}`,
+		`artifactDir: ${scoped.artifactDir}`,
+		`cache: ${cacheWrite.entryDir}`,
+	];
+	const excerpt = readTextExcerpt(output, cwd);
+	if (excerpt) parts.push("", "--- excerpt ---", excerpt);
+
+	return okResult(parts.join("\n"), {
+		output,
+		artifactDir: scoped.artifactDir,
+		url,
+		mode,
+		highlights,
+		cacheHit: false,
+		cacheKey: cacheWrite.cacheKey,
+		cachePath: `${cacheWrite.entryDir}/${workspaceBasename}`,
+	});
+}
+
+async function executeWebFindSimilar(params: any, ctx: any) {
+	const cwd = sessionCwd(ctx);
+	const webScope = String(params.webScope ?? "").trim() || undefined;
+	const url = String(params.url ?? "").trim();
+	if (!url) return failResult("web_find_similar: url is required.");
+
+	const scoped = resolveScopedOutput(
+		ctx,
+		"search-deep.json",
+		params.output ? String(params.output) : undefined,
+		webScope,
+	);
+	const output = scoped.output;
+	ensureParentDir(cwd, output);
+	const limit = typeof params.limit === "number" ? params.limit : 10;
+	const argv = [
+		"find-similar",
+		url,
+		"-o",
+		output,
+		"--limit",
+		String(limit),
+		...(params.fast !== false ? ["--fast"] : []),
+	];
+
+	const run = runHarnessWeb(MODULE_URL, argv, cwd);
+	if (!run.ok) {
+		return failResult(
+			`web_find_similar failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
+		);
+	}
+
+	const parts = [run.stdout];
+	const summary = summarizeDeepSearchJson(output, cwd);
+	if (summary) parts.push("", summary);
+	parts.push("", `output: ${output}`, `artifactDir: ${scoped.artifactDir}`);
+
+	return okResult(parts.join("\n"), {
+		output,
+		artifactDir: scoped.artifactDir,
+		url,
+	});
+}
+
+async function executeWebContents(params: any, ctx: any) {
+	const cwd = sessionCwd(ctx);
+	const webScope = String(params.webScope ?? "").trim() || undefined;
+	const dirScoped = resolveScopedOutput(
+		ctx,
+		"contents",
+		params.outputDir ? String(params.outputDir) : undefined,
+		webScope,
+	);
+	const outputDir = dirScoped.output.endsWith("/contents")
+		? dirScoped.output
+		: `${dirScoped.artifactDir}/contents`;
+	mkdirSync(resolve(cwd, outputDir), { recursive: true });
+	let fromSearch = String(params.fromSearch ?? "").trim();
+	if (fromSearch && !fromSearch.startsWith("/") && !fromSearch.includes("..")) {
+		fromSearch = resolveScopedOutput(
+			ctx,
+			"search-deep.json",
+			fromSearch,
+			webScope,
+		).output;
+	}
+	const urls = (params.urls ?? [])
+		.map((u: unknown) => String(u).trim())
+		.filter(Boolean);
+	const limit = typeof params.limit === "number" ? params.limit : 5;
+	const hlQuery = String(params.highlightQuery ?? "").trim();
+
+	const argv = [
+		"contents-batch",
+		"-o",
+		outputDir,
+		"--limit",
+		String(limit),
+		...(params.fast ? ["--fast"] : []),
+		...(params.highlights && hlQuery
+			? ["--highlights", "--highlight-query", hlQuery]
+			: []),
+		...urls,
+	];
+	if (fromSearch) {
+		argv.splice(1, 0, "--from-search", fromSearch);
+	}
+	let evidencePath: string | undefined;
+	if (params.evidenceBundle && fromSearch) {
+		const bundleArg = String(params.evidenceBundle);
+		evidencePath =
+			bundleArg.startsWith("/") || bundleArg.includes("..")
+				? bundleArg
+				: resolveScopedOutput(ctx, "evidence-bundle.json", bundleArg, webScope)
+						.output;
+		ensureParentDir(cwd, evidencePath);
+		argv.push("--evidence-bundle", evidencePath);
+	}
+
+	if (!fromSearch && !urls.length) {
+		return failResult("web_contents: provide urls or fromSearch");
+	}
+
+	const run = runHarnessWeb(MODULE_URL, argv, cwd);
+	if (!run.ok) {
+		return failResult(
+			`web_contents failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
+		);
+	}
+
+	return okResult(
+		`${run.stdout}\n\noutputDir: ${outputDir}\nartifactDir: ${dirScoped.artifactDir}` +
+			(evidencePath ? `\nevidence: ${evidencePath}` : ""),
+		{
+			outputDir,
+			artifactDir: dirScoped.artifactDir,
+			fromSearch,
+			evidenceBundle: evidencePath,
+		},
+	);
+}
+
 export default function harnessWebTools(pi: ExtensionAPI) {
 	if (!claimHarnessGovernanceLoad("harness-web-tools", MODULE_URL)) return;
 	pi.on("before_agent_start", async (event, ctx) => {
@@ -342,210 +928,7 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 		parameters: WebSearchSchema,
 
 		async execute(_id, params, _signal, _onUpdate, ctx) {
-			const cwd = sessionCwd(ctx);
-			const webScope = String(params.webScope ?? "").trim() || undefined;
-			const query = String(params.query ?? "").trim();
-			if (!query) return failResult("web_search: query is required.");
-
-			const tier = resolveTier(params);
-			const bulk = params.bulk === true;
-			const limit = typeof params.limit === "number" ? params.limit : undefined;
-
-			if (bulk) {
-				const bulkScoped = resolveScopedOutput(
-					ctx,
-					"bulk",
-					params.output ? `${params.output}` : undefined,
-					webScope,
-				);
-				const output = bulkScoped.output.endsWith("/bulk")
-					? bulkScoped.output
-					: `${bulkScoped.artifactDir}/bulk`;
-				ensureParentDir(cwd, output);
-				const lim = limit ?? 3;
-				const argv = ["bulk-scrape", query, "-o", output, "--limit", String(lim)];
-				const run = runHarnessWeb(MODULE_URL, argv, cwd);
-				if (!run.ok) {
-					return failResult(
-						`web_search bulk failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
-					);
-				}
-				return okResult(
-					`${run.stdout}\n\noutput: ${output}\nartifactDir: ${bulkScoped.artifactDir}`,
-					{ output, artifactDir: bulkScoped.artifactDir, query, bulk: true },
-				);
-			}
-
-			const basename =
-				tier === "deep" || tier === "research" ? "search-deep.json" : "search.json";
-			const scoped = resolveScopedOutput(
-				ctx,
-				basename,
-				params.output ? String(params.output) : undefined,
-				webScope,
-			);
-			const output = scoped.output;
-			ensureParentDir(cwd, output);
-			const { refresh: refreshCache, maxAgeSec } = cacheControlFromParams(params);
-			const engine = searchEngineId();
-			const resultLimit = limit ?? 10;
-			const category = params.category ? String(params.category) : undefined;
-
-			let anglesFile = String(params.anglesFile ?? "").trim();
-			if (anglesFile && !anglesFile.startsWith("/") && !anglesFile.includes("..")) {
-				anglesFile = resolveScopedOutput(ctx, "angles.yaml", anglesFile, webScope).output;
-			}
-			if (params.angles?.length && !anglesFile) {
-				const inline = resolveScopedOutput(ctx, "angles-inline.yaml", undefined, webScope);
-				const tmp = resolve(cwd, inline.output);
-				ensureParentDir(cwd, inline.output);
-				const yaml =
-					`intent: ${JSON.stringify(query)}\nangles:\n` +
-					params.angles
-						.map(
-							(q, i) =>
-								`  - id: angle_${i + 1}\n    query: ${JSON.stringify(q)}`,
-						)
-						.join("\n") +
-					"\n";
-				writeFileSync(tmp, yaml, "utf-8");
-				anglesFile = inline.output;
-			}
-
-			if (
-				(tier === "deep" || tier === "research") &&
-				!anglesFile &&
-				params.expandHeuristic !== true &&
-				!params.angles?.length
-			) {
-				return failResult(
-					"web_search tier=deep requires anglesFile (.web/angles.yaml from harness/web-retrieval/web-query-expander) " +
-						"or expandHeuristic:true. Invoke web-retrieval skill first.",
-				);
-			}
-
-			const anglesFingerprint = anglesFile
-				? fingerprintFile(cwd, anglesFile)
-				: undefined;
-
-			const searchCtx: SearchCacheContext = {
-				query,
-				tier,
-				engine,
-				limit: resultLimit,
-				category,
-				expandHeuristic: params.expandHeuristic === true,
-				anglesFingerprint,
-			};
-
-			if (!refreshCache) {
-				const cached = lookupSearchCache(cwd, searchCtx, { maxAgeSec });
-				if (cached.hit && !cached.stale) {
-					const workspaceOutput = publishWorkspaceAlias(
-						cwd,
-						cached.artifactPath,
-						basename,
-					);
-					const parts = [
-						`[cache hit] age ${formatCacheAge(cached.ageMs)} · key ${cached.cacheKey}`,
-						`cache: ${cached.entryDir}`,
-					];
-					const summary =
-						tier === "deep" || tier === "research"
-							? summarizeDeepSearchJson(workspaceOutput, cwd)
-							: summarizeSearchJson(workspaceOutput, cwd);
-					if (summary) parts.push("", summary);
-					parts.push(
-						"",
-						`output: ${workspaceOutput}`,
-						`artifactDir: ${scoped.artifactDir}`,
-						`tier: ${tier}`,
-					);
-					parts.push("Read output JSON; web_fetch top URLs with highlights:true.");
-					return okResult(parts.join("\n"), {
-						output: workspaceOutput,
-						artifactDir: scoped.artifactDir,
-						query,
-						tier,
-						engine,
-						cacheHit: true,
-						cacheKey: cached.cacheKey,
-						cachePath: cached.artifactPath,
-						cacheAgeMs: cached.ageMs,
-					});
-				}
-			}
-
-			let argv: string[];
-			if (tier === "deep" || tier === "research") {
-				argv = [
-					"search-deep",
-					query,
-					"-o",
-					output,
-					"--limit",
-					String(resultLimit),
-				];
-				if (anglesFile) {
-					argv.push("--angles-file", anglesFile);
-				} else if (params.expandHeuristic === true) {
-					argv.push("--expand-heuristic");
-				}
-				if (category) {
-					argv.push("--category", category);
-				}
-			} else {
-				argv = [
-					"search",
-					query,
-					"-o",
-					output,
-					"--tier",
-					tier,
-					...(limit != null ? ["--limit", String(limit)] : []),
-				];
-			}
-
-			const run = runHarnessWeb(MODULE_URL, argv, cwd);
-			if (!run.ok) {
-				const hint =
-					"\n\nHints: run /harness-setup; for searxng set HARNESS_WEB_SEARXNG_URL; " +
-					"enable json in SearXNG search.formats; for deep spawn web-query-expander first.";
-				return failResult(
-					`web_search failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}${hint}`,
-				);
-			}
-
-			const cacheWrite = writeSearchCacheEntry(cwd, searchCtx, output, {
-				anglesPath: anglesFile,
-			});
-			publishWorkspaceAlias(cwd, `${cacheWrite.entryDir}/${basename}`, basename);
-
-			const parts = [run.stdout];
-			const summary =
-				tier === "deep" || tier === "research"
-					? summarizeDeepSearchJson(output, cwd)
-					: summarizeSearchJson(output, cwd);
-			if (summary) parts.push("", summary);
-			parts.push(
-				"",
-				`output: ${output}`,
-				`artifactDir: ${scoped.artifactDir}`,
-				`tier: ${tier}`,
-				`cache: ${cacheWrite.entryDir}`,
-			);
-			parts.push("Read output JSON; web_fetch top URLs with highlights:true.");
-
-			return okResult(parts.join("\n"), {
-				output,
-				artifactDir: scoped.artifactDir,
-				query,
-				tier,
-				engine,
-				cacheHit: false,
-				cacheKey: cacheWrite.cacheKey,
-				cachePath: `${cacheWrite.entryDir}/${basename}`,
-			});
+			return executeWebSearch(params as Record<string, unknown>, ctx);
 		},
 	});
 
@@ -559,147 +942,7 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 		parameters: WebFetchSchema,
 
 		async execute(_id, params, _signal, _onUpdate, ctx) {
-			const cwd = sessionCwd(ctx);
-			const webScope = String(params.webScope ?? "").trim() || undefined;
-			const url = String(params.url ?? "").trim();
-			if (!url) return failResult("web_fetch: url is required.");
-
-			const mode = params.mode === "map" ? "map" : "scrape";
-			const fast = params.fast === true;
-			const limit = typeof params.limit === "number" ? params.limit : 100;
-			const basename = mode === "map" ? "map.json" : "page.md";
-			const scoped = resolveScopedOutput(
-				ctx,
-				basename,
-				params.output ? String(params.output) : undefined,
-				webScope,
-			);
-			const output = scoped.output;
-			ensureParentDir(cwd, output);
-			const highlights = params.highlights === true;
-			const hlQuery = String(params.highlightQuery ?? "").trim();
-			const { refresh: refreshCache, maxAgeSec } = cacheControlFromParams(params);
-
-			const hlScoped =
-				highlights && !params.highlightsOutput
-					? resolveScopedOutput(ctx, "highlights.json", undefined, webScope)
-					: highlights
-						? resolveScopedOutput(
-								ctx,
-								"highlights.json",
-								String(params.highlightsOutput),
-								webScope,
-							)
-						: undefined;
-			if (hlScoped) ensureParentDir(cwd, hlScoped.output);
-
-			const fetchCtx: FetchCacheContext = {
-				url,
-				mode,
-				fast,
-				highlightQuery: hlQuery || undefined,
-				highlights,
-			};
-
-			if (!refreshCache) {
-				const cached = lookupFetchCache(cwd, fetchCtx, { maxAgeSec });
-				if (cached.hit && !cached.stale) {
-					const workspaceBasename = highlights
-						? "highlights.json"
-						: mode === "map"
-							? "map.json"
-							: "page.md";
-					const workspaceOutput = publishWorkspaceAlias(
-						cwd,
-						cached.artifactPath,
-						workspaceBasename,
-					);
-					const parts = [
-						`[cache hit] age ${formatCacheAge(cached.ageMs)} · key ${cached.cacheKey}`,
-						`cache: ${cached.entryDir}`,
-						"",
-						`output: ${workspaceOutput}`,
-						`artifactDir: ${scoped.artifactDir}`,
-					];
-					const excerpt = readTextExcerpt(workspaceOutput, cwd);
-					if (excerpt) parts.push("", "--- excerpt ---", excerpt);
-					return okResult(parts.join("\n"), {
-						output: workspaceOutput,
-						artifactDir: scoped.artifactDir,
-						url,
-						mode,
-						highlights,
-						cacheHit: true,
-						cacheKey: cached.cacheKey,
-						cachePath: cached.artifactPath,
-					});
-				}
-			}
-
-			let argv: string[];
-			if (mode === "map") {
-				argv = [
-					"map",
-					url,
-					"-o",
-					output,
-					"--limit",
-					String(limit),
-					...(fast ? ["--fast"] : []),
-				];
-			} else {
-				argv = ["scrape", url, "-o", output, ...(fast ? ["--fast"] : [])];
-				if (highlights) {
-					if (!hlQuery) {
-						return failResult("web_fetch: highlightQuery required when highlights=true");
-					}
-					argv.push("--highlights", "--highlight-query", hlQuery);
-					if (hlScoped) argv.push("--highlights-output", hlScoped.output);
-				}
-			}
-
-			const run = runHarnessWeb(MODULE_URL, argv, cwd);
-			if (!run.ok) {
-				return failResult(
-					`web_fetch failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}\n` +
-						"Try fast:true for static pages, or run harness-cli-verify for Scrapling install.",
-				);
-			}
-
-			const cacheArtifact = highlights && hlScoped ? hlScoped.output : output;
-			const cacheWrite = writeFetchCacheEntry(cwd, fetchCtx, cacheArtifact, {
-				highlightsPath:
-					highlights && hlScoped && hlScoped.output !== cacheArtifact
-						? hlScoped.output
-						: undefined,
-			});
-			const workspaceBasename = highlights
-				? "highlights.json"
-				: mode === "map"
-					? "map.json"
-					: "page.md";
-			publishWorkspaceAlias(cwd, `${cacheWrite.entryDir}/${workspaceBasename}`, workspaceBasename);
-
-			const parts = [
-				run.stdout,
-				"",
-				`output: ${output}`,
-				`artifactDir: ${scoped.artifactDir}`,
-				`cache: ${cacheWrite.entryDir}`,
-			];
-			const excerpt = readTextExcerpt(output, cwd);
-			if (excerpt) parts.push("", "--- excerpt ---", excerpt);
-
-			return okResult(parts.join("\n"), {
-				output,
-				artifactDir: scoped.artifactDir,
-				url,
-				mode,
-				highlights,
-				cacheHit: false,
-				cacheKey: cacheWrite.cacheKey,
-				cachePath: `${cacheWrite.entryDir}/${workspaceBasename}`,
-			});
+			return executeWebFetch(params as Record<string, unknown>, ctx);
 		},
 	});
 
@@ -713,47 +956,7 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 		parameters: WebFindSimilarSchema,
 
 		async execute(_id, params, _signal, _onUpdate, ctx) {
-			const cwd = sessionCwd(ctx);
-			const webScope = String(params.webScope ?? "").trim() || undefined;
-			const url = String(params.url ?? "").trim();
-			if (!url) return failResult("web_find_similar: url is required.");
-
-			const scoped = resolveScopedOutput(
-				ctx,
-				"search-deep.json",
-				params.output ? String(params.output) : undefined,
-				webScope,
-			);
-			const output = scoped.output;
-			ensureParentDir(cwd, output);
-			const limit = typeof params.limit === "number" ? params.limit : 10;
-			const argv = [
-				"find-similar",
-				url,
-				"-o",
-				output,
-				"--limit",
-				String(limit),
-				...(params.fast !== false ? ["--fast"] : []),
-			];
-
-			const run = runHarnessWeb(MODULE_URL, argv, cwd);
-			if (!run.ok) {
-				return failResult(
-					`web_find_similar failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
-				);
-			}
-
-			const parts = [run.stdout];
-			const summary = summarizeDeepSearchJson(output, cwd);
-			if (summary) parts.push("", summary);
-			parts.push("", `output: ${output}`, `artifactDir: ${scoped.artifactDir}`);
-
-			return okResult(parts.join("\n"), {
-				output,
-				artifactDir: scoped.artifactDir,
-				url,
-			});
+			return executeWebFindSimilar(params as Record<string, unknown>, ctx);
 		},
 	});
 
@@ -767,83 +970,7 @@ export default function harnessWebTools(pi: ExtensionAPI) {
 		parameters: WebContentsSchema,
 
 		async execute(_id, params, _signal, _onUpdate, ctx) {
-			const cwd = sessionCwd(ctx);
-			const webScope = String(params.webScope ?? "").trim() || undefined;
-			const dirScoped = resolveScopedOutput(
-				ctx,
-				"contents",
-				params.outputDir ? String(params.outputDir) : undefined,
-				webScope,
-			);
-			const outputDir = dirScoped.output.endsWith("/contents")
-				? dirScoped.output
-				: `${dirScoped.artifactDir}/contents`;
-			mkdirSync(resolve(cwd, outputDir), { recursive: true });
-			let fromSearch = String(params.fromSearch ?? "").trim();
-			if (fromSearch && !fromSearch.startsWith("/") && !fromSearch.includes("..")) {
-				fromSearch = resolveScopedOutput(
-					ctx,
-					"search-deep.json",
-					fromSearch,
-					webScope,
-				).output;
-			}
-			const urls = (params.urls ?? []).map((u) => String(u).trim()).filter(Boolean);
-			const limit = typeof params.limit === "number" ? params.limit : 5;
-			const hlQuery = String(params.highlightQuery ?? "").trim();
-
-			const argv = [
-				"contents-batch",
-				"-o",
-				outputDir,
-				"--limit",
-				String(limit),
-				...(params.fast ? ["--fast"] : []),
-				...(params.highlights && hlQuery
-					? ["--highlights", "--highlight-query", hlQuery]
-					: []),
-				...urls,
-			];
-			if (fromSearch) {
-				argv.splice(1, 0, "--from-search", fromSearch);
-			}
-			let evidencePath: string | undefined;
-			if (params.evidenceBundle && fromSearch) {
-				const bundleArg = String(params.evidenceBundle);
-				evidencePath =
-					bundleArg.startsWith("/") || bundleArg.includes("..")
-						? bundleArg
-						: resolveScopedOutput(
-								ctx,
-								"evidence-bundle.json",
-								bundleArg,
-								webScope,
-							).output;
-				ensureParentDir(cwd, evidencePath);
-				argv.push("--evidence-bundle", evidencePath);
-			}
-
-			if (!fromSearch && !urls.length) {
-				return failResult("web_contents: provide urls or fromSearch");
-			}
-
-			const run = runHarnessWeb(MODULE_URL, argv, cwd);
-			if (!run.ok) {
-				return failResult(
-					`web_contents failed (exit ${run.exitCode}).\n${run.stderr || run.stdout}`,
-				);
-			}
-
-			return okResult(
-				`${run.stdout}\n\noutputDir: ${outputDir}\nartifactDir: ${dirScoped.artifactDir}` +
-					(evidencePath ? `\nevidence: ${evidencePath}` : ""),
-				{
-					outputDir,
-					artifactDir: dirScoped.artifactDir,
-					fromSearch,
-					evidenceBundle: evidencePath,
-				},
-			);
+			return executeWebContents(params as Record<string, unknown>, ctx);
 		},
 	});
 }

@@ -6,6 +6,7 @@ import { spawn } from "node:child_process";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { resolveHarnessScript } from "../lib/harness-paths.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
+import { completeStrictFlag } from "../lib/harness-slash-completions.js";
 
 function resolveSyncScript(): string {
 	return resolveHarnessScript(
@@ -80,6 +81,7 @@ export default function lsLintRulesSync(pi: ExtensionAPI) {
 
 	pi.registerCommand("harness-ls-lint-sync", {
 		description: "Regenerate .ls-lint.yml from harness naming manifest",
+		getArgumentCompletions: completeStrictFlag,
 		handler: async (_args, ctx) => {
 			const strict = _args.includes("--strict");
 			const { code, output } = await runSync(

@@ -8,7 +8,14 @@
 
 import { mkdir, readFile, realpath, writeFile } from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
+import {
+	isPlanApprovalAskUser,
+	PLAN_APPROVE_OPTION,
+	PLAN_CANCEL_OPTION,
+} from "./ask-user/policy.js";
 import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
+
+export { isPlanApprovalAskUser } from "./ask-user/policy.js";
 
 export type HarnessPhase =
 	| "plan"
@@ -170,11 +177,6 @@ export function steerMaxAttemptsFromEnv(): number {
 }
 
 const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
-
-const PLAN_APPROVE_OPTION =
-	/^(approve(d)?(\s+plan)?|yes,?\s+proceed|looks\s+good)$/i;
-const PLAN_CANCEL_OPTION =
-	/^(cancel(led)?|revise|request\s+changes|needs?\s+clarification)$/i;
 
 export interface PlanUserApproval {
 	plan_id: string | null;
@@ -700,28 +702,6 @@ export function hasApprovedPlanSignalFromUserPrompt(prompt: string): boolean {
 	if (/\bapprove(d)?\s+(this\s+)?plan\b/.test(p)) return true;
 	if (p.includes("harness-plan-approval")) return true;
 	return false;
-}
-
-/** Detect parent-session ask_user calls that duplicate planner plan approval. */
-export function isPlanApprovalAskUser(input: {
-	question?: string;
-	options?: unknown[];
-}): boolean {
-	const q = String(input.question ?? "").trim();
-	const opts = Array.isArray(input.options) ? input.options : [];
-	const titles = opts.map((o) => {
-		if (typeof o === "string") return o.trim();
-		if (o && typeof o === "object" && "title" in o) {
-			return String((o as { title?: string }).title ?? "").trim();
-		}
-		return "";
-	});
-	const hasPlanOptions =
-		titles.some(
-			(t) => PLAN_APPROVE_OPTION.test(t) || PLAN_CANCEL_OPTION.test(t),
-		) || PLAN_APPROVE_OPTION.test(q);
-	if (!hasPlanOptions) return false;
-	return /plan|approve/i.test(q);
 }
 
 export function appendPlanApprovalIfNew(
@@ -1667,6 +1647,34 @@ export async function readReviewOutcomeFromRun(
 	}
 }
 
+function nextStepForEvaluateLikePhase(input: {
+	adversaryComplete?: boolean;
+	remediation: string;
+	evalStatus: string;
+	steerAttempt: number;
+	steerMax: number;
+}): string {
+	if (input.remediation === "pass" || input.evalStatus === "pass") {
+		if (input.adversaryComplete) return "/harness-policy-status";
+		return "/harness-review";
+	}
+	if (input.remediation === "rollback") return "/harness-incident";
+	if (input.remediation === "plan_gap") return "/harness-plan (mode: revise)";
+	if (
+		input.remediation === "implementation_gap" ||
+		(input.remediation === "inconclusive" && input.evalStatus === "fail")
+	) {
+		if (input.steerAttempt < input.steerMax) return "/harness-steer";
+		return "/harness-plan (mode: revise) or /harness-abort";
+	}
+	if (input.evalStatus === "fail") {
+		if (input.steerAttempt < input.steerMax) return "/harness-steer";
+		return "/harness-plan (mode: revise) or /harness-incident";
+	}
+	if (input.adversaryComplete) return "/harness-policy-status";
+	return "/harness-review";
+}
+
 export function nextStepAfterOutcome(input: {
 	phase: HarnessPhase;
 	planStatus?: string | null;
@@ -1730,31 +1738,13 @@ export function nextStepAfterOutcome(input: {
 	}
 
 	if (input.phase === "evaluate" || input.phase === "adversary") {
-		if (remediation === "pass" || evalSt === "pass") {
-			if (input.adversaryComplete) return "/harness-policy-status";
-			return "/harness-review";
-		}
-		if (remediation === "rollback") {
-			return "/harness-incident";
-		}
-		if (remediation === "plan_gap") {
-			return "/harness-plan (mode: revise)";
-		}
-		if (
-			remediation === "implementation_gap" ||
-			(remediation === "inconclusive" && evalSt === "fail")
-		) {
-			if (steerAttempt < steerMax) {
-				return "/harness-steer";
-			}
-			return "/harness-plan (mode: revise) or /harness-abort";
-		}
-		if (evalSt === "fail") {
-			if (steerAttempt < steerMax) return "/harness-steer";
-			return "/harness-plan (mode: revise) or /harness-incident";
-		}
-		if (input.adversaryComplete) return "/harness-policy-status";
-		return "/harness-review";
+		return nextStepForEvaluateLikePhase({
+			adversaryComplete: input.adversaryComplete,
+			remediation,
+			evalStatus: evalSt,
+			steerAttempt,
+			steerMax,
+		});
 	}
 
 	if (input.phase === "merge") return "/harness-policy-status";

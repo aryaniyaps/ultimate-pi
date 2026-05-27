@@ -1,5 +1,5 @@
+import { formatResultText } from "../ask-user/format.js";
 import type { AskResponse } from "../ask-user/types.js";
-import { formatResultText } from "../ask-user/validate.js";
 import {
 	type PlanPacketLike,
 	validatePlanPacket,

@@ -37,6 +37,7 @@ Created: 2026-05-14
 - `graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code
 - Non-API web: invoke **`web-retrieval`** skill (WRS tiers; default `tier=deep` with `web-query-expander` → `anglesFile`). CLI: `python3 "$UP_PKG/.pi/scripts/harness-web.py"`
+- Git commits: invoke **`harness-git-commit`** skill — `node "$UP_PKG/.pi/scripts/harness-git-commit.mjs"` (config: `.pi/auto-commit.json`)
 
 ## graphify
 

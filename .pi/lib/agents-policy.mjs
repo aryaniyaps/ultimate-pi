@@ -262,7 +262,45 @@ function isMutatingBash(command) {
 		command,
 	);
 }
+function deniesReadOnlyBatchExecute(toolInput) {
+	const commands = toolInput.commands;
+	if (!Array.isArray(commands)) return false;
+	for (const c of commands) {
+		const cmd =
+			typeof c === "string" ? c : String(c?.command ?? c?.code ?? "");
+		if (cmd && isMutatingBash(cmd)) return true;
+	}
+	return false;
+}
 
+function deniesReadOnlyExecute(toolInput) {
+	const code = String(toolInput.code ?? toolInput.command ?? "");
+	return Boolean(code && isMutatingBash(code));
+}
+
+function deniesReadOnlyBash(agentId, toolInput) {
+	const command = String(toolInput.command ?? "");
+	if (command && isMutatingBash(command)) return true;
+	if (
+		isHarnessPlanningAgent(agentId) &&
+		command &&
+		PLANNING_ARTIFACT_JSON_WRITE.test(command)
+	) {
+		return true;
+	}
+	if (
+		isHarnessPlanningAgent(agentId) &&
+		command &&
+		PLANNING_BASH_DENY_PATTERNS.some((p) => p.test(command))
+	) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Manifest allowlist + subprocess constraints (replaces harness-subagent-policy.ts).
+ */
 /**
  * Manifest allowlist + subprocess constraints (replaces harness-subagent-policy.ts).
  */
@@ -297,40 +335,15 @@ export function allowsAgentTool(input) {
 	if (MUTATING_TOOLS.has(toolName) && spec.readOnly) return false;
 
 	if (toolName === "ctx_batch_execute" && spec.readOnly) {
-		const commands = toolInput.commands;
-		if (Array.isArray(commands)) {
-			for (const c of commands) {
-				const cmd =
-					typeof c === "string"
-						? c
-						: String(c?.command ?? c?.code ?? "");
-				if (cmd && isMutatingBash(cmd)) return false;
-			}
-		}
+		if (deniesReadOnlyBatchExecute(toolInput)) return false;
 	}
 
 	if (toolName === "ctx_execute" && spec.readOnly) {
-		const code = String(toolInput.code ?? toolInput.command ?? "");
-		if (code && isMutatingBash(code)) return false;
+		if (deniesReadOnlyExecute(toolInput)) return false;
 	}
 
 	if (toolName === "bash" && spec.readOnly) {
-		const command = String(toolInput.command ?? "");
-		if (command && isMutatingBash(command)) return false;
-		if (
-			isHarnessPlanningAgent(agentId) &&
-			command &&
-			PLANNING_ARTIFACT_JSON_WRITE.test(command)
-		) {
-			return false;
-		}
-		if (
-			isHarnessPlanningAgent(agentId) &&
-			command &&
-			PLANNING_BASH_DENY_PATTERNS.some((p) => p.test(command))
-		) {
-			return false;
-		}
+		if (deniesReadOnlyBash(agentId, toolInput)) return false;
 	}
 
 	return true;

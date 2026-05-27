@@ -723,6 +723,15 @@ function buildNavigationOutput(args: {
 	return { output, actionStats, isEmpty, resultCount };
 }
 
+function isDirectoryPath(filePath: string): boolean {
+	if (!filePath) return false;
+	try {
+		return nodeFs.statSync(filePath).isDirectory();
+	} catch {
+		return false;
+	}
+}
+
 export function createLspNavigationTool(
 	getFlag: (name: string) => boolean | string | undefined,
 ) {
@@ -1021,14 +1030,7 @@ export function createLspNavigationTool(
 					: path.resolve(ctx.cwd || ".", rawPath)
 				: "";
 
-			let filePathIsDirectory = false;
-			if (filePath) {
-				try {
-					filePathIsDirectory = nodeFs.statSync(filePath).isDirectory();
-				} catch {
-					// non-existent path — existing error paths handle this
-				}
-			}
+			const filePathIsDirectory = isDirectoryPath(filePath);
 
 			const lspService = getLSPService();
 			if (operation === "workspaceDiagnostics") {

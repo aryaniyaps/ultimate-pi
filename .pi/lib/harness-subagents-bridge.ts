@@ -13,7 +13,6 @@ import {
 	type HarnessSubagentsOptions,
 	type SpawnAuthForward,
 } from "../../vendor/pi-subagents/src/subagents.js";
-import { subagentGovernanceExtensionPath } from "../extensions/subagent-governance.js";
 import { getAgentKind, resolveExtensionBundlePaths } from "./agents-policy.mjs";
 import {
 	delegationEnvFromBundle,
@@ -60,6 +59,10 @@ type PendingSpawnTelemetry = {
 	spawn_group_id: string;
 };
 let pendingSpawnTelemetry: PendingSpawnTelemetry | null = null;
+
+function subagentGovernanceExtensionPath(packageRoot: string): string {
+	return join(packageRoot, ".pi", "extensions", "subagent-governance.ts");
+}
 
 function collectHarnessAgentIds(params: Record<string, unknown>): string[] {
 	const out = new Set<string>();

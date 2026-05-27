@@ -336,57 +336,101 @@ function applyEditAutopatch(
 	return undefined;
 }
 
-export default function harnessLensExtension(pi: ExtensionAPI): void {
-	initLensEvents(pi);
-	const globalConfig = loadPiLensGlobalConfig();
-	let lensEnabled = !globalConfig.noLens;
-
-	type PiWithFlags = ExtensionAPI & {
-		getFlag?: (name: string) => boolean | undefined;
-	};
-	const piFlags = pi as PiWithFlags;
-	const readCliFlag = (name: string): boolean | undefined => {
-		if (typeof piFlags.getFlag === "function") return piFlags.getFlag(name);
-		return process.argv.includes(`--${name}`) ? true : undefined;
-	};
-	const getFlag = (name: string) =>
-		getLensFlag(name, readCliFlag, globalConfig);
-
+function registerLensRuntimePart1(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerFlag("no-lens", {
 		description: "Disable harness-lens for this session.",
 		type: "boolean",
 		default: false,
 	});
+}
+
+function registerLensRuntimePart2(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerFlag("no-lsp", {
 		description: "Disable LSP auto-touch and lsp_* tools backing servers.",
 		type: "boolean",
 		default: false,
 	});
+}
+
+function registerLensRuntimePart3(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerFlag("no-autoformat", {
 		description: "Disable auto-format on write/edit.",
 		type: "boolean",
 		default: false,
 	});
+}
+
+function registerLensRuntimePart4(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerFlag("immediate-format", {
 		description: "Format during tool_result instead of deferring to agent_end.",
 		type: "boolean",
 		default: false,
 	});
+}
+
+function registerLensRuntimePart5(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerFlag("lens-guard", {
 		description: "Block git commit/push while unresolved lens blockers exist.",
 		type: "boolean",
 		default: false,
 	});
+}
 
+function registerLensRuntimePart6(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.registerTool(createLspDiagnosticsTool());
-	pi.registerTool(createLspNavigationTool());
+}
 
+function registerLensRuntimePart7(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
+	pi.registerTool(createLspNavigationTool(getFlag));
+}
+
+function registerLensRuntimePart8(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.on("session_start", async (_event, ctx) => {
 		if (getFlag("no-lens")) {
-			lensEnabled = false;
+			lensEnabledRef.current = false;
 			return;
 		}
-		lensEnabled = true;
+		lensEnabledRef.current = true;
 		runtime.resetForSession();
 		clearWidgetState();
 		resetFormatService();
@@ -416,15 +460,126 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 			});
 		}
 	});
+}
 
+function registerLensRuntimePart9(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.on("turn_start", () => {
-		if (!lensEnabled) return;
+		if (!lensEnabledRef.current) return;
 		runtime.beginTurn();
 		clearLastAnalyzedStateCache();
 	});
+}
 
+async function ensureToolCallLspConfig(args: {
+	getFlag: (name: string) => boolean | string | undefined;
+	filePath: string | undefined;
+	ctx: any;
+	runtime: RuntimeCoordinator;
+}): Promise<void> {
+	if (args.getFlag("no-lsp")) return;
+	try {
+		await ensureLSPConfigInitialized(
+			args.filePath
+				? path.dirname(args.filePath)
+				: (args.ctx.cwd ?? args.runtime.projectRoot),
+		);
+	} catch (err) {
+		dbg(`tool_call lsp config init failed: ${err}`);
+	}
+}
+
+function maybeAutoTouchLspOnToolCall(args: {
+	getFlag: (name: string) => boolean | string | undefined;
+	toolName: string;
+	filePath: string;
+	runtime: RuntimeCoordinator;
+}): void {
+	if (
+		args.getFlag("no-lsp") ||
+		!isLspCapableFile(args.filePath) ||
+		shouldSkipLspAutoTouch(args.filePath, args.runtime.projectRoot)
+	) {
+		return;
+	}
+	const shouldWarmRead =
+		args.toolName === "read" && args.runtime.shouldWarmLspOnRead(args.filePath);
+	const shouldTouch =
+		args.toolName === "write" ||
+		args.toolName === "edit" ||
+		args.toolName === "lsp_navigation" ||
+		shouldWarmRead;
+	if (!shouldTouch) return;
+	try {
+		const content = nodeFs.readFileSync(args.filePath, "utf-8");
+		if (args.toolName === "read")
+			args.runtime.markLspReadWarmStarted(args.filePath);
+		void getLSPService()
+			.touchFile(args.filePath, content, {
+				diagnostics: "none",
+				source: `tool_call:${args.toolName}`,
+			})
+			.then((result) => {
+				if (args.toolName !== "read") return;
+				if (result === undefined)
+					args.runtime.clearLspReadWarmState(args.filePath);
+				else args.runtime.markLspReadWarmCompleted(args.filePath);
+			})
+			.catch((err) => {
+				if (args.toolName === "read") {
+					args.runtime.clearLspReadWarmState(args.filePath);
+				}
+				dbg(`lsp auto-touch failed: ${err}`);
+			});
+	} catch {
+		if (args.toolName === "read")
+			args.runtime.clearLspReadWarmState(args.filePath);
+	}
+}
+
+function applyEditAutopatchForToolCall(
+	filePath: string,
+	event: unknown,
+	ctx: unknown,
+) {
+	if (
+		!isToolCallEventType(
+			"edit",
+			event as Parameters<typeof isToolCallEventType>[1],
+		)
+	) {
+		return undefined;
+	}
+	const editInput = (event as { input?: unknown }).input;
+	if (isAnchoredEditToolInput(editInput)) {
+		return applyAnchoredEditAutopatch(
+			filePath,
+			editInput,
+			anchoredEditTaskId({
+				sessionId: (ctx as { sessionId?: string }).sessionId,
+			}),
+		);
+	}
+	const legacyInput = editInput as {
+		oldText?: string;
+		newText?: string;
+		edits?: Array<{ oldText?: string; newText?: string }>;
+	};
+	return applyEditAutopatch(filePath, legacyInput);
+}
+
+function registerLensRuntimePart10(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.on("tool_call", async (event, ctx) => {
-		if (!lensEnabled) return;
+		if (!lensEnabledRef.current) return;
 
 		const toolName = (event as { toolName?: string }).toolName ?? "";
 		if (
@@ -442,100 +597,33 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 			runtime.projectRoot,
 		);
 
-		if (!getFlag("no-lsp")) {
-			try {
-				await ensureLSPConfigInitialized(
-					filePath ? path.dirname(filePath) : (ctx.cwd ?? runtime.projectRoot),
-				);
-			} catch (err) {
-				dbg(`tool_call lsp config init failed: ${err}`);
-			}
-		}
-
+		await ensureToolCallLspConfig({ getFlag, filePath, ctx, runtime });
 		if (!filePath || !nodeFs.existsSync(filePath)) return;
 		if (isPathIgnoredByProject(filePath, runtime.projectRoot, false)) return;
 
-		if (
-			!getFlag("no-lsp") &&
-			isLspCapableFile(filePath) &&
-			!shouldSkipLspAutoTouch(filePath, runtime.projectRoot)
-		) {
-			const shouldWarmRead =
-				toolName === "read" && runtime.shouldWarmLspOnRead(filePath);
-			const shouldTouch =
-				toolName === "write" ||
-				toolName === "edit" ||
-				toolName === "lsp_navigation" ||
-				shouldWarmRead;
-			if (shouldTouch) {
-				try {
-					const content = nodeFs.readFileSync(filePath, "utf-8");
-					if (toolName === "read") runtime.markLspReadWarmStarted(filePath);
-					void getLSPService()
-						.touchFile(filePath, content, {
-							diagnostics: "none",
-							source: `tool_call:${toolName}`,
-						})
-						.then((result) => {
-							if (toolName === "read") {
-								if (result === undefined) {
-									runtime.clearLspReadWarmState(filePath);
-								} else {
-									runtime.markLspReadWarmCompleted(filePath);
-								}
-							}
-						})
-						.catch((err) => {
-							if (toolName === "read") runtime.clearLspReadWarmState(filePath);
-							dbg(`lsp auto-touch failed: ${err}`);
-						});
-				} catch {
-					if (toolName === "read") runtime.clearLspReadWarmState(filePath);
-				}
-			}
-		}
-
-		if (
-			isToolCallEventType(
-				"edit",
-				event as Parameters<typeof isToolCallEventType>[1],
-			)
-		) {
-			const editInput = (event as { input?: unknown }).input;
-			if (isAnchoredEditToolInput(editInput)) {
-				const block = applyAnchoredEditAutopatch(
-					filePath,
-					editInput,
-					anchoredEditTaskId({
-						sessionId: (ctx as { sessionId?: string }).sessionId,
-					}),
-				);
-				if (block) return block;
-			} else {
-				const legacyInput = editInput as {
-					oldText?: string;
-					newText?: string;
-					edits?: Array<{ oldText?: string; newText?: string }>;
-				};
-				const block = applyEditAutopatch(filePath, legacyInput);
-				if (block) return block;
-			}
-		}
+		maybeAutoTouchLspOnToolCall({ getFlag, toolName, filePath, runtime });
+		const block = applyEditAutopatchForToolCall(filePath, event, ctx);
+		if (block) return block;
 	});
+}
 
-	pi.on("tool_result", async (event, _ctx) => {
-		if (!lensEnabled) return;
-		return handleToolResult({
-			event: event as Parameters<typeof handleToolResult>[0]["event"],
-			getFlag,
-			dbg,
-			runtime,
-			resetLSPService,
-		});
-	});
+function registerLensRuntimePart11(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
+	pi as any;
+}
 
+function registerLensRuntimePart12(
+	pi: ExtensionAPI,
+	getFlag: (name: string) => boolean | string | undefined,
+	runtime: RuntimeCoordinator,
+	lensEnabledRef: { current: boolean },
+) {
 	pi.on("agent_end", async (_event, ctx) => {
-		if (!lensEnabled) return;
+		if (!lensEnabledRef.current) return;
 		await handleAgentEnd({
 			ctxCwd: ctx.cwd,
 			getFlag,
@@ -546,4 +634,49 @@ export default function harnessLensExtension(pi: ExtensionAPI): void {
 				getFormatService(runtime.telemetrySessionId, !getFlag("no-autoformat")),
 		});
 	});
+}
+
+function registerHarnessLensRuntime(
+	pi: ExtensionAPI,
+	args: {
+		getFlag: (name: string) => boolean | string | undefined;
+		runtime: RuntimeCoordinator;
+		lensEnabledRef: { current: boolean };
+	},
+) {
+	const { getFlag, runtime, lensEnabledRef } = args;
+	registerLensRuntimePart1(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart2(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart3(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart4(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart5(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart6(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart7(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart8(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart9(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart10(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart11(pi, getFlag, runtime, lensEnabledRef);
+	registerLensRuntimePart12(pi, getFlag, runtime, lensEnabledRef);
+}
+
+export default function harnessLensExtension(pi: ExtensionAPI): void {
+	initLensEvents(pi);
+	const globalConfig = loadPiLensGlobalConfig();
+	const lensEnabledRef = { current: !globalConfig.noLens };
+
+	type PiWithFlags = ExtensionAPI & {
+		getFlag?: (name: string) => boolean | string | undefined;
+	};
+	const piFlags = pi as PiWithFlags;
+	const readCliFlag = (name: string): boolean | undefined => {
+		if (typeof piFlags.getFlag === "function") {
+			const flag = piFlags.getFlag(name);
+			return typeof flag === "boolean" ? flag : undefined;
+		}
+		return process.argv.includes(`--${name}`) ? true : undefined;
+	};
+	const getFlag = (name: string) =>
+		getLensFlag(name, readCliFlag, globalConfig);
+
+	registerHarnessLensRuntime(pi, { getFlag, runtime, lensEnabledRef });
 }

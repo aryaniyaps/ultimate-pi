@@ -201,26 +201,33 @@ function deriveFlowSubstate(state: HarnessUiState): HarnessFlowSubstate {
 	return "idle";
 }
 
-export function createStateFromEntries(entries: unknown[]): HarnessUiState {
-	const latest = pickLatestCustomEntries(entries);
-	const state: HarnessUiState = {
-		...DEFAULT_STATE,
-		severity: { ...DEFAULT_STATE.severity },
-	};
-
+function applyPolicyState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const policy = latest.get("harness-policy-state") as
 		| PolicyStateLike
 		| undefined;
 	if (policy?.phase) state.phase = policy.phase;
 	state.planApproved = Boolean(policy?.approvedPlan);
 	state.planId = typeof policy?.planId === "string" ? policy.planId : null;
+}
 
+function applyReviewState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const review = latest.get("harness-review-integrity") as
 		| ReviewIntegrityStateLike
 		| undefined;
 	state.reviewViolationActive = Boolean(review?.violationActive);
 	state.reviewIsolationOk = !state.reviewViolationActive;
+}
 
+function applyBudgetState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const budget = latest.get("harness-budget-exhausted") as
 		| BudgetExhaustedLike
 		| undefined;
@@ -234,30 +241,41 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 		if (budgetUsed != null) state.debateBudgetUsed = budgetUsed;
 		const cap = asNumber(budget.caps?.debate_global_cap);
 		if (cap != null) state.debateBudgetCap = cap;
+		return;
 	}
 	const telemetry = latest.get("harness-budget-telemetry") as
 		| BudgetExhaustedLike
 		| undefined;
-	if (telemetry && !state.budgetExhausted) {
-		const budgetUsed = asNumber(telemetry.budget_used);
-		if (budgetUsed != null) state.debateBudgetUsed = budgetUsed;
-		const cap = asNumber(telemetry.caps?.debate_global_cap);
-		if (cap != null) state.debateBudgetCap = cap;
-	}
+	if (!telemetry) return;
+	const budgetUsed = asNumber(telemetry.budget_used);
+	if (budgetUsed != null) state.debateBudgetUsed = budgetUsed;
+	const cap = asNumber(telemetry.caps?.debate_global_cap);
+	if (cap != null) state.debateBudgetCap = cap;
+}
 
+function applyTestIntegrityState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const testIntegrity = latest.get("harness-test-integrity-flag") as
 		| TestIntegrityLike
 		| undefined;
 	if (
-		testIntegrity?.severity === "high" ||
-		testIntegrity?.severity === "medium"
+		testIntegrity?.severity !== "high" &&
+		testIntegrity?.severity !== "medium"
 	) {
-		state.testIntegritySeverity = testIntegrity.severity;
-		state.testIntegrityReasons = Array.isArray(testIntegrity.reasons)
-			? testIntegrity.reasons.filter((r): r is string => typeof r === "string")
-			: [];
+		return;
 	}
+	state.testIntegritySeverity = testIntegrity.severity;
+	state.testIntegrityReasons = Array.isArray(testIntegrity.reasons)
+		? testIntegrity.reasons.filter((r): r is string => typeof r === "string")
+		: [];
+}
 
+function applyDebateState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const debate = latest.get("harness-debate-state") as
 		| DebateStateLike
 		| undefined;
@@ -269,7 +287,12 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 	if (debateBudgetUsed != null) state.debateBudgetUsed = debateBudgetUsed;
 	const debateBudgetCap = asNumber(debate?.debate_global_cap);
 	if (debateBudgetCap != null) state.debateBudgetCap = debateBudgetCap;
+}
 
+function applyRoundAndConsensusState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const roundResult = latest.get("harness-round-result") as
 		| RoundLike
 		| undefined;
@@ -291,14 +314,19 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 		state.policyDecision = consensus.policy_decision;
 	}
 	const correctness = asNumber(consensus?.severity_scores?.correctness);
-	const security = asNumber(consensus?.severity_scores?.security);
-	const architecture = asNumber(consensus?.severity_scores?.architecture);
-	const test = asNumber(consensus?.severity_scores?.test_integrity);
 	if (correctness != null) state.severity.correctness = correctness;
+	const security = asNumber(consensus?.severity_scores?.security);
 	if (security != null) state.severity.security = security;
+	const architecture = asNumber(consensus?.severity_scores?.architecture);
 	if (architecture != null) state.severity.architecture = architecture;
+	const test = asNumber(consensus?.severity_scores?.test_integrity);
 	if (test != null) state.severity.testIntegrity = test;
+}
 
+function applyTraceState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+): void {
 	const runTrace = latest.get("harness-run-trace") as TraceLike | undefined;
 	const traceState = latest.get("harness-trace-state") as TraceLike | undefined;
 	state.traceRunId =
@@ -307,7 +335,13 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 			: typeof traceState?.run_id === "string"
 				? traceState.run_id
 				: null;
+}
 
+function applyRunContextState(
+	state: HarnessUiState,
+	latest: Map<string, unknown>,
+	entries: unknown[],
+): void {
 	const runCtx = latest.get("harness-run-context") as
 		| {
 				phase?: HarnessPhase;
@@ -320,36 +354,49 @@ export function createStateFromEntries(entries: unknown[]): HarnessUiState {
 				status?: string;
 		  }
 		| undefined;
-	if (runCtx?.plan_ready) {
+	if (!runCtx) {
+		state.nextRecommendedCommand = null;
+		return;
+	}
+	if (runCtx.plan_ready) {
 		state.planApproved = true;
 		if (typeof runCtx.plan_id === "string") state.planId = runCtx.plan_id;
 	}
-	if (runCtx?.phase) {
-		state.phase = runCtx.phase;
-	}
-	if (typeof runCtx?.run_id === "string") {
-		state.traceRunId = runCtx.run_id;
-	}
-	if (runCtx) {
-		const persisted = runCtx.next_recommended_command;
-		if (typeof persisted === "string" && persisted.startsWith("/")) {
-			state.nextRecommendedCommand = persisted;
-		} else {
-			const statuses = extractCompletionStatuses(entries);
-			state.nextRecommendedCommand = nextStepAfterOutcome({
-				phase: state.phase,
-				planStatus: runCtx.plan_ready ? "ready" : null,
-				lastCompletedStep: runCtx.last_completed_step,
-				lastOutcome: runCtx.last_outcome,
-				executionStatus: statuses.executionStatus,
-				evalStatus: statuses.evalStatus,
-				aborted: runCtx.status === "aborted",
-			});
-		}
-	} else {
-		state.nextRecommendedCommand = null;
-	}
+	if (runCtx.phase) state.phase = runCtx.phase;
+	if (typeof runCtx.run_id === "string") state.traceRunId = runCtx.run_id;
 
+	const persisted = runCtx.next_recommended_command;
+	if (typeof persisted === "string" && persisted.startsWith("/")) {
+		state.nextRecommendedCommand = persisted;
+		return;
+	}
+	const statuses = extractCompletionStatuses(entries);
+	state.nextRecommendedCommand = nextStepAfterOutcome({
+		phase: state.phase,
+		planStatus: runCtx.plan_ready ? "ready" : null,
+		lastCompletedStep: runCtx.last_completed_step,
+		lastOutcome: runCtx.last_outcome,
+		executionStatus: statuses.executionStatus,
+		evalStatus: statuses.evalStatus,
+		aborted: runCtx.status === "aborted",
+	});
+}
+
+export function createStateFromEntries(entries: unknown[]): HarnessUiState {
+	const latest = pickLatestCustomEntries(entries);
+	const state: HarnessUiState = {
+		...DEFAULT_STATE,
+		severity: { ...DEFAULT_STATE.severity },
+	};
+
+	applyPolicyState(state, latest);
+	applyReviewState(state, latest);
+	applyBudgetState(state, latest);
+	applyTestIntegrityState(state, latest);
+	applyDebateState(state, latest);
+	applyRoundAndConsensusState(state, latest);
+	applyTraceState(state, latest);
+	applyRunContextState(state, latest, entries);
 	state.flowSubstate = deriveFlowSubstate(state);
 	return state;
 }

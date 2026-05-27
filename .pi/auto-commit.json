@@ -2,7 +2,8 @@
 	"dryRun": false,
 	"coAuthor": {
 		"login": "pi-mono",
-		"email": "261679550+pi-mono@users.noreply.github.com"
+		"email": "261679550+pi-mono@users.noreply.github.com",
+		"required": true
 	},
 	"branch": {
 		"strategy": "auto-feature-branch",
@@ -15,6 +16,12 @@
 		"ignore": true
 	},
 	"message": {
-		"scopeDefault": "harness"
+		"template": "{type}({scope}): {subject}",
+		"templateNoScope": "{type}: {subject}",
+		"typeDefault": "chore",
+		"scopeDefault": "harness",
+		"bodySeparator": "\n\n",
+		"coAuthorTrailer": "Co-authored-by: {login} <{email}>",
+		"maxSubjectLength": 72
 	}
 }

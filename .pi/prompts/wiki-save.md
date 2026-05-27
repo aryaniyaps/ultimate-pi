@@ -1,5 +1,6 @@
 ---
 description: Save the current conversation or a specific insight as a structured note in the knowledge graph.
+argument-hint: "[name|session|decision <name>]"
 ---
 
 Read the `graphify` skill for context on graphify-out/ structure.
@@ -9,10 +10,10 @@ so it can be graphified and queried. Then run `graphify ./raw --update` to
 incorporate it into the knowledge graph.
 
 Usage:
-- `/save` — analyze the full conversation and save the most valuable content
-- `/save [name]` — save with a specific note title
-- `/save session` — save a complete session summary
-- `/save decision [name]` — save as a design/governance decision (also mirror into `.pi/harness/incidents/` when incident tracking is required)
+- `/wiki-save` — analyze the full conversation and save the most valuable content
+- `/wiki-save [name]` — save with a specific note title
+- `/wiki-save session` — save a complete session summary
+- `/wiki-save decision [name]` — save as a design/governance decision (also mirror into `.pi/harness/incidents/` when incident tracking is required)
 
 Save to: `./raw/[sanitized-name].md`
 Then: `graphify ./raw --update`

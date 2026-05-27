@@ -18,6 +18,7 @@ import {
 } from "../lib/debate-bus-state.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import { getRunIdFromSession } from "../lib/harness-run-context.js";
+import { completeDebateOpen } from "../lib/harness-slash-completions.js";
 import { normalizePlanDebateId } from "../lib/plan-debate-id.js";
 import { initPlanMessenger } from "../lib/plan-messenger.js";
 
@@ -55,6 +56,8 @@ export default function debateOrchestrator(pi: ExtensionAPI) {
 
 	pi.registerCommand("harness-debate-open", {
 		description: "Open a headless debate session",
+		getArgumentCompletions: (prefix) =>
+			completeDebateOpen(prefix, process.cwd()),
 		handler: async (args, ctx) => {
 			const runId = getRunId(ctx);
 			const trimmed = args.trim();

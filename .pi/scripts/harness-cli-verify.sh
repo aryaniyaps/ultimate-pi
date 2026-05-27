@@ -392,8 +392,23 @@ verify_cocoindex
 verify_biome
 verify_sg
 verify_gh
+verify_auto_commit() {
+	log "[auto-commit]"
+	_git_commit="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)/harness-git-commit.mjs"
+	if [ ! -f "$_git_commit" ]; then
+		warn "harness-git-commit.mjs missing (package incomplete)"
+		return
+	fi
+	if node "$_git_commit" --print-message --subject "harness-cli-verify" 2>/dev/null | grep -qi 'Co-authored-by:'; then
+		pass "harness-git-commit (co-author trailer)"
+	else
+		fail "harness-git-commit --print-message missing Co-authored-by trailer"
+	fi
+}
+
 verify_sentrux
 verify_ls_lint
+verify_auto_commit
 
 log ""
 if [ "$FAILURES" -gt 0 ]; then
