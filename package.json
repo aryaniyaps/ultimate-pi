@@ -94,6 +94,7 @@
 		"harness:sentrux-sync": "node .pi/scripts/sentrux-rules-sync.mjs --force",
 		"harness:ls-lint-bootstrap": "node .pi/scripts/harness-ls-lint-bootstrap.mjs",
 		"harness:ls-lint-sync": "node .pi/scripts/ls-lint-rules-sync.mjs --force",
+		"harness:git-commit": "node .pi/scripts/harness-git-commit.mjs",
 		"test:integration": "npx -y tsx --test test/cursor-sdk-provider.integration.test.ts"
 	},
 	"devDependencies": {

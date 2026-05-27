@@ -6,6 +6,7 @@ import { spawn } from "node:child_process";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { resolveHarnessScript } from "../lib/harness-paths.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
+import { completeStrictFlag } from "../lib/harness-slash-completions.js";
 
 function resolveSyncScript(): string {
 	return resolveHarnessScript(
@@ -81,6 +82,7 @@ export default function sentruxRulesSync(pi: ExtensionAPI) {
 	pi.registerCommand("harness-sentrux-sync", {
 		description:
 			"Regenerate .sentrux/rules.toml from harness architecture manifest",
+		getArgumentCompletions: completeStrictFlag,
 		handler: async (_args, ctx) => {
 			const strict = _args.includes("--strict");
 			const { code, output } = await runSync(

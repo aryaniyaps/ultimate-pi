@@ -12,24 +12,62 @@ function StringEnum<T extends string[]>(
 	});
 }
 
+const OptionObjectSchema = Type.Object({
+	title: Type.String({ description: "Short option label" }),
+	description: Type.Optional(
+		Type.String({ description: "Optional explanation" }),
+	),
+	recommended: Type.Optional(
+		Type.Boolean({ description: "Show a Recommended badge" }),
+	),
+});
+
 const OptionSchema = Type.Union([
 	Type.String({ description: "Option label" }),
-	Type.Object({
-		title: Type.String({ description: "Short option label" }),
-		description: Type.Optional(
-			Type.String({ description: "Optional explanation" }),
-		),
-	}),
+	OptionObjectSchema,
 ]);
+
+const QuestionSchema = Type.Object({
+	title: Type.String({ description: "Short label for this sub-question" }),
+	description: Type.Optional(
+		Type.String({ description: "Full question text shown in the card" }),
+	),
+	options: Type.Optional(
+		Type.Array(OptionSchema, {
+			description: "If omitted, renders as freeform textarea",
+		}),
+	),
+	allowMultiple: Type.Optional(
+		Type.Boolean({
+			description: "Allow multiple selections for this sub-question",
+			default: false,
+		}),
+	),
+});
 
 export const AskUserParamsSchema = Type.Object({
 	question: Type.String({ description: "The question to ask the user" }),
 	context: Type.Optional(
-		Type.String({ description: "Context shown above the question" }),
+		Type.String({
+			description:
+				"Additional context (markdown or HTML panel when contextFormat is set)",
+		}),
+	),
+	contextFormat: Type.Optional(
+		StringEnum(["markdown", "html"] as const, {
+			description: "How to render context in rich UI (default markdown)",
+		}),
 	),
 	options: Type.Optional(
 		Type.Array(OptionSchema, {
-			description: "Multiple-choice options (min 2 if provided)",
+			description:
+				"Flat mode: multiple-choice options (min 2 if provided). Ignored when questions is set.",
+		}),
+	),
+	questions: Type.Optional(
+		Type.Array(QuestionSchema, {
+			description:
+				"Questionnaire mode: batch independent forks in one dialog (max 8)",
 		}),
 	),
 	allowMultiple: Type.Optional(
@@ -40,18 +78,31 @@ export const AskUserParamsSchema = Type.Object({
 	),
 	allowFreeform: Type.Optional(
 		Type.Boolean({
-			description: 'Append "Type something…" freeform row',
+			description: 'Allow custom answer (TUI: "Type something…" row)',
 			default: true,
+		}),
+	),
+	allowComment: Type.Optional(
+		Type.Boolean({
+			description: "Collect optional comment after selection",
+			default: false,
+		}),
+	),
+	allowSkip: Type.Optional(
+		Type.Boolean({
+			description: "Questionnaire only: allow submit with unanswered items",
+			default: false,
 		}),
 	),
 	displayMode: Type.Optional(
 		StringEnum(["overlay", "inline"] as const, {
-			description: "overlay = modal (default), inline = in transcript flow",
+			description:
+				"overlay = modal (default); inline = transcript flow (forces TUI)",
 		}),
 	),
 	timeout: Type.Optional(
 		Type.Number({
-			description: "Auto-cancel after N milliseconds",
+			description: "Auto-cancel after N milliseconds (TUI/headless only)",
 			minimum: 1,
 		}),
 	),
@@ -62,8 +113,10 @@ export const PROMPT_SNIPPET =
 
 export const PROMPT_GUIDELINES = [
 	"Use ask_user when requirements are ambiguous, conflicting, or high-impact — never guess on harness forks (Firecrawl mode, .env creation, scope, risk, merge policy).",
-	"Prefer one focused question per call with 2–4 clear options and short descriptions for trade-offs.",
+	"Prefer one focused flat question with 2–4 options, or use questions[] when 2–4 independent dimensions must be decided in one clarification round (max 8 sub-questions).",
+	"Use context (markdown) for evidence bullets; keep under ~500 chars unless the fork is architectural.",
+	"Never use ask_user for final plan approval — use approve_plan.",
 	"If the user cancels (Esc), stop and report needs_clarification; do not proceed with assumptions.",
-	"Do not stack redundant ask_user calls — combine related choices when phase 2 batch mode exists.",
 	"Independent evaluator/adversary agents must not call ask_user; emit human_required and let the orchestrator ask.",
+	"After Phase 0 ask_user, merge answers into task-clarification.yaml via applyAskUserToTaskClarification (harness-decisions skill).",
 ];

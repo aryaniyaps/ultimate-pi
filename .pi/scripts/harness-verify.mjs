@@ -3,7 +3,7 @@
  * harness-verify — deterministic harness contract checks (no LLM).
  */
 
-import { readFile, access } from "node:fs/promises";
+import { readFile, access, readdir } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -32,6 +32,7 @@ const REQUIRED_SCHEMAS = [
 	"naming-manifest.schema.json",
 	"ls-lint-manifest-proposal.schema.json",
 	"ls-lint-signal.schema.json",
+	"auto-commit.schema.json",
 ];
 
 const REQUIRED_ADRS = [
@@ -54,6 +55,16 @@ const REQUIRED_ADRS = [
 	"0047-agt-layered-security.md",
 	"0048-tool-call-hook-order.md",
 	"0052-ls-lint-naming-lifecycle.md",
+	"0054-harness-native-ask-user.md",
+	"0055-auto-commit-coauthor-lifecycle.md",
+];
+
+const ASK_USER_PUBLIC_EXPORTS = [
+	"runAskUser",
+	"validateAskParams",
+	"formatResultText",
+	"isPlanApprovalAskUser",
+	"applyAskUserToTaskClarification",
 ];
 
 const REQUIRED_EXTENSIONS = [
@@ -144,6 +155,60 @@ async function runNodeScript(scriptPath, args = []) {
 		});
 		child.on("close", (code) => resolve({ code: code ?? 1, out }));
 	});
+}
+
+const PROMPT_EXCLUDE = new Set(["release.md"]);
+
+function parsePromptFrontmatter(raw) {
+	const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+	if (!match) return null;
+	const fields = {};
+	for (const line of match[1].split("\n")) {
+		const idx = line.indexOf(":");
+		if (idx === -1) continue;
+		const key = line.slice(0, idx).trim();
+		let value = line.slice(idx + 1).trim();
+		if (
+			(value.startsWith('"') && value.endsWith('"')) ||
+			(value.startsWith("'") && value.endsWith("'"))
+		) {
+			value = value.slice(1, -1);
+		}
+		fields[key] = value;
+	}
+	return fields;
+}
+
+async function checkPromptFrontmatter() {
+	const promptsDir = join(ROOT, ".pi", "prompts");
+	const names = await readdir(promptsDir);
+	for (const name of names) {
+		if (!name.endsWith(".md") || PROMPT_EXCLUDE.has(name)) continue;
+		const path = join(promptsDir, name);
+		const raw = await readFile(path, "utf-8");
+		const fm = parsePromptFrontmatter(raw);
+		if (!fm) fail(`prompt ${name}: missing YAML frontmatter`);
+		const description = fm.description?.trim();
+		if (!description) fail(`prompt ${name}: missing or empty description`);
+		if (Object.hasOwn(fm, "argument-hint") && fm["argument-hint"] === "") {
+			fail(`prompt ${name}: argument-hint must be omitted or non-empty (not "")`);
+		}
+		const body = raw.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "");
+		const usesArgs = /\$ARGUMENTS|\$1|\$2|\$@/.test(body);
+		const stepZeroFlags =
+			/Step 0 — Parse arguments/.test(body) &&
+			/\[--[^\]]+\]/.test(body) &&
+			name !== "harness-run.md";
+		if (
+			(usesArgs || stepZeroFlags) &&
+			!fm["argument-hint"]?.trim()
+		) {
+			fail(
+				`prompt ${name}: requires argument-hint (uses $ARGUMENTS/$1 or Step 0 flags)`,
+			);
+		}
+		ok(`prompt frontmatter ${name}`);
+	}
 }
 
 async function checkSentruxRules() {
@@ -382,95 +447,73 @@ async function checkSentruxGate() {
 	ok("sentrux check passed");
 }
 
-async function main() {
-	console.log("harness:verify\n");
-
+async function verifySchemaAdrAndExtensions() {
 	for (const name of REQUIRED_SCHEMAS) {
 		const path = join(SPECS, name);
 		if (!(await fileExists(path))) fail(`missing schema ${name}`);
 		JSON.parse(await readFile(path, "utf-8"));
 		ok(`schema ${name}`);
 	}
-
 	for (const name of REQUIRED_ADRS) {
 		const path = join(ADRS, name);
 		if (!(await fileExists(path))) fail(`missing ADR ${name}`);
 		ok(`ADR ${name}`);
 	}
-
 	for (const name of REQUIRED_EXTENSIONS) {
 		const path = join(ROOT, ".pi", "extensions", name);
 		if (!(await fileExists(path))) fail(`missing extension ${name}`);
 		ok(`extension ${name}`);
 	}
+}
 
-	const libPath = join(ROOT, ".pi", "lib", "harness-posthog.ts");
-	if (!(await fileExists(libPath))) fail("missing lib/harness-posthog.ts");
-	ok("lib/harness-posthog.ts");
+async function verifyCoreSurfaceFiles() {
+	const required = [
+		{ path: join(ROOT, ".pi", "lib", "harness-posthog.ts"), msg: "lib/harness-posthog.ts" },
+		{ path: join(ROOT, ".pi", "lib", "harness-run-context.ts"), msg: "lib/harness-run-context.ts" },
+		{ path: join(ROOT, ".pi", "extensions", "harness-ask-user.ts"), msg: "extension harness-ask-user.ts" },
+		{ path: join(ROOT, ".pi", "lib", "harness-slash-completions.ts"), msg: "lib/harness-slash-completions.ts" },
+	];
+	for (const item of required) {
+		if (!(await fileExists(item.path))) fail(`missing ${item.msg}`);
+		ok(item.msg);
+	}
+	const askUserIndex = join(ROOT, ".pi", "lib", "ask-user", "index.ts");
+	if (!(await fileExists(askUserIndex))) fail("missing .pi/lib/ask-user/index.ts");
+	const askUserSrc = await readFile(askUserIndex, "utf-8");
+	for (const sym of ASK_USER_PUBLIC_EXPORTS) {
+		if (!askUserSrc.includes(sym)) fail(`ask-user/index.ts missing export or symbol: ${sym}`);
+	}
+	ok("ask-user public API (index.ts)");
+}
 
-	const runCtxLib = join(ROOT, ".pi", "lib", "harness-run-context.ts");
-	if (!(await fileExists(runCtxLib))) fail("missing lib/harness-run-context.ts");
-	ok("lib/harness-run-context.ts");
-
-	const pkgJson = JSON.parse(
-		await readFile(join(ROOT, "package.json"), "utf-8"),
-	);
-	await checkHarnessLens(pkgJson);
-	await checkHarnessAnchoredEdit(pkgJson);
-
+async function verifySubagentBridgeAndGovernance(pkgJson) {
 	if (!pkgJson.files?.includes("vendor/pi-subagents")) {
-		fail(
-			'package.json "files" must include vendor/pi-subagents (npm publish ships subagents vendor)',
-		);
+		fail('package.json "files" must include vendor/pi-subagents (npm publish ships subagents vendor)');
 	}
 	ok('package.json files includes vendor/pi-subagents');
-
-	const subagentsVendor = join(
-		ROOT,
-		"vendor",
-		"pi-subagents",
-		"src",
-		"subagents.ts",
-	);
-	if (!(await fileExists(subagentsVendor))) {
-		fail("missing vendor/pi-subagents/src/subagents.ts");
-	}
+	const subagentsVendor = join(ROOT, "vendor", "pi-subagents", "src", "subagents.ts");
+	if (!(await fileExists(subagentsVendor))) fail("missing vendor/pi-subagents/src/subagents.ts");
 	const bridgePath = join(ROOT, ".pi", "lib", "harness-subagents-bridge.ts");
-	if (!(await fileExists(bridgePath))) {
-		fail("missing harness-subagents-bridge.ts");
-	}
+	if (!(await fileExists(bridgePath))) fail("missing harness-subagents-bridge.ts");
 	const bridgeSrc = await readFile(bridgePath, "utf-8");
-	if (!bridgeSrc.includes("precheckHarnessSubagentSpawn")) {
-		fail("harness-subagents-bridge must run precheckHarnessSubagentSpawn");
+	const bridgeNeedles = [
+		"precheckHarnessSubagentSpawn",
+		"packageRoot",
+	];
+	for (const needle of bridgeNeedles) {
+		if (!bridgeSrc.includes(needle)) fail(`harness-subagents-bridge missing required token: ${needle}`);
 	}
-	if (!bridgeSrc.includes("packageRoot")) {
-		fail("harness-subagents-bridge must pass packageRoot for agent discovery");
-	}
-	if (
-		!bridgeSrc.includes("subprocessGovernanceExtensionPath") &&
-		!bridgeSrc.includes("subagentGovernanceExtensionPath")
-	) {
-		fail(
-			"harness-subagents-bridge must set subprocessGovernanceExtensionPath for all subagents",
-		);
+	if (!bridgeSrc.includes("subprocessGovernanceExtensionPath") && !bridgeSrc.includes("subagentGovernanceExtensionPath")) {
+		fail("harness-subagents-bridge must set subprocessGovernanceExtensionPath for all subagents");
 	}
 	const subagentsSrc = await readFile(subagentsVendor, "utf-8");
-	if (!subagentsSrc.includes("discoverAgents")) {
-		fail("vendor subagents.ts must implement discoverAgents");
-	}
-	if (!subagentsSrc.includes("packageRoot")) {
-		fail("vendor subagents.ts must pass packageRoot into discovery");
-	}
+	if (!subagentsSrc.includes("discoverAgents")) fail("vendor subagents.ts must implement discoverAgents");
+	if (!subagentsSrc.includes("packageRoot")) fail("vendor subagents.ts must pass packageRoot into discovery");
 	ok("vendor pi-subagents + harness bridge");
 
-	const policyGateSrc = await readFile(
-		join(ROOT, ".pi", "extensions", "policy-gate.ts"),
-		"utf-8",
-	);
+	const policyGateSrc = await readFile(join(ROOT, ".pi", "extensions", "policy-gate.ts"), "utf-8");
 	if (!policyGateSrc.includes("isPlanPhaseAllowedMutation")) {
-		fail(
-			"policy-gate.ts must use isPlanPhaseAllowedMutation (plan-phase scoped writes)",
-		);
+		fail("policy-gate.ts must use isPlanPhaseAllowedMutation (plan-phase scoped writes)");
 	}
 	if (!policyGateSrc.includes('pi.on("tool_call", async (event, ctx)')) {
 		fail("policy-gate tool_call must receive ctx for run context");
@@ -479,107 +522,141 @@ async function main() {
 		fail("policy-gate.ts must delegate tool_call to AGT evaluateAgtHarnessToolCall");
 	}
 	const govPath = join(ROOT, ".pi", "extensions", "subagent-governance.ts");
-	const govAlias = join(
-		ROOT,
-		".pi",
-		"extensions",
-		"harness-subagent-governance.ts",
-	);
-	if (!(await fileExists(govPath))) {
-		fail("missing subagent-governance.ts subprocess bundle");
-	}
-	if (!(await fileExists(govAlias))) {
-		fail("missing harness-subagent-governance.ts re-export alias");
-	}
+	const govAlias = join(ROOT, ".pi", "extensions", "harness-subagent-governance.ts");
+	if (!(await fileExists(govPath))) fail("missing subagent-governance.ts subprocess bundle");
+	if (!(await fileExists(govAlias))) fail("missing harness-subagent-governance.ts re-export alias");
 	ok("policy-gate + subprocess governance");
+}
 
+async function runAgtPolicyDoctor() {
 	const agtDoctorPath = join(ROOT, ".pi", "scripts", "harness-agt-doctor.ts");
-	const { code: agtDoctorCode, out: agtDoctorOut } = await new Promise(
-		(resolve) => {
-			const child = spawn(
-				"npx",
-				["-y", "tsx", agtDoctorPath],
-				{ cwd: ROOT, stdio: ["ignore", "pipe", "pipe"], shell: true },
-			);
-			let out = "";
-			child.stdout?.on("data", (d) => {
-				out += d.toString();
-			});
-			child.stderr?.on("data", (d) => {
-				out += d.toString();
-			});
-			child.on("close", (code) => resolve({ code: code ?? 1, out }));
-		},
-	);
-	if (agtDoctorCode !== 0) {
-		fail(agtDoctorOut.trim() || "AGT policy doctor failed");
-	}
+	const { code: agtDoctorCode, out: agtDoctorOut } = await new Promise((resolve) => {
+		const child = spawn("npx", ["-y", "tsx", agtDoctorPath], {
+			cwd: ROOT,
+			stdio: ["ignore", "pipe", "pipe"],
+			shell: true,
+		});
+		let out = "";
+		child.stdout?.on("data", (d) => {
+			out += d.toString();
+		});
+		child.stderr?.on("data", (d) => {
+			out += d.toString();
+		});
+		child.on("close", (code) => resolve({ code: code ?? 1, out }));
+	});
+	if (agtDoctorCode !== 0) fail(agtDoctorOut.trim() || "AGT policy doctor failed");
 	ok("AGT policy doctor");
+}
 
+async function verifySmokeFixtures() {
 	const runCtxFixture = join(SMOKE, "run-context.fixture.json");
-	if (!(await fileExists(runCtxFixture))) {
-		fail("missing run-context.fixture.json");
-	}
+	if (!(await fileExists(runCtxFixture))) fail("missing run-context.fixture.json");
 	const runCtxData = JSON.parse(await readFile(runCtxFixture, "utf-8"));
-	if (runCtxData.schema_version !== "1.0.0") {
-		fail("run-context fixture schema_version must be 1.0.0");
-	}
+	if (runCtxData.schema_version !== "1.0.0") fail("run-context fixture schema_version must be 1.0.0");
 	if (!runCtxData.run_id) fail("run-context fixture missing run_id");
 	ok("run-context.fixture.json");
 
-	const fixture = JSON.parse(
-		await readFile(join(SMOKE, "run-record.fixture.json"), "utf-8"),
-	);
+	const fixture = JSON.parse(await readFile(join(SMOKE, "run-record.fixture.json"), "utf-8"));
 	validateRunRecordFixture(fixture);
 	ok("run-record.fixture.json");
 
-	const golden = JSON.parse(
-		await readFile(join(SMOKE, "test-diff-golden.json"), "utf-8"),
-	);
+	const golden = JSON.parse(await readFile(join(SMOKE, "test-diff-golden.json"), "utf-8"));
 	validateTestDiffGolden(golden);
 	ok("test-diff-golden.json");
+}
 
-	await checkSentruxGate();
-	await checkLsLintGate();
-
+async function verifyAgentsPolicyAndManifest() {
 	const AGENTS_POLICY = join(ROOT, ".pi", "harness", "agents.policy.yaml");
-	if (!(await fileExists(AGENTS_POLICY))) {
-		fail("missing .pi/harness/agents.policy.yaml");
-	}
+	if (!(await fileExists(AGENTS_POLICY))) fail("missing .pi/harness/agents.policy.yaml");
 	ok("agents.policy.yaml present");
-
 	const policyYaml = await readFile(AGENTS_POLICY, "utf8");
 	if (!/^\s+extension_bundle:\s+executor/m.test(policyYaml)) {
 		fail("agents.policy.yaml kinds.executor must set extension_bundle: executor");
 	}
-	if (
-		/harness\/running\/executor:[\s\S]*?extensions:\s+true/m.test(policyYaml)
-	) {
-		fail(
-			"harness/running/executor must not set extensions: true (use kind extension_bundle)",
-		);
+	if (/harness\/running\/executor:[\s\S]*?extensions:\s+true/m.test(policyYaml)) {
+		fail("harness/running/executor must not set extensions: true (use kind extension_bundle)");
 	}
 	ok("executor extension_bundle policy");
 
 	if (!(await fileExists(AGENTS_MANIFEST))) {
-		fail(
-			"missing .pi/harness/agents.manifest.json — run node \"$UP_PKG/.pi/scripts/harness-agents-manifest.mjs\" --write",
-		);
+		fail('missing .pi/harness/agents.manifest.json — run node "$UP_PKG/.pi/scripts/harness-agents-manifest.mjs" --write');
 	}
 	ok("agents.manifest.json present");
-
 	const { code: manifestCode, out: manifestOut } = await runNodeScript(
 		join(ROOT, ".pi", "scripts", "harness-agents-manifest.mjs"),
 		["--check"],
 	);
-	if (manifestCode !== 0) {
-		fail(manifestOut.trim() || "agents.manifest.json drift — regenerate with --write");
-	}
+	if (manifestCode !== 0) fail(manifestOut.trim() || "agents.manifest.json drift — regenerate with --write");
 	ok("agents.manifest.json in sync");
+}
 
+async function main() {
+	console.log("harness:verify\n");
+	await verifySchemaAdrAndExtensions();
+	await verifyCoreSurfaceFiles();
+	await checkPromptFrontmatter();
+	const pkgJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8"));
+	await checkHarnessLens(pkgJson);
+	await checkHarnessAnchoredEdit(pkgJson);
+	await verifySubagentBridgeAndGovernance(pkgJson);
+	await runAgtPolicyDoctor();
+	await verifySmokeFixtures();
+	await checkSentruxGate();
+	await checkLsLintGate();
+	await verifyAgentsPolicyAndManifest();
+	await checkAutoCommitGitCommit();
 	await checkWrsContracts();
-
 	console.log("\nharness:verify PASS");
+}
+
+async function checkAutoCommitGitCommit() {
+	const skill = join(
+		ROOT,
+		".agents",
+		"skills",
+		"harness-git-commit",
+		"SKILL.md",
+	);
+	const script = join(ROOT, ".pi", "scripts", "harness-git-commit.mjs");
+	const lib = join(ROOT, ".pi", "lib", "harness-auto-commit-config.mjs");
+	const bootstrap = join(
+		ROOT,
+		".pi",
+		"scripts",
+		"harness-auto-commit-bootstrap.mjs",
+	);
+	const autoCommit = join(ROOT, ".pi", "auto-commit.json");
+	for (const p of [skill, script, lib, bootstrap, autoCommit]) {
+		if (!(await fileExists(p))) {
+			fail(`missing auto-commit artifact: ${p}`);
+		}
+	}
+
+	const { validateAutoCommitConfig, resolveAutoCommitConfig } = await import(
+		join(ROOT, ".pi", "lib", "harness-auto-commit-config.mjs")
+	);
+	const pkgConfig = JSON.parse(await readFile(autoCommit, "utf-8"));
+	validateAutoCommitConfig(pkgConfig);
+	await resolveAutoCommitConfig(ROOT, ROOT);
+
+	const sys = await readFile(join(ROOT, ".pi", "SYSTEM.md"), "utf-8");
+	if (!sys.includes("harness-git-commit")) {
+		fail("SYSTEM.md must reference harness-git-commit skill for commits");
+	}
+
+	const { code, out } = await runNodeScript(script, [
+		"--print-message",
+		"--subject",
+		"harness-verify smoke",
+	]);
+	if (code !== 0) {
+		fail(out.trim() || "harness-git-commit --print-message failed");
+	}
+	if (!out.includes("Co-authored-by:")) {
+		fail("harness-git-commit message missing Co-authored-by trailer");
+	}
+	ok("auto-commit git commit (skill, CLI, config, SYSTEM.md)");
 }
 
 async function checkWrsContracts() {

@@ -1,6 +1,6 @@
 ---
 description: Ad-hoc naming convention review — spawn harness/ls-lint-steward with graphify evidence.
-argument-hint: ""
+argument-hint: "[--run <run-id>]"
 ---
 
 # harness-ls-lint-steward

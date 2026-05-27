@@ -15,6 +15,7 @@ import { copyFile, mkdir, readdir, access } from "node:fs/promises";
 import { constants } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const UP_PKG = join(SCRIPT_DIR, "..", "..");
@@ -94,6 +95,30 @@ async function main() {
 		console.log(
 			`harness-seed-project-contracts: seeded ls-lint manifest -> ${lsLintDest} (run harness-ls-lint-bootstrap.mjs to sync .ls-lint.yml)`,
 		);
+	}
+
+	const autoCommitBootstrap = join(
+		UP_PKG,
+		".pi",
+		"scripts",
+		"harness-auto-commit-bootstrap.mjs",
+	);
+	const autoCommitDest = join(projectRoot, ".pi", "auto-commit.json");
+	if (
+		!(await fileExists(autoCommitDest)) &&
+		(await fileExists(autoCommitBootstrap))
+	) {
+		await new Promise((resolve, reject) => {
+			const child = spawn(
+				process.execPath,
+				[autoCommitBootstrap, projectRoot],
+				{ cwd: projectRoot, stdio: "inherit", env: process.env },
+			);
+			child.on("error", reject);
+			child.on("close", (code) =>
+				code === 0 ? resolve() : reject(new Error(`bootstrap exit ${code}`)),
+			);
+		});
 	}
 }
 

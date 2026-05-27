@@ -2,26 +2,26 @@
 	"schema_version": "1.0.0",
 	"project": "ultimate-pi",
 	"global_rules": {
-		".*": "kebab-case",
-		".md": "kebab-case",
-		".ts": "kebab-case",
-		".tsx": "kebab-case",
-		".mjs": "kebab-case",
-		".js": "kebab-case",
-		".json": "kebab-case",
-		".yaml": "kebab-case",
-		".yml": "kebab-case",
-		".toml": "kebab-case",
-		".py": "kebab-case",
-		".sh": "kebab-case",
-		".css": "kebab-case",
-		".html": "kebab-case"
+		".*": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".md": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".ts": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".tsx": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".mjs": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".js": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".json": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".yaml": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".yml": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".toml": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".py": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".sh": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".css": "regex:^[a-z]+(?:-[a-z]+)*$",
+		".html": "regex:^[a-z]+(?:-[a-z]+)*$"
 	},
 	"scoped_rules": [
 		{
 			"path": ".pi/harness/docs/adrs",
 			"rules": {
-				".md": "regex:^\\d{4}-[a-z0-9-]+$|^template$"
+				".md": "regex:^\\d{4}-[a-z-]+$|^template$"
 			}
 		},
 		{
@@ -114,6 +114,15 @@
 		".graphify_root",
 		".graphify_incremental.json",
 		".pi/SYSTEM.md",
-		".pi/PACKAGING.md"
+		".pi/PACKAGING.md",
+		"**/.*",
+		".pi/sounds",
+		".pi/harness/evals",
+		".pi/extensions/00-harness-project-control.ts",
+		"DOCS_BY_AUDIENCE.md",
+		"GLOSSARY.md",
+		"REPO_MAP.md",
+		"START_HERE.md",
+		"WORKFLOW_CHEAT_SHEET.md"
 	]
 }

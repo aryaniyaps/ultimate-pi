@@ -35,6 +35,8 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | ls-lint config drift check (CI) | `node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --check` |
 | ls-lint filename check (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs` [`--json`] |
 | Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
+| Auto-commit config bootstrap | `node "$UP_PKG/.pi/scripts/harness-auto-commit-bootstrap.mjs"` |
+| Git commit + co-author trailer | `node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" --subject "…"` [`--dry-run`] |
 | Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
 | Harness lens extension | `.pi/extensions/harness-lens.ts` → `.pi/lib/harness-lens/index.ts` (loaded by `.pi/extensions`; PostHog owns lens telemetry) |
 

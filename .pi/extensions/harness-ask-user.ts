@@ -1,23 +1,16 @@
 /**
  * harness-ask-user — structured user decisions for harness planning and setup.
- * Design references: pi-ask-user, @pi-unipi/ask-user, rpiv-ask-user-question (not vendored).
  */
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { runAskDialog } from "../lib/ask-user/dialog.js";
-import { runAskFallback } from "../lib/ask-user/fallback.js";
+import { runAskUser } from "../lib/ask-user/index.js";
 import { renderAskCall, renderAskResult } from "../lib/ask-user/render.js";
 import {
 	AskUserParamsSchema,
 	PROMPT_GUIDELINES,
 	PROMPT_SNIPPET,
 } from "../lib/ask-user/schema.js";
-import type { AskUserParams, DialogResult } from "../lib/ask-user/types.js";
-import {
-	formatResultText,
-	toToolDetails,
-	validateAskParams,
-} from "../lib/ask-user/validate.js";
+import type { AskUserParams } from "../lib/ask-user/types.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 
 // @ts-expect-error pi extensions run as ESM
@@ -35,36 +28,22 @@ export default function harnessAskUser(pi: ExtensionAPI) {
 		parameters: AskUserParamsSchema,
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-			const validated = validateAskParams(params as AskUserParams);
-			if (typeof validated === "string") {
+			const result = await runAskUser(params as AskUserParams, {
+				ui: ctx.ui,
+				hasUI: ctx.hasUI,
+				sessionName: undefined,
+			});
+
+			if ("error" in result) {
 				return {
-					content: [{ type: "text", text: validated }],
-					details: {
-						question: params.question ?? "",
-						options: [],
-						response: null,
-						cancelled: true,
-					},
+					content: [{ type: "text", text: result.error }],
+					details: result.details,
 				};
 			}
 
-			let outcome: DialogResult;
-			if (ctx.hasUI) {
-				outcome = await runAskDialog(ctx.ui, validated);
-			} else {
-				outcome = await runAskFallback(ctx.ui, validated);
-			}
-
-			const details = toToolDetails(
-				validated,
-				outcome.response,
-				outcome.cancelled,
-			);
-			const text = formatResultText(outcome.response, outcome.cancelled);
-
 			return {
-				content: [{ type: "text", text }],
-				details,
+				content: result.content,
+				details: result.details,
 			};
 		},
 

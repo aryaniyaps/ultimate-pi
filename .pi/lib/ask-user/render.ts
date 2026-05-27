@@ -16,16 +16,25 @@ export function renderAskCall(
 	if (args.context) {
 		text += `\n${theme.fg("dim", `  ${String(args.context)}`)}`;
 	}
-	const opts = Array.isArray(args.options) ? args.options : [];
-	if (opts.length) {
-		const labels = opts.map((o: unknown) =>
-			typeof o === "string" ? o : ((o as { title?: string })?.title ?? "?"),
-		);
-		const numbered = labels.map((o, i) => `${i + 1}. ${o}`);
-		if (args.allowFreeform !== false) {
-			numbered.push(`${numbered.length + 1}. Type something…`);
+	const questions = Array.isArray(args.questions) ? args.questions : [];
+	if (questions.length > 0) {
+		text += `\n${theme.fg("dim", `  Questionnaire: ${questions.length} item(s)`)}`;
+		const first = questions[0] as { title?: string };
+		if (first?.title) {
+			text += `\n${theme.fg("dim", `  First: ${first.title}`)}`;
 		}
-		text += `\n${theme.fg("dim", `  Options: ${numbered.join(", ")}`)}`;
+	} else {
+		const opts = Array.isArray(args.options) ? args.options : [];
+		if (opts.length) {
+			const labels = opts.map((o: unknown) =>
+				typeof o === "string" ? o : ((o as { title?: string })?.title ?? "?"),
+			);
+			const numbered = labels.map((o, i) => `${i + 1}. ${o}`);
+			if (args.allowFreeform !== false) {
+				numbered.push(`${numbered.length + 1}. Type something…`);
+			}
+			text += `\n${theme.fg("dim", `  Options: ${numbered.join(", ")}`)}`;
+		}
 	}
 	return new Text(text, 0, 0);
 }
@@ -45,11 +54,33 @@ export function renderAskResult(
 		return new Text(theme.fg("warning", "Cancelled"), 0, 0);
 	}
 
+	if (details.ui_degraded) {
+		return new Text(
+			theme.fg("warning", "↓ TUI ") +
+				theme.fg("success", "✓ ") +
+				theme.fg(
+					"muted",
+					result.content[0]?.type === "text" ? result.content[0].text : "",
+				),
+			0,
+			0,
+		);
+	}
+
 	if (details.response.kind === "freeform") {
 		return new Text(
 			theme.fg("success", "✓ ") +
 				theme.fg("muted", "(wrote) ") +
 				theme.fg("accent", details.response.text),
+			0,
+			0,
+		);
+	}
+
+	if (details.response.kind === "questionnaire") {
+		const count = details.response.questionnaireDetails.length;
+		return new Text(
+			theme.fg("success", "✓ ") + theme.fg("accent", `${count} answer(s)`),
 			0,
 			0,
 		);

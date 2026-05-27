@@ -75,25 +75,12 @@ export async function synthesizeRepairBrief(
 			review.remediation_class) ||
 		"implementation_gap";
 
-	const sourceArtifacts: Record<string, string> = {
-		"review-outcome":
-			input.reviewOutcomePath ?? "artifacts/review-outcome.yaml",
-	};
-	if (evalDoc) {
-		sourceArtifacts["eval-verdict"] =
-			input.evalVerdictPath ?? "artifacts/eval-verdict.yaml";
-	}
-	if (adversary) {
-		sourceArtifacts["adversary-report"] =
-			input.adversaryReportPath ?? "artifacts/adversary-report.yaml";
-	}
-	if (plan) {
-		sourceArtifacts["plan-packet"] = planRel;
-	}
-	if (sentruxRepair) {
-		sourceArtifacts["sentrux-repair-plan"] =
-			"artifacts/sentrux-repair-plan.yaml";
-	}
+	const sourceArtifacts = buildSourceArtifacts(input, planRel, {
+		evalDoc,
+		adversary,
+		plan,
+		sentruxRepair,
+	});
 
 	const failedIds = [
 		...stringList(review?.failed_acceptance_check_ids),
@@ -102,33 +89,7 @@ export async function synthesizeRepairBrief(
 	];
 	const uniqueFailed = [...new Set(failedIds)];
 
-	const fixDirectives: string[] = [];
-	if (sentruxRepair) {
-		const actions = Array.isArray(sentruxRepair.actions)
-			? sentruxRepair.actions
-			: [];
-		for (const raw of actions) {
-			const action = asRecord(raw);
-			if (!action) continue;
-			const id = typeof action.id === "string" ? action.id : "action";
-			const target = typeof action.target === "string" ? action.target : "";
-			const instruction =
-				typeof action.instruction === "string" ? action.instruction : "";
-			if (instruction) {
-				fixDirectives.push(`[sentrux:${id}] ${target}: ${instruction}`.trim());
-			}
-		}
-		if (
-			typeof sentruxRepair.summary === "string" &&
-			sentruxRepair.summary.trim()
-		) {
-			fixDirectives.unshift(`[sentrux] ${sentruxRepair.summary.trim()}`);
-		}
-		const verification = stringList(sentruxRepair.verification);
-		for (const v of verification) {
-			fixDirectives.push(`[sentrux:verify] ${v}`);
-		}
-	}
+	const fixDirectives: string[] = sentruxFixDirectives(sentruxRepair);
 	for (const key of [
 		"fix_directives",
 		"repair_directives",
@@ -152,15 +113,7 @@ export async function synthesizeRepairBrief(
 		);
 	}
 
-	const execPlan = asRecord(plan?.execution_plan);
-	const priorityLakeIds = stringList(execPlan?.critical_path_lake_ids);
-	if (priorityLakeIds.length === 0) {
-		const lakes = Array.isArray(execPlan?.lakes) ? execPlan.lakes : [];
-		for (const lake of lakes) {
-			const l = asRecord(lake);
-			if (l && typeof l.id === "string") priorityLakeIds.push(l.id);
-		}
-	}
+	const priorityLakeIds = collectPriorityLakeIds(plan);
 
 	const brief: Record<string, unknown> = {
 		schema_version: REPAIR_BRIEF_SCHEMA,
@@ -177,4 +130,75 @@ export async function synthesizeRepairBrief(
 		brief.priority_lake_ids = [...new Set(priorityLakeIds)];
 	}
 	return brief;
+}
+
+function buildSourceArtifacts(
+	input: SynthesizeRepairBriefInput,
+	planRel: string,
+	docs: {
+		evalDoc: Record<string, unknown> | null;
+		adversary: Record<string, unknown> | null;
+		plan: Record<string, unknown> | null;
+		sentruxRepair: Record<string, unknown> | null;
+	},
+): Record<string, string> {
+	const sourceArtifacts: Record<string, string> = {
+		"review-outcome":
+			input.reviewOutcomePath ?? "artifacts/review-outcome.yaml",
+	};
+	if (docs.evalDoc)
+		sourceArtifacts["eval-verdict"] =
+			input.evalVerdictPath ?? "artifacts/eval-verdict.yaml";
+	if (docs.adversary)
+		sourceArtifacts["adversary-report"] =
+			input.adversaryReportPath ?? "artifacts/adversary-report.yaml";
+	if (docs.plan) sourceArtifacts["plan-packet"] = planRel;
+	if (docs.sentruxRepair)
+		sourceArtifacts["sentrux-repair-plan"] =
+			"artifacts/sentrux-repair-plan.yaml";
+	return sourceArtifacts;
+}
+
+function sentruxFixDirectives(
+	sentruxRepair: Record<string, unknown> | null,
+): string[] {
+	if (!sentruxRepair) return [];
+	const out: string[] = [];
+	const actions = Array.isArray(sentruxRepair.actions)
+		? sentruxRepair.actions
+		: [];
+	for (const raw of actions) {
+		const action = asRecord(raw);
+		if (!action) continue;
+		const id = typeof action.id === "string" ? action.id : "action";
+		const target = typeof action.target === "string" ? action.target : "";
+		const instruction =
+			typeof action.instruction === "string" ? action.instruction : "";
+		if (instruction)
+			out.push(`[sentrux:${id}] ${target}: ${instruction}`.trim());
+	}
+	if (
+		typeof sentruxRepair.summary === "string" &&
+		sentruxRepair.summary.trim()
+	) {
+		out.unshift(`[sentrux] ${sentruxRepair.summary.trim()}`);
+	}
+	for (const v of stringList(sentruxRepair.verification)) {
+		out.push(`[sentrux:verify] ${v}`);
+	}
+	return out;
+}
+
+function collectPriorityLakeIds(
+	plan: Record<string, unknown> | null,
+): string[] {
+	const execPlan = asRecord(plan?.execution_plan);
+	const ids = stringList(execPlan?.critical_path_lake_ids);
+	if (ids.length > 0) return ids;
+	const lakes = Array.isArray(execPlan?.lakes) ? execPlan.lakes : [];
+	for (const lake of lakes) {
+		const record = asRecord(lake);
+		if (record && typeof record.id === "string") ids.push(record.id);
+	}
+	return ids;
 }

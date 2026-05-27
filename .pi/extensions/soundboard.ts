@@ -387,6 +387,53 @@ function readAgentEndOutcome(event: unknown): {
 	return { status: "completed" };
 }
 
+function registerSoundsCommand(pi: ExtensionAPI): void {
+	pi.registerCommand("sounds", {
+		description: "Show pi-sounds status: loaded sounds, player",
+		handler: async (_args: string, ctx: ExtensionCommandContext) => {
+			const soundCtx = await getSoundContext();
+			if (!soundCtx) {
+				const msg = "pi-sounds: no .pi/sounds/project-sounds.json found";
+				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
+				else
+					pi.sendMessage({
+						customType: "pi-sounds",
+						content: msg,
+						display: true,
+					});
+				return;
+			}
+
+			const player = await getPlayer();
+			const playerName = player ? player.cmd : "none";
+			const total = SOUND_CATEGORIES.reduce(
+				(sum, c) => sum + soundCtx.soundsByCategory[c].length,
+				0,
+			);
+			const lines = [
+				`pi-sounds status:`,
+				`  player: ${playerName}`,
+				`  sounds: ${total} files in ${soundCtx.soundsDirectory}`,
+				`  randomize: ${soundCtx.randomizeSounds ? "yes" : "no"}`,
+				`  categories:`,
+			];
+			for (const cat of SOUND_CATEGORIES) {
+				const files = soundCtx.soundsByCategory[cat];
+				lines.push(
+					`    ${cat}: ${files.length > 0 ? files.map((f) => basename(f)).join(", ") : "(none)"}`,
+				);
+			}
+			if (ctx.hasUI) ctx.ui.notify(lines.join("\n"), "info");
+			else
+				pi.sendMessage({
+					customType: "pi-sounds",
+					content: lines.join("\n"),
+					display: true,
+				});
+		},
+	});
+}
+
 // ── Extension ─────────────────────────────────────────────────────
 
 export default function piSoundsExtension(pi: ExtensionAPI): void {
@@ -482,52 +529,5 @@ export default function piSoundsExtension(pi: ExtensionAPI): void {
 		hadErrorInTurn = false;
 	});
 
-	// ── Command ────────────────────────────────────────────────────
-
-	pi.registerCommand("sounds", {
-		description: "Show pi-sounds status: loaded sounds, player",
-		handler: async (_args: string, ctx: ExtensionCommandContext) => {
-			const soundCtx = await getSoundContext();
-			if (!soundCtx) {
-				const msg = "pi-sounds: no .pi/sounds/project-sounds.json found";
-				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
-				else
-					pi.sendMessage({
-						customType: "pi-sounds",
-						content: msg,
-						display: true,
-					});
-				return;
-			}
-
-			const player = await getPlayer();
-			const playerName = player ? player.cmd : "none";
-			const total = SOUND_CATEGORIES.reduce(
-				(sum, c) => sum + soundCtx.soundsByCategory[c].length,
-				0,
-			);
-
-			const lines = [
-				`pi-sounds status:`,
-				`  player: ${playerName}`,
-				`  sounds: ${total} files in ${soundCtx.soundsDirectory}`,
-				`  randomize: ${soundCtx.randomizeSounds ? "yes" : "no"}`,
-				`  categories:`,
-			];
-			for (const cat of SOUND_CATEGORIES) {
-				const files = soundCtx.soundsByCategory[cat];
-				lines.push(
-					`    ${cat}: ${files.length > 0 ? files.map((f) => basename(f)).join(", ") : "(none)"}`,
-				);
-			}
-
-			if (ctx.hasUI) ctx.ui.notify(lines.join("\n"), "info");
-			else
-				pi.sendMessage({
-					customType: "pi-sounds",
-					content: lines.join("\n"),
-					display: true,
-				});
-		},
-	});
+	registerSoundsCommand(pi);
 }

@@ -30,9 +30,14 @@ function toAskParams(
 	return {
 		question: "How would you like to proceed with this harness plan?",
 		context: buildPlanApprovalMarkdown(validated),
+		contextFormat: "markdown",
 		options: validated.options,
+		questions: [],
+		mode: "flat",
 		allowMultiple: false,
 		allowFreeform: false,
+		allowComment: false,
+		allowSkip: false,
 		// Inline prompt below the plan — no full-screen overlay.
 		displayMode: "inline",
 	};

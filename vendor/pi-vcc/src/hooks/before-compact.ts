@@ -137,6 +137,87 @@ const REASON_MESSAGES: Record<OwnCutCancelReason, string> = {
   too_few_live_messages: "pi-vcc: Too few messages to compact",
 };
 
+
+function collectLiveRolesForDiagnostics(
+  branchEntries: any[],
+  lastCompIdx: number,
+  lastKeptId: string | undefined,
+): string[] {
+  const hasPriorCompaction = lastCompIdx >= 0;
+  const hasValidKeptId = !!lastKeptId && branchEntries.some((e: any) => e.id === lastKeptId);
+  const diagOrphan = hasPriorCompaction && !hasValidKeptId;
+  const liveRoles: string[] = [];
+  if (diagOrphan) {
+    for (let i = lastCompIdx + 1; i < branchEntries.length; i++) {
+      const e = branchEntries[i];
+      if (e.type === "compaction") continue;
+      if (e.type === "message" && e.message) liveRoles.push(e.message.role);
+    }
+    return liveRoles;
+  }
+  let foundKept = !lastKeptId;
+  for (const e of branchEntries) {
+    if (!foundKept && e.id === lastKeptId) foundKept = true;
+    if (!foundKept || e.type === "compaction") continue;
+    if (e.type === "message" && e.message) liveRoles.push(e.message.role);
+  }
+  return liveRoles;
+}
+
+function handleOwnCutCancellation(args: {
+  ownCut: Extract<OwnCutResult, { ok: false }>;
+  isPiVcc: boolean;
+  settings: PiVccSettings;
+  branchEntries: any[];
+  ctx: any;
+}): { cancel: true } {
+  const { ownCut, isPiVcc, settings, branchEntries, ctx } = args;
+  const lastComp = [...branchEntries].reverse().find((e: any) => e.type === "compaction");
+  const lastCompIdx = lastComp ? branchEntries.indexOf(lastComp) : -1;
+  const lastKeptId: string | undefined = lastComp?.firstKeptEntryId;
+  const liveRoles = collectLiveRolesForDiagnostics(branchEntries, lastCompIdx, lastKeptId);
+  const userIndices = liveRoles.reduce<number[]>((acc, r, i) => (r === "user" ? (acc.push(i), acc) : acc), []);
+
+  dbg(settings, {
+    cancelled: true,
+    reason: ownCut.reason,
+    isPiVcc,
+    counts: {
+      total: branchEntries.length,
+      messages: branchEntries.filter((e: any) => e.type === "message").length,
+      compactions: branchEntries.filter((e: any) => e.type === "compaction").length,
+      entriesAfterLastCompaction: lastCompIdx >= 0 ? branchEntries.length - lastCompIdx - 1 : null,
+    },
+    liveMessages: {
+      count: liveRoles.length,
+      userCount: userIndices.length,
+      firstUserIdx: userIndices[0] ?? null,
+      lastUserIdx: userIndices[userIndices.length - 1] ?? null,
+      roleSequence: liveRoles.length <= 30
+        ? liveRoles
+        : [...liveRoles.slice(0, 10), "...", ...liveRoles.slice(-10)],
+    },
+    lastCompaction: lastComp
+      ? {
+          hasFirstKeptEntryId: !!lastComp.firstKeptEntryId,
+          foundInBranch: lastComp.firstKeptEntryId
+            ? branchEntries.some((e: any) => e.id === lastComp.firstKeptEntryId)
+            : null,
+        }
+      : null,
+    tail: branchEntries.slice(-5).map((e: any) => ({
+      type: e.type,
+      role: e.type === "message" ? e.message?.role : undefined,
+      hasContent: e.type === "message" ? e.message?.content != null : undefined,
+    })),
+  });
+
+  try {
+    ctx?.ui?.notify?.(REASON_MESSAGES[ownCut.reason], "warning");
+  } catch {}
+  return { cancel: true };
+}
+
 export const registerBeforeCompactHook = (pi: ExtensionAPI) => {
   pi.on("session_before_compact", (event, ctx) => {
     const { preparation, branchEntries, customInstructions } = event;
@@ -149,68 +230,13 @@ export const registerBeforeCompactHook = (pi: ExtensionAPI) => {
 
     const ownCut = buildOwnCut(branchEntries as any[]);
     if (!ownCut.ok) {
-      const lastComp = [...branchEntries].reverse().find((e: any) => e.type === "compaction");
-      const lastCompIdx = lastComp ? (branchEntries as any[]).indexOf(lastComp) : -1;
-
-      // Recompute liveMessages view (same logic as buildOwnCut) for diagnostic
-      const lastKeptId: string | undefined = lastComp?.firstKeptEntryId;
-      const hasPriorCompaction = lastCompIdx >= 0;
-      const hasValidKeptId = !!lastKeptId && (branchEntries as any[]).some((e: any) => e.id === lastKeptId);
-      const diagOrphan = hasPriorCompaction && !hasValidKeptId;
-      const liveRoles: string[] = [];
-      if (diagOrphan) {
-        for (let i = lastCompIdx + 1; i < branchEntries.length; i++) {
-          const e = (branchEntries as any[])[i];
-          if (e.type === "compaction") continue;
-          if (e.type === "message" && e.message) liveRoles.push(e.message.role);
-        }
-      } else {
-        let foundKept = !lastKeptId;
-        for (const e of branchEntries as any[]) {
-          if (!foundKept && e.id === lastKeptId) foundKept = true;
-          if (!foundKept) continue;
-          if (e.type === "compaction") continue;
-          if (e.type === "message" && e.message) liveRoles.push(e.message.role);
-        }
-      }
-      const userIndices = liveRoles.reduce<number[]>((acc, r, i) => (r === "user" ? (acc.push(i), acc) : acc), []);
-
-      dbg(settings, {
-        cancelled: true,
-        reason: ownCut.reason,
+      return handleOwnCutCancellation({
+        ownCut,
         isPiVcc,
-        counts: {
-          total: branchEntries.length,
-          messages: (branchEntries as any[]).filter((e: any) => e.type === "message").length,
-          compactions: (branchEntries as any[]).filter((e: any) => e.type === "compaction").length,
-          entriesAfterLastCompaction: lastCompIdx >= 0 ? branchEntries.length - lastCompIdx - 1 : null,
-        },
-        liveMessages: {
-          count: liveRoles.length,
-          userCount: userIndices.length,
-          firstUserIdx: userIndices[0] ?? null,
-          lastUserIdx: userIndices[userIndices.length - 1] ?? null,
-          roleSequence: liveRoles.length <= 30
-            ? liveRoles
-            : [...liveRoles.slice(0, 10), "...", ...liveRoles.slice(-10)],
-        },
-        lastCompaction: lastComp ? {
-          hasFirstKeptEntryId: !!lastComp.firstKeptEntryId,
-          foundInBranch: lastComp.firstKeptEntryId
-            ? (branchEntries as any[]).some((e: any) => e.id === lastComp.firstKeptEntryId)
-            : null,
-        } : null,
-        tail: (branchEntries as any[]).slice(-5).map((e: any) => ({
-          type: e.type,
-          role: e.type === "message" ? e.message?.role : undefined,
-          hasContent: e.type === "message" ? e.message?.content != null : undefined,
-        })),
+        settings,
+        branchEntries: branchEntries as any[],
+        ctx,
       });
-
-      try {
-        ctx?.ui?.notify?.(REASON_MESSAGES[ownCut.reason], "warning");
-      } catch {}
-      return { cancel: true };
     }
 
     const agentMessages = ownCut.messages;

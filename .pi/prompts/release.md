@@ -158,14 +158,18 @@ DRY RUN — no changes made.
 ```bash
 git add package.json CHANGELOG.md
 
-git commit -m "chore(release): bump to v$NEW_VERSION" -m "- Bump version in package.json
+UP_PKG="$(node -p "require('path').dirname(require.resolve('ultimate-pi/package.json'))" 2>/dev/null || pwd)"
+
+node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" \
+  --type chore --scope release --subject "bump to v$NEW_VERSION" \
+  --body "- Bump version in package.json
 - Add changelog entry for v$NEW_VERSION
 
 Commits included:
-$(echo "$COMMITS" | sed 's/^/- /')" -m "Co-authored-by: pi-mono <261679550+pi-mono@users.noreply.github.com>"
+$(echo "$COMMITS" | sed 's/^/- /')"
 ```
 
-Use the co-author from `.pi/auto-commit.json` if available, otherwise use the default pi-mono co-author.
+Co-author and message format come from merged `.pi/auto-commit.json` (project over package). Invoke **harness-git-commit** skill — do not use raw `git commit`.
 
 ## Step 7 — Create and push tag
 

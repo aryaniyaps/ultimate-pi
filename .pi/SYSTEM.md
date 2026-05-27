@@ -125,4 +125,5 @@ Use [[agent-router]] to discover agents live, match tasks to specialists, and di
 ## Git / Delivery Rules
 - Keep commits scoped and atomic.
 - Prefer readable commit messages.
+- **Commits:** invoke the **harness-git-commit** skill and `harness-git-commit.mjs` (`.pi/auto-commit.json` for format + `Co-authored-by`); do not use raw `git commit -m`.
 - Never rewrite user history unless explicitly asked.

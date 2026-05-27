@@ -84,28 +84,37 @@ function visibleWidth(input: string): number {
 	return width;
 }
 
+const WIDE_SINGLE_CODE_POINTS = new Set([0x2329, 0x232a]);
+const WIDE_RANGES: ReadonlyArray<readonly [number, number]> = [
+	[0x1100, 0x115f],
+	[0x2e80, 0xa4cf],
+	[0xac00, 0xd7a3],
+	[0xf900, 0xfaff],
+	[0xfe10, 0xfe19],
+	[0xfe30, 0xfe6f],
+	[0xff00, 0xff60],
+	[0xffe0, 0xffe6],
+	[0x1f300, 0x1faff],
+	[0x20000, 0x3fffd],
+];
+
+function inRange(codePoint: number, start: number, end: number): boolean {
+	return codePoint >= start && codePoint <= end;
+}
+
+function isWideCodePoint(codePoint: number): boolean {
+	if (WIDE_SINGLE_CODE_POINTS.has(codePoint)) return true;
+	if (inRange(codePoint, 0x2e80, 0xa4cf) && codePoint === 0x303f) return false;
+	return WIDE_RANGES.some(([start, end]) => inRange(codePoint, start, end));
+}
+
 function charDisplayWidth(char: string): number {
 	const codePoint = char.codePointAt(0);
 	if (codePoint == null) return 0;
-	if (codePoint <= 0x1f || (codePoint >= 0x7f && codePoint <= 0x9f)) return 0;
-	if (codePoint >= 0x300 && codePoint <= 0x36f) return 0;
-	if (
-		codePoint >= 0x1100 &&
-		(codePoint <= 0x115f ||
-			codePoint === 0x2329 ||
-			codePoint === 0x232a ||
-			(codePoint >= 0x2e80 && codePoint <= 0xa4cf && codePoint !== 0x303f) ||
-			(codePoint >= 0xac00 && codePoint <= 0xd7a3) ||
-			(codePoint >= 0xf900 && codePoint <= 0xfaff) ||
-			(codePoint >= 0xfe10 && codePoint <= 0xfe19) ||
-			(codePoint >= 0xfe30 && codePoint <= 0xfe6f) ||
-			(codePoint >= 0xff00 && codePoint <= 0xff60) ||
-			(codePoint >= 0xffe0 && codePoint <= 0xffe6) ||
-			(codePoint >= 0x1f300 && codePoint <= 0x1faff) ||
-			(codePoint >= 0x20000 && codePoint <= 0x3fffd))
-	) {
-		return 2;
-	}
+	if (inRange(codePoint, 0x00, 0x1f) || inRange(codePoint, 0x7f, 0x9f))
+		return 0;
+	if (inRange(codePoint, 0x300, 0x36f)) return 0;
+	if (isWideCodePoint(codePoint)) return 2;
 	return 1;
 }
 

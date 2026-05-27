@@ -60,6 +60,63 @@ function artifactStatusBad(doc: Record<string, unknown>): string | null {
 	return null;
 }
 
+async function validatePlanningContextArtifact(
+	normalized: string,
+	doc: Record<string, unknown>,
+): Promise<string[]> {
+	const errors: string[] = [];
+	if (normalized !== "artifacts/planning-context.yaml") return errors;
+	const statusErr = artifactStatusBad(doc);
+	if (statusErr) errors.push(`${normalized}: ${statusErr}`);
+	const coverage = doc.coverage as Record<string, unknown> | undefined;
+	if (!coverage || typeof coverage !== "object") return errors;
+	for (const lane of ["architecture", "structure"] as const) {
+		const laneDoc = coverage[lane] as Record<string, unknown> | undefined;
+		const laneStatus = String(laneDoc?.status ?? "").toLowerCase();
+		if (laneStatus !== "ok" && laneStatus !== "partial") {
+			errors.push(
+				`${normalized}: coverage.${lane}.status must be ok or partial (got "${laneStatus || "missing"}")`,
+			);
+		}
+	}
+	return errors;
+}
+
+async function validateArtifactPrerequisites(
+	runRoot: string,
+	normalized: string,
+	prereqs: string[],
+): Promise<string[]> {
+	const errors: string[] = [];
+	for (const prereq of prereqs) {
+		const prereqPath = join(runRoot, prereq);
+		if (!(await fileExists(prereqPath))) {
+			errors.push(`${normalized}: prerequisite missing (${prereq})`);
+			continue;
+		}
+		if (prereq !== TASK_CLARIFICATION_ARTIFACT) continue;
+		try {
+			const raw = await readFile(prereqPath, "utf-8");
+			const prereqDoc = parseYaml(raw) as Record<string, unknown>;
+			const clar = validateTaskClarificationDoc(prereqDoc, {
+				requireReady: true,
+			});
+			if (!clar.ok) {
+				errors.push(
+					...clar.errors.map(
+						(e) => `${normalized}: prerequisite ${prereq} — ${e}`,
+					),
+				);
+			}
+		} catch {
+			errors.push(
+				`${normalized}: prerequisite ${prereq} invalid or unreadable`,
+			);
+		}
+	}
+	return errors;
+}
+
 export async function validateHarnessArtifactFile(
 	runRoot: string,
 	relPath: string,
@@ -116,53 +173,14 @@ export async function validateHarnessArtifactFile(
 		}
 	}
 
-	if (doc && normalized === "artifacts/planning-context.yaml") {
-		const statusErr = artifactStatusBad(doc);
-		if (statusErr) {
-			errors.push(`${normalized}: ${statusErr}`);
-		}
-		const coverage = doc.coverage as Record<string, unknown> | undefined;
-		if (coverage && typeof coverage === "object") {
-			for (const lane of ["architecture", "structure"] as const) {
-				const laneDoc = coverage[lane] as Record<string, unknown> | undefined;
-				const laneStatus = String(laneDoc?.status ?? "").toLowerCase();
-				if (laneStatus !== "ok" && laneStatus !== "partial") {
-					errors.push(
-						`${normalized}: coverage.${lane}.status must be ok or partial (got "${laneStatus || "missing"}")`,
-					);
-				}
-			}
-		}
+	if (doc) {
+		errors.push(...(await validatePlanningContextArtifact(normalized, doc)));
 	}
 
 	const prereqs = PREREQUISITE_ORDER[normalized] ?? [];
-	for (const prereq of prereqs) {
-		const prereqPath = join(runRoot, prereq);
-		if (!(await fileExists(prereqPath))) {
-			errors.push(`${normalized}: prerequisite missing (${prereq})`);
-			continue;
-		}
-		if (prereq === TASK_CLARIFICATION_ARTIFACT) {
-			try {
-				const raw = await readFile(prereqPath, "utf-8");
-				const prereqDoc = parseYaml(raw) as Record<string, unknown>;
-				const clar = validateTaskClarificationDoc(prereqDoc, {
-					requireReady: true,
-				});
-				if (!clar.ok) {
-					errors.push(
-						...clar.errors.map(
-							(e) => `${normalized}: prerequisite ${prereq} — ${e}`,
-						),
-					);
-				}
-			} catch {
-				errors.push(
-					`${normalized}: prerequisite ${prereq} invalid or unreadable`,
-				);
-			}
-		}
-	}
+	errors.push(
+		...(await validateArtifactPrerequisites(runRoot, normalized, prereqs)),
+	);
 
 	return { ok: errors.length === 0, errors };
 }

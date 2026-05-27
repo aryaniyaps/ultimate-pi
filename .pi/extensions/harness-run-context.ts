@@ -86,7 +86,6 @@ import {
 	TASK_CLARIFICATION_ARTIFACT,
 } from "../lib/plan-task-clarification.js";
 
-// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 interface SessionEntryLike {
@@ -1224,6 +1223,115 @@ async function resolveCommandRunContext(input: {
 	return { activeCtx, resolved, response: null };
 }
 
+async function handlePreResolvedHarnessCommand(args: {
+	pi: ExtensionAPI;
+	activeCtx: HarnessRunContext | null;
+	command: string;
+	parsedArgs: string;
+	userPrompt: string;
+	systemPrompt: string;
+	sessionId: string;
+	projectRoot: string;
+	entries: unknown[];
+	driftActive: boolean;
+}): Promise<{
+	activeCtx: HarnessRunContext | null;
+	response: any;
+	handled: boolean;
+}> {
+	const {
+		pi,
+		activeCtx,
+		command,
+		parsedArgs,
+		userPrompt,
+		systemPrompt,
+		sessionId,
+		projectRoot,
+		entries,
+		driftActive,
+	} = args;
+	if (
+		!isHarnessBootstrapPrompt(userPrompt) &&
+		!hasHarnessAbortSignal(userPrompt)
+	) {
+		const policyBlock = getPolicyTransitionBlock(userPrompt, entries);
+		if (policyBlock.blocked) {
+			return {
+				activeCtx,
+				response: blockRunContextMessage(
+					policyBlock.message ?? "Harness command blocked by policy phase.",
+				),
+				handled: true,
+			};
+		}
+	}
+	if (command === "harness-new-run") {
+		const next = createNewRunContextForCommand({
+			pi,
+			activeCtx,
+			sessionId,
+			projectRoot,
+			args: parsedArgs,
+			userPrompt,
+			systemPrompt,
+		});
+		return {
+			activeCtx: next.activeCtx,
+			response: next.response,
+			handled: true,
+		};
+	}
+	if (command === "harness-use-run") {
+		const next = await bindExistingRunForCommand({
+			pi,
+			sessionId,
+			projectRoot,
+			entries,
+			args: parsedArgs,
+			systemPrompt,
+		});
+		return {
+			activeCtx: next.activeCtx ?? activeCtx,
+			response: next.response,
+			handled: true,
+		};
+	}
+	if (command === "harness-run-status") {
+		return { activeCtx, response: undefined, handled: true };
+	}
+	if (
+		command === "harness-plan" &&
+		activeCtx &&
+		isNewTaskPlanBlocked(activeCtx, userPrompt) &&
+		!isAmendPlanAllowed(activeCtx, userPrompt, driftActive)
+	) {
+		return {
+			activeCtx,
+			response: blockRunContextMessage(
+				"Active harness run in progress. Use /harness-abort or /harness-new-run before starting a new task plan.",
+			),
+			handled: true,
+		};
+	}
+	return { activeCtx, response: null, handled: false };
+}
+
+function blockingRunCommandReason(
+	command: string,
+	activeCtx: HarnessRunContext,
+): string | null {
+	if (command !== "harness-run") return null;
+	if (!activeCtx.plan_ready) return "Plan not ready. Run /harness-plan first.";
+	if (
+		activeCtx.last_completed_step === "execute" &&
+		activeCtx.last_outcome === "completed"
+	) {
+		return "Execute already completed for this run. Next: /harness-review (same session), or /harness-abort to replan.";
+	}
+	return null;
+}
+
 async function handleBeforeAgentStart(input: {
 	pi: ExtensionAPI;
 	event: any;
@@ -1272,52 +1380,22 @@ async function handleBeforeAgentStart(input: {
 	}
 	if (!parsed) return undefined;
 	const { command, args } = parsed;
-	if (
-		!isHarnessBootstrapPrompt(userPrompt) &&
-		!hasHarnessAbortSignal(userPrompt)
-	) {
-		const policyBlock = getPolicyTransitionBlock(userPrompt, entries);
-		if (policyBlock.blocked) {
-			return blockRunContextMessage(
-				policyBlock.message ?? "Harness command blocked by policy phase.",
-			);
-		}
-	}
-	if (command === "harness-new-run") {
-		const next = createNewRunContextForCommand({
-			pi: input.pi,
-			activeCtx,
-			sessionId,
-			projectRoot,
-			args,
-			userPrompt,
-			systemPrompt: input.event.systemPrompt,
-		});
-		input.active.set(next.activeCtx);
-		return next.response;
-	}
-	if (command === "harness-use-run") {
-		const next = await bindExistingRunForCommand({
-			pi: input.pi,
-			sessionId,
-			projectRoot,
-			entries,
-			args,
-			systemPrompt: input.event.systemPrompt,
-		});
-		if (next.activeCtx) input.active.set(next.activeCtx);
-		return next.response;
-	}
-	if (command === "harness-run-status") return undefined;
-	if (
-		command === "harness-plan" &&
-		activeCtx &&
-		isNewTaskPlanBlocked(activeCtx, userPrompt) &&
-		!isAmendPlanAllowed(activeCtx, userPrompt, driftActive)
-	) {
-		return blockRunContextMessage(
-			"Active harness run in progress. Use /harness-abort or /harness-new-run before starting a new task plan.",
-		);
+	const preResolved = await handlePreResolvedHarnessCommand({
+		pi: input.pi,
+		activeCtx,
+		command,
+		parsedArgs: args,
+		userPrompt,
+		systemPrompt: input.event.systemPrompt,
+		sessionId,
+		projectRoot,
+		entries,
+		driftActive,
+	});
+	activeCtx = preResolved.activeCtx;
+	if (preResolved.handled) {
+		input.active.set(activeCtx);
+		return preResolved.response;
 	}
 	const prepared = await resolveCommandRunContext({
 		pi: input.pi,
@@ -1355,18 +1433,8 @@ async function handleBeforeAgentStart(input: {
 			return blockRunContextMessage(check.reason ?? "Invalid --plan override");
 		activeCtx.plan_packet_path = resolved.planPath;
 	}
-	if (command === "harness-run" && !activeCtx.plan_ready)
-		return blockRunContextMessage("Plan not ready. Run /harness-plan first.");
-	if (
-		command === "harness-run" &&
-		activeCtx.plan_ready &&
-		activeCtx.last_completed_step === "execute" &&
-		activeCtx.last_outcome === "completed"
-	) {
-		return blockRunContextMessage(
-			"Execute already completed for this run. Next: /harness-review (same session), or /harness-abort to replan.",
-		);
-	}
+	const runBlockReason = blockingRunCommandReason(command, activeCtx);
+	if (runBlockReason) return blockRunContextMessage(runBlockReason);
 	const { planSummary, planPacketForSpawn } =
 		await readPlanSpawnState(activeCtx);
 	const { activePlanBlock, planMode, contextSpawnOpts } =
@@ -1502,57 +1570,10 @@ async function handleAgentEnd(input: {
 	}
 }
 
-export default function harnessRunContext(pi: ExtensionAPI) {
-	if (!claimHarnessGovernanceLoad("harness-run-context", MODULE_URL)) return;
-	let activeCtx: HarnessRunContext | null = null;
-	const activeAccess: ActiveContextAccess = {
-		get: () => activeCtx,
-		set: (ctx) => {
-			activeCtx = ctx;
-		},
-	};
-
-	pi.on("session_start", async (_event, ctx) => {
-		const entries = getEntries(ctx);
-		activeCtx = hydrateFromSession(entries);
-		const booted = await bootstrapHarnessSubprocessFromEnv(pi, ctx);
-		if (booted) activeCtx = booted;
-		if (!booted) await offerCrossSessionResume(pi, ctx);
-	});
-
-	pi.on("input", async (event) => {
-		if (event.source === "extension") {
-			return { action: "continue" as const };
-		}
-		const parsed = parseHarnessSlashInput(event.text);
-		if (!parsed) {
-			return { action: "continue" as const };
-		}
-		appendHarnessTurn(pi, {
-			schema_version: "1.0.0",
-			command: parsed.command,
-			args: parsed.args,
-			source: "slash",
-			invoked_at: nowIso(),
-		});
-		return { action: "continue" as const };
-	});
-
-	pi.on("before_agent_start", async (event, ctx) =>
-		handleBeforeAgentStart({ pi, event, ctx, active: activeAccess }),
-	);
-
-	pi.on("agent_end", async (_event, ctx) => {
-		await handleAgentEnd({ pi, ctx, active: activeAccess });
-	});
-
-	registerPlanApprovalCapture(pi, activeAccess);
-	registerHarnessToolCallGuards(pi, activeAccess);
-	registerHarnessRunStatusCommand(pi, activeAccess);
-	registerHarnessNewRunCommand(pi, activeAccess);
-
-	registerHarnessPlanCommitCommand(pi, activeAccess);
-
+function registerHarnessRunContextTool1(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+) {
 	pi.registerTool({
 		name: "write_harness_yaml",
 		label: "Write Harness YAML",
@@ -1578,7 +1599,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}),
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			const entries = getEntries(ctx);
-			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			const runCtx = getLatestRunContext(entries) ?? active.get();
 			if (!runCtx?.run_id) {
 				return {
 					content: [
@@ -1729,7 +1750,12 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessRunContextTool2(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+) {
 	pi.registerTool({
 		name: "merge_harness_yaml",
 		label: "Merge Harness YAML",
@@ -1760,7 +1786,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}),
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			const entries = getEntries(ctx);
-			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			const runCtx = getLatestRunContext(entries) ?? active.get();
 			if (!runCtx?.run_id) {
 				return {
 					content: [{ type: "text", text: "No active harness run." }],
@@ -1877,7 +1903,12 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessRunContextTool3(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+) {
 	pi.registerTool({
 		name: "harness_synthesize_repair_brief",
 		label: "Synthesize Repair Brief",
@@ -1902,7 +1933,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}),
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			const entries = getEntries(ctx);
-			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			const runCtx = getLatestRunContext(entries) ?? active.get();
 			if (!runCtx?.run_id) {
 				return {
 					content: [{ type: "text", text: "No active harness run." }],
@@ -1972,7 +2003,12 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessRunContextTool4(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+) {
 	pi.registerTool({
 		name: "harness_artifact_ready",
 		label: "Harness Artifact Ready",
@@ -1987,7 +2023,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		}),
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const entries = getEntries(ctx);
-			const runCtx = getLatestRunContext(entries) ?? activeCtx;
+			const runCtx = getLatestRunContext(entries) ?? active.get();
 			if (!runCtx?.run_id) {
 				return {
 					content: [{ type: "text", text: "No active harness run." }],
@@ -2043,6 +2079,70 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
+
+function registerHarnessRunContextTools(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+) {
+	registerHarnessRunContextTool1(pi, active);
+	registerHarnessRunContextTool2(pi, active);
+	registerHarnessRunContextTool3(pi, active);
+	registerHarnessRunContextTool4(pi, active);
+}
+
+export default function harnessRunContext(pi: ExtensionAPI) {
+	if (!claimHarnessGovernanceLoad("harness-run-context", MODULE_URL)) return;
+	let activeCtx: HarnessRunContext | null = null;
+	const activeAccess: ActiveContextAccess = {
+		get: () => activeCtx,
+		set: (ctx) => {
+			activeCtx = ctx;
+		},
+	};
+
+	pi.on("session_start", async (_event, ctx) => {
+		const entries = getEntries(ctx);
+		activeCtx = hydrateFromSession(entries);
+		const booted = await bootstrapHarnessSubprocessFromEnv(pi, ctx);
+		if (booted) activeCtx = booted;
+		if (!booted) await offerCrossSessionResume(pi, ctx);
+	});
+
+	pi.on("input", async (event) => {
+		if (event.source === "extension") {
+			return { action: "continue" as const };
+		}
+		const parsed = parseHarnessSlashInput(event.text);
+		if (!parsed) {
+			return { action: "continue" as const };
+		}
+		appendHarnessTurn(pi, {
+			schema_version: "1.0.0",
+			command: parsed.command,
+			args: parsed.args,
+			source: "slash",
+			invoked_at: nowIso(),
+		});
+		return { action: "continue" as const };
+	});
+
+	pi.on("before_agent_start", async (event, ctx) =>
+		handleBeforeAgentStart({ pi, event, ctx, active: activeAccess }),
+	);
+
+	pi.on("agent_end", async (_event, ctx) => {
+		await handleAgentEnd({ pi, ctx, active: activeAccess });
+	});
+
+	registerPlanApprovalCapture(pi, activeAccess);
+	registerHarnessToolCallGuards(pi, activeAccess);
+	registerHarnessRunStatusCommand(pi, activeAccess);
+	registerHarnessNewRunCommand(pi, activeAccess);
+
+	registerHarnessPlanCommitCommand(pi, activeAccess);
+
+	registerHarnessRunContextTools(pi, activeAccess);
 
 	registerHarnessUseRunCommand(pi, activeAccess);
 }

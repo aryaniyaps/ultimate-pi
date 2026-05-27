@@ -1,6 +1,5 @@
 ---
 description: Execute only against an approved PlanPacket with strict phase gates.
-argument-hint: ""
 ---
 
 # harness-run

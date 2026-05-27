@@ -15,11 +15,12 @@ Bootstraps the complete ultimate-pi agentic harness: Graphify knowledge graph, C
 |---------|------------------|
 | `UP_PKG="$(pwd)"` in an **external** repo | Wrong — scripts live in the npm package. Resolve via `harness-resolve-up-pkg.mjs` (see Step 0). |
 | Re-running 2.1–2.8 manually after CLI verify | Wasteful — trust `harness-cli-verify.sh` output; only fix reported ✗ lines. |
-| Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.4). |
+| Overwriting `AGENTS.md` after graphify | Graphify appends a section — **merge**, do not replace (Step 4.5). |
 | `sentrux-rules-sync` without project manifest | Use **`harness-sentrux-bootstrap.mjs`** (Step 4.2) — seeds manifest + idempotent rules sync. |
 | Re-running bootstrap with `--force` on unchanged manifest | Wasteful but safe — default bootstrap skips when hash unchanged; `--force` only after manifest edits. |
 | `graph.json` uses `links`, not `edges` | Step 6 stats: `g.get('edges', g.get('links', []))`. |
 | Guessing harness-web / `.env` defaults when `ask_user` is available | **Mandatory `ask_user`** at Step 4.0 unless `--non-interactive`. |
+| WSL2 / SSH without WebView | Set `HARNESS_ASK_USER_UI=tui` in project `.env` (or rely on `auto` TUI fallback). Glimpse needs a display (WSLg or X11). |
 | `sudo apt-get` without passwordless sudo | Skip — report manual fix; do not block the rest of setup. |
 | `graphify codex install` | **Never run** — it writes `.codex/hooks.json`. Harness targets pi only (`graphify install --platform pi`). |
 | Overwriting `.env` | Use `harness-sync-env.mjs` — never rewrite; append missing keys only. |
@@ -460,6 +461,18 @@ Rules:
 - Re-runs only add keys from `$UP_PKG/.pi/harness/env.harness.template` that are absent (managed block at EOF).
 - Ensure `.env` is gitignored (Step 4.1).
 
+### 4.0c — ask_user UI (optional)
+
+Harness `ask_user` supports terminal (TUI), headless (CI), and Glimpse WebView (`HARNESS_ASK_USER_UI=auto|tui|glimpse|headless`). Dependencies install with `.pi/npm` during pi package install.
+
+| Environment | Recommendation |
+|-------------|----------------|
+| **WSL2 without WSLg / no DISPLAY** | `HARNESS_ASK_USER_UI=tui` in `.env` (default `auto` already falls back) |
+| **Desktop Linux / macOS / WSLg** | `auto` or `glimpse` for richer questionnaires |
+| **CI / `--non-interactive`** | Prompts skipped; do not expect WebView |
+
+Append `HARNESS_ASK_USER_UI=tui` to `.env` when WebView is unavailable. The first real `ask_user` reports `ui_backend` and `ui_degraded` in tool details. See ADR 0054.
+
 Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `HARNESS_WEB_*`, `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG`, plus commented optional PostHog / Graphify vars.
 
 ### 4.1 — .gitignore Entries
@@ -558,7 +571,25 @@ Verify naming:
 node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" && echo "✓ ls-lint pass" || echo "✗ ls-lint failed"
 ```
 
-### 4.4 — Project AGENTS.md
+### 4.4 — Auto-commit co-author bootstrap (required)
+
+**Skill:** invoke **harness-git-commit** before any agent commit.
+
+From **project root**:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-auto-commit-bootstrap.mjs"
+```
+
+| Command | When |
+|---------|------|
+| `harness-auto-commit-bootstrap.mjs` | `/harness-setup`, first install, re-run safe |
+| `harness-git-commit.mjs --dry-run --subject "…"` | Preview message + trailer |
+| `harness-git-commit.mjs --type … --scope … --subject "…"` | Commit after `git add` |
+
+Edit `.pi/auto-commit.json` to customize `message.template` or `coAuthor` (project overrides package defaults).
+
+### 4.5 — Project AGENTS.md
 
 **Do not overwrite** an existing `AGENTS.md` — graphify bootstrap may have appended a `## Graphify` section. If missing, create minimal onboarding content; if present, only add harness subsections that are absent.
 

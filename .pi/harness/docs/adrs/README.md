@@ -41,6 +41,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0052](0052-sentrux-structured-repair.md) | Sentrux structured repair (OSS diagnostics) | Accepted |
 | [0052](0052-ls-lint-naming-lifecycle.md) | ls-lint naming lifecycle | Accepted |
 | [0053](0053-plan-task-clarification-gate.md) | Plan-phase task clarification gate | Accepted |
+| [0054](0054-harness-native-ask-user.md) | Harness-native ask_user + Glimpse presenters | Accepted |
+| [0055](0055-auto-commit-coauthor-lifecycle.md) | Auto-commit co-author + message format lifecycle | Accepted |
 
 ## Practice map
 

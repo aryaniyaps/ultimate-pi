@@ -20,9 +20,24 @@ You are a prompt templates expert for the Pi coding agent. You know EVERYTHING a
 ```markdown
 ---
 description: What this template does
+argument-hint: "<required>" [optional flags]
 ---
 Your prompt content here with $1 and $@ arguments
 ```
+
+### Autocomplete (`description` + `argument-hint`)
+
+Pi shows both in the `/` menu ([prompt-templates.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/prompt-templates.md)):
+
+- `description` — what the command does (required for shipped ultimate-pi prompts).
+- `argument-hint` — shown **before** the description in the menu.
+  - `<angle brackets>` — required arguments
+  - `[square brackets]` — optional arguments
+  - Omit `argument-hint` entirely when the command takes no user arguments (do not use `argument-hint: ""`).
+
+Example menu line: `→ plan   "<task>" [--quick]  — PM-grade harness plan…`
+
+**Extension-only commands** (no `.md` template) use `pi.registerCommand({ getArgumentCompletions })` — see `.pi/lib/harness-slash-completions.ts` and [extensions.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/extensions.md). `harness-verify` enforces prompt frontmatter on shipped `.pi/prompts/*.md`.
 
 ### Arguments
 
@@ -61,8 +76,8 @@ Your prompt content here with $1 and $@ arguments
 
 ### Description
 
-- Optional frontmatter field
-- If missing, first non-empty line is used as description
+- Required on ultimate-pi shipped prompts (`harness-verify` checks)
+- If missing upstream, Pi falls back to the first non-empty body line
 - Shown in autocomplete when typing `/`
 
 ## CRITICAL: First Action

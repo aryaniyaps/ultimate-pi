@@ -125,6 +125,106 @@ function bashPlanningJsonDenied(command: string, agentType: string): boolean {
 	return PLANNING_ARTIFACT_JSON_WRITE.test(command);
 }
 
+function isReadOnlyAgentKind(agentKind: string): boolean {
+	return (
+		agentKind === "planner" ||
+		agentKind === "evaluator" ||
+		agentKind === "adversary" ||
+		agentKind === "tie_breaker" ||
+		agentKind === "trace" ||
+		agentKind === "incident" ||
+		agentKind === "meta"
+	);
+}
+
+async function resolvePlanMutation(args: {
+	sessionActive: boolean;
+	toolName: string;
+	toolInput: Record<string, unknown>;
+	phase: HarnessPhase;
+	runCtx: HarnessRunContext | null;
+	projectRoot: string;
+	aborted: boolean;
+	entries: unknown[];
+	sessionId: string;
+}): Promise<{ allowed: boolean; reason?: string }> {
+	const mutatingTool = args.toolName === "write" || args.toolName === "edit";
+	if (!(args.sessionActive && mutatingTool)) return { allowed: true };
+	return isPlanPhaseAllowedMutation(
+		args.toolName,
+		args.toolInput,
+		args.phase,
+		args.runCtx,
+		args.projectRoot,
+		{
+			aborted: args.aborted,
+			entries: args.entries,
+			ownerSessionId: args.runCtx?.owner_pi_session_id,
+			currentSessionId: args.sessionId,
+		},
+	);
+}
+
+function resolveContextMode(args: {
+	sessionActive: boolean;
+	toolName: string;
+	toolInput: Record<string, unknown>;
+	phase: HarnessPhase;
+	aborted: boolean;
+	budgetBypass: boolean;
+	agentKind: string;
+}): { blocked: boolean; reason?: string } {
+	if (!args.sessionActive) return { blocked: false, reason: "" };
+	return evaluateContextModeMutation(
+		args.toolName,
+		args.toolInput,
+		args.phase,
+		{
+			aborted: args.aborted,
+			budgetBypass: args.budgetBypass,
+			readOnlyAgent: isReadOnlyAgentKind(args.agentKind),
+		},
+	);
+}
+
+function shouldBlockEvalPlanPacketWrite(args: {
+	sessionActive: boolean;
+	runCtx: HarnessRunContext | null;
+	phase: HarnessPhase;
+	toolName: string;
+	toolInput: Record<string, unknown>;
+}): boolean {
+	if (!args.sessionActive || !args.runCtx?.plan_packet_path) return false;
+	if (args.phase !== "evaluate" && args.phase !== "adversary") return false;
+	if (args.toolName !== "write" && args.toolName !== "edit") return false;
+	const target = String(args.toolInput.path ?? args.toolInput.filePath ?? "");
+	return target.includes("plan-packet.yaml");
+}
+
+function resolveMutatingBashFlags(args: {
+	sessionActive: boolean;
+	bashCommand: string;
+	aborted: boolean;
+	phase: HarnessPhase;
+	toolName: string;
+}): { mutatingBashPhaseBlock: boolean; abortMutatingBlock: boolean } {
+	const isMutating = Boolean(
+		args.bashCommand && isMutatingBash(args.bashCommand),
+	);
+	return {
+		mutatingBashPhaseBlock:
+			args.sessionActive &&
+			isMutating &&
+			!args.aborted &&
+			args.phase !== "execute" &&
+			args.phase !== "merge",
+		abortMutatingBlock:
+			args.sessionActive &&
+			args.aborted &&
+			(isMutating || args.toolName === "write" || args.toolName === "edit"),
+	};
+}
+
 function harnessSessionActive(entries: unknown[]): boolean {
 	return isHarnessAutoSession(entries);
 }
@@ -142,35 +242,27 @@ export async function buildHarnessAgtEvaluationContext(
 		input.toolName === "bash" ? String(input.toolInput.command ?? "") : "";
 	const sessionActive = harnessSessionActive(input.entries);
 
-	const MUTATING_FILE_TOOLS = new Set(["write", "edit"]);
-	const planMutation =
-		sessionActive && MUTATING_FILE_TOOLS.has(input.toolName)
-			? await isPlanPhaseAllowedMutation(
-					input.toolName,
-					input.toolInput,
-					phase,
-					runCtx,
-					input.projectRoot,
-					{
-						aborted: input.policyState.aborted,
-						entries: input.entries,
-						ownerSessionId: runCtx?.owner_pi_session_id,
-						currentSessionId: input.sessionId,
-					},
-				)
-			: { allowed: true };
+	const planMutation = await resolvePlanMutation({
+		sessionActive,
+		toolName: input.toolName,
+		toolInput: input.toolInput,
+		phase,
+		runCtx,
+		projectRoot: input.projectRoot,
+		aborted: input.policyState.aborted,
+		entries: input.entries,
+		sessionId: input.sessionId,
+	});
 
-	const ctxMode = sessionActive
-		? evaluateContextModeMutation(input.toolName, input.toolInput, phase, {
-				aborted: input.policyState.aborted,
-				budgetBypass: input.policyState.budgetBypass,
-				readOnlyAgent:
-					agentKind === "planner" ||
-					agentKind === "evaluator" ||
-					agentKind === "adversary" ||
-					agentKind === "tie_breaker",
-			})
-		: { blocked: false, reason: "" };
+	const ctxMode = resolveContextMode({
+		sessionActive,
+		toolName: input.toolName,
+		toolInput: input.toolInput,
+		phase,
+		aborted: input.policyState.aborted,
+		budgetBypass: input.policyState.budgetBypass,
+		agentKind,
+	});
 
 	const spawnDecision = evaluateSubagentToolCall(input.toolName, agentId);
 
@@ -184,40 +276,27 @@ export async function buildHarnessAgtEvaluationContext(
 		isParentOrchestrator,
 	});
 
-	let evalPlanPacketBlock = false;
-	if (
-		sessionActive &&
-		runCtx?.plan_packet_path &&
-		(phase === "evaluate" || phase === "adversary") &&
-		(input.toolName === "write" || input.toolName === "edit")
-	) {
-		const target = String(
-			input.toolInput.path ?? input.toolInput.filePath ?? "",
-		);
-		if (target.includes("plan-packet.yaml")) {
-			evalPlanPacketBlock = true;
-		}
-	}
+	const evalPlanPacketBlock = shouldBlockEvalPlanPacketWrite({
+		sessionActive,
+		runCtx,
+		phase,
+		toolName: input.toolName,
+		toolInput: input.toolInput,
+	});
 
 	const writePath =
 		input.toolName === "write" || input.toolName === "edit"
 			? extractWritePathFromToolInput(input.toolInput)
 			: null;
 
-	const mutatingBashPhaseBlock =
-		sessionActive &&
-		Boolean(bashCommand && isMutatingBash(bashCommand)) &&
-		!input.policyState.aborted &&
-		phase !== "execute" &&
-		phase !== "merge";
-
-	const abortMutatingBlock =
-		sessionActive &&
-		input.policyState.aborted &&
-		((bashCommand && isMutatingBash(bashCommand)) ||
-			input.toolName === "write" ||
-			input.toolName === "edit");
-
+	const { mutatingBashPhaseBlock, abortMutatingBlock } =
+		resolveMutatingBashFlags({
+			sessionActive,
+			bashCommand,
+			aborted: input.policyState.aborted,
+			phase,
+			toolName: input.toolName,
+		});
 	return {
 		tool_name: input.toolName,
 		harness_phase: phase,
@@ -249,14 +328,7 @@ export async function buildHarnessAgtEvaluationContext(
 		eval_plan_packet_write_block: evalPlanPacketBlock,
 		is_submit_tool: input.toolName.startsWith("submit_"),
 		is_planning_agent: isHarnessPlanningAgent(agentId),
-		is_read_only_kind:
-			agentKind === "planner" ||
-			agentKind === "evaluator" ||
-			agentKind === "adversary" ||
-			agentKind === "tie_breaker" ||
-			agentKind === "trace" ||
-			agentKind === "incident" ||
-			agentKind === "meta",
+		is_read_only_kind: isReadOnlyAgentKind(agentKind),
 		is_executor_kind: agentKind === "executor",
 		trust_score: Number(process.env.HARNESS_TRUST_SCORE ?? "1"),
 		delegation_ceiling: Number(process.env.HARNESS_DELEGATION_CEILING ?? "1"),

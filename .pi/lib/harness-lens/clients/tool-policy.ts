@@ -1132,13 +1132,81 @@ export interface AutofixPolicyContext {
 	hasBiomeConfig?: boolean;
 }
 
+const JS_TS_EXTENSIONS = new Set([
+	".js",
+	".jsx",
+	".ts",
+	".tsx",
+	".mjs",
+	".cjs",
+]);
+const PY_EXTENSIONS = new Set([".py", ".pyi"]);
+const KOTLIN_EXTENSIONS = new Set([".kt", ".kts"]);
+
+function staticLinterPolicy(
+	runner: LintRunnerName,
+	gate: ToolGate = "smart-default",
+	defaultWhenUnconfigured = true,
+): LinterPolicy {
+	return {
+		runnerNames: [runner],
+		preferredRunners: [runner],
+		defaultRunner: runner,
+		defaultWhenUnconfigured,
+		gate,
+	};
+}
+
+const STATIC_LINTER_POLICY_BY_EXTENSION = new Map<string, LinterPolicy>([
+	[".css", staticLinterPolicy("stylelint")],
+	[".scss", staticLinterPolicy("stylelint")],
+	[".sass", staticLinterPolicy("stylelint")],
+	[".less", staticLinterPolicy("stylelint")],
+	[".sql", staticLinterPolicy("sqlfluff")],
+	[".rb", staticLinterPolicy("rubocop")],
+	[".rake", staticLinterPolicy("rubocop")],
+	[".gemspec", staticLinterPolicy("rubocop")],
+	[".ru", staticLinterPolicy("rubocop")],
+	[".yaml", staticLinterPolicy("yamllint")],
+	[".yml", staticLinterPolicy("yamllint")],
+	[".md", staticLinterPolicy("markdownlint")],
+	[".mdx", staticLinterPolicy("markdownlint")],
+	[".html", staticLinterPolicy("htmlhint")],
+	[".htm", staticLinterPolicy("htmlhint")],
+	[".toml", staticLinterPolicy("taplo")],
+	[".rs", staticLinterPolicy("rust-clippy")],
+	[".sh", staticLinterPolicy("shellcheck")],
+	[".bash", staticLinterPolicy("shellcheck")],
+	[".fish", staticLinterPolicy("fish-indent")],
+	[".tf", staticLinterPolicy("tflint")],
+	[".tfvars", staticLinterPolicy("tflint")],
+	[".ex", staticLinterPolicy("credo")],
+	[".exs", staticLinterPolicy("credo")],
+	[".eex", staticLinterPolicy("credo")],
+	[".heex", staticLinterPolicy("credo")],
+	[".leex", staticLinterPolicy("credo")],
+	[".c", staticLinterPolicy("cpp-check")],
+	[".cc", staticLinterPolicy("cpp-check")],
+	[".cpp", staticLinterPolicy("cpp-check")],
+	[".cxx", staticLinterPolicy("cpp-check")],
+	[".h", staticLinterPolicy("cpp-check")],
+	[".hpp", staticLinterPolicy("cpp-check")],
+	[".ino", staticLinterPolicy("cpp-check")],
+	[".dart", staticLinterPolicy("dart-analyze")],
+	[".gleam", staticLinterPolicy("gleam-check")],
+	[".ps1", staticLinterPolicy("psscriptanalyzer")],
+	[".psm1", staticLinterPolicy("psscriptanalyzer")],
+	[".psd1", staticLinterPolicy("psscriptanalyzer")],
+	[".prisma", staticLinterPolicy("prisma-validate")],
+]);
+
 export function getLinterPolicyForFile(
 	filePath: string,
 	context: LinterPolicyContext = {},
 ): LinterPolicy | undefined {
 	const ext = path.extname(filePath).toLowerCase();
 
-	if ([".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"].includes(ext)) {
+	if (JS_TS_EXTENSIONS.has(ext)) {
 		const policy = getJstsLintPolicy({
 			hasEslintConfig: context.hasEslintConfig,
 			hasOxlintConfig: context.hasOxlintConfig,
@@ -1154,7 +1222,7 @@ export function getLinterPolicyForFile(
 		};
 	}
 
-	if ([".py", ".pyi"].includes(ext)) {
+	if (PY_EXTENSIONS.has(ext)) {
 		const preferredRunners: LintRunnerName[] = ["ruff-lint"];
 		if (context.hasMypyConfig) preferredRunners.push("mypy");
 		return {
@@ -1166,77 +1234,11 @@ export function getLinterPolicyForFile(
 		};
 	}
 
-	if ([".css", ".scss", ".sass", ".less"].includes(ext)) {
-		return {
-			runnerNames: ["stylelint"],
-			preferredRunners: ["stylelint"],
-			defaultRunner: "stylelint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if (ext === ".sql") {
-		return {
-			runnerNames: ["sqlfluff"],
-			preferredRunners: ["sqlfluff"],
-			defaultRunner: "sqlfluff",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".rb", ".rake", ".gemspec", ".ru"].includes(ext)) {
-		return {
-			runnerNames: ["rubocop"],
-			preferredRunners: ["rubocop"],
-			defaultRunner: "rubocop",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".yaml", ".yml"].includes(ext)) {
-		return {
-			runnerNames: ["yamllint"],
-			preferredRunners: ["yamllint"],
-			defaultRunner: "yamllint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".md", ".mdx"].includes(ext)) {
-		return {
-			runnerNames: ["markdownlint"],
-			preferredRunners: ["markdownlint"],
-			defaultRunner: "markdownlint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".html", ".htm"].includes(ext)) {
-		return {
-			runnerNames: ["htmlhint"],
-			preferredRunners: ["htmlhint"],
-			defaultRunner: "htmlhint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
 	if (path.basename(filePath).toLowerCase() === "dockerfile") {
-		return {
-			runnerNames: ["hadolint"],
-			preferredRunners: ["hadolint"],
-			defaultRunner: "hadolint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
+		return staticLinterPolicy("hadolint");
 	}
 
-	if ([".kt", ".kts"].includes(ext)) {
+	if (KOTLIN_EXTENSIONS.has(ext)) {
 		const preferredRunners: LintRunnerName[] = ["ktlint"];
 		if (context.hasDetektConfig) preferredRunners.push("detekt");
 		return {
@@ -1245,16 +1247,6 @@ export function getLinterPolicyForFile(
 			defaultRunner: "ktlint",
 			defaultWhenUnconfigured: true,
 			gate: context.hasDetektConfig ? "mixed" : "smart-default",
-		};
-	}
-
-	if (ext === ".toml") {
-		return {
-			runnerNames: ["taplo"],
-			preferredRunners: ["taplo"],
-			defaultRunner: "taplo",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
 		};
 	}
 
@@ -1278,107 +1270,7 @@ export function getLinterPolicyForFile(
 		};
 	}
 
-	if (ext === ".rs") {
-		return {
-			runnerNames: ["rust-clippy"],
-			preferredRunners: ["rust-clippy"],
-			defaultRunner: "rust-clippy",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".sh", ".bash"].includes(ext)) {
-		return {
-			runnerNames: ["shellcheck"],
-			preferredRunners: ["shellcheck"],
-			defaultRunner: "shellcheck",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if (ext === ".fish") {
-		return {
-			runnerNames: ["fish-indent"],
-			preferredRunners: ["fish-indent"],
-			defaultRunner: "fish-indent",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".tf", ".tfvars"].includes(ext)) {
-		return {
-			runnerNames: ["tflint"],
-			preferredRunners: ["tflint"],
-			defaultRunner: "tflint",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".ex", ".exs", ".eex", ".heex", ".leex"].includes(ext)) {
-		return {
-			runnerNames: ["credo"],
-			preferredRunners: ["credo"],
-			defaultRunner: "credo",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".c", ".cc", ".cpp", ".cxx", ".h", ".hpp", ".ino"].includes(ext)) {
-		return {
-			runnerNames: ["cpp-check"],
-			preferredRunners: ["cpp-check"],
-			defaultRunner: "cpp-check",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if (ext === ".dart") {
-		return {
-			runnerNames: ["dart-analyze"],
-			preferredRunners: ["dart-analyze"],
-			defaultRunner: "dart-analyze",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if (ext === ".gleam") {
-		return {
-			runnerNames: ["gleam-check"],
-			preferredRunners: ["gleam-check"],
-			defaultRunner: "gleam-check",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if ([".ps1", ".psm1", ".psd1"].includes(ext)) {
-		return {
-			runnerNames: ["psscriptanalyzer"],
-			preferredRunners: ["psscriptanalyzer"],
-			defaultRunner: "psscriptanalyzer",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	if (ext === ".prisma") {
-		return {
-			runnerNames: ["prisma-validate"],
-			preferredRunners: ["prisma-validate"],
-			defaultRunner: "prisma-validate",
-			defaultWhenUnconfigured: true,
-			gate: "smart-default",
-		};
-	}
-
-	return undefined;
+	return STATIC_LINTER_POLICY_BY_EXTENSION.get(ext);
 }
 
 export function getLinterPolicyForCwd(

@@ -833,6 +833,60 @@ async function navRequest<T>(
 	}) as Promise<T | undefined>;
 }
 
+async function initializeLspOrThrow(input: {
+	connection: ReturnType<typeof createMessageConnection>;
+	root: string;
+	initialization?: Record<string, unknown>;
+	initializeTimeoutMs: number;
+	lspProcess: LSPProcess;
+	onStderr: (chunk: Buffer | string) => void;
+}): Promise<Awaited<ReturnType<typeof safeSendRequest>>> {
+	const {
+		connection,
+		root,
+		initialization,
+		initializeTimeoutMs,
+		lspProcess,
+		onStderr,
+	} = input;
+	try {
+		return await withTimeout(
+			safeSendRequest(connection, "initialize", {
+				processId: process.pid,
+				rootUri: pathToFileURL(root).href,
+				workspaceFolders: [
+					{ name: "workspace", uri: pathToFileURL(root).href },
+				],
+				capabilities: {
+					window: { workDoneProgress: true },
+					workspace: {
+						workspaceFolders: true,
+						configuration: true,
+						didChangeWatchedFiles: { dynamicRegistration: true },
+					},
+					textDocument: {
+						synchronization: { didOpen: true, didChange: true },
+						publishDiagnostics: { versionSupport: true },
+					},
+				},
+				initializationOptions: initialization,
+			}),
+			initializeTimeoutMs,
+		);
+	} catch (err) {
+		const pid = lspProcess.pid;
+		void killProcessTree(lspProcess.process, pid);
+		setTimeout(() => {
+			if (!lspProcess.process.killed && process.platform !== "win32") {
+				lspProcess.process.kill("SIGKILL");
+			}
+		}, 2000);
+		throw err;
+	} finally {
+		(lspProcess.stderr as NodeJS.ReadableStream).off("data", onStderr);
+	}
+}
+
 // --- Client Factory ---
 
 export async function createLSPClient(options: {
@@ -987,45 +1041,14 @@ export async function createLSPClient(options: {
 	connection.listen();
 	setupConnectionLifecycle(state);
 
-	let initResult: Awaited<ReturnType<typeof safeSendRequest>>;
-	try {
-		initResult = await withTimeout(
-			safeSendRequest(connection, "initialize", {
-				processId: process.pid,
-				rootUri: pathToFileURL(root).href,
-				workspaceFolders: [
-					{ name: "workspace", uri: pathToFileURL(root).href },
-				],
-				capabilities: {
-					window: { workDoneProgress: true },
-					workspace: {
-						workspaceFolders: true,
-						configuration: true,
-						didChangeWatchedFiles: { dynamicRegistration: true },
-					},
-					textDocument: {
-						synchronization: { didOpen: true, didChange: true },
-						publishDiagnostics: { versionSupport: true },
-					},
-				},
-				initializationOptions: initialization,
-			}),
-			initializeTimeoutMs,
-		);
-	} catch (err) {
-		// Hard-kill the hung process so it doesn't become a zombie.
-		// SIGTERM alone is unreliable on Windows for cmd.exe/PowerShell trees.
-		const pid = lspProcess.pid;
-		void killProcessTree(lspProcess.process, pid);
-		setTimeout(() => {
-			if (!lspProcess.process.killed && process.platform !== "win32") {
-				lspProcess.process.kill("SIGKILL");
-			}
-		}, 2000);
-		throw err;
-	} finally {
-		(lspProcess.stderr as NodeJS.ReadableStream).off("data", onStderr);
-	}
+	const initResult = await initializeLspOrThrow({
+		connection,
+		root,
+		initialization,
+		initializeTimeoutMs,
+		lspProcess,
+		onStderr,
+	});
 
 	if (initResult === undefined) {
 		const compactStderr = startupState.stderr

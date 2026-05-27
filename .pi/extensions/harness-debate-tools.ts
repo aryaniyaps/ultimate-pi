@@ -51,7 +51,6 @@ import {
 	withReviewRoundYamlWrite,
 } from "../lib/harness-debate-workflow-deps.js";
 
-// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 function getRunId(ctx: {
@@ -98,9 +97,7 @@ function subagentResults(
 
 const USE_SUBMIT_TOOLS = process.env.HARNESS_SUBMIT_TOOLS !== "0";
 
-export default function harnessDebateTools(pi: ExtensionAPI) {
-	if (!claimHarnessGovernanceLoad("harness-debate-tools", MODULE_URL)) return;
-
+function registerHarnessDebateHandler1(pi: ExtensionAPI) {
 	pi.on("tool_result", async (event, ctx) => {
 		if (event.isError || event.toolName !== "subagent") return;
 		const runId = getRunId(ctx);
@@ -171,7 +168,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			details: { applied, status },
 		});
 	});
+}
 
+function registerHarnessDebateHandler2(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_plan_debate_eligibility",
 		label: "Plan Debate Eligibility",
@@ -247,7 +246,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler3(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_open",
 		label: "Open Plan Debate",
@@ -332,7 +333,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler4(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_messenger_post",
 		label: "Post Debate Messenger Message",
@@ -397,7 +400,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler5(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_messenger_read_round",
 		label: "Read Debate Round Transcript",
@@ -422,7 +427,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler6(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_submit_round",
 		label: "Submit Plan Review Round",
@@ -551,7 +558,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler7(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_consensus",
 		label: "Finalize Plan Debate Consensus",
@@ -590,7 +599,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler8(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_apply_lane",
 		label: "Apply Debate Lane YAML + Messenger",
@@ -624,7 +635,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler9(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_round_status",
 		label: "Plan Debate Round Status",
@@ -669,7 +682,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler10(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_focus_coverage",
 		label: "Plan Debate Focus Coverage",
@@ -712,7 +727,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler11(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_debate_advance_thread",
 		label: "Advance Plan Debate Thread",
@@ -746,7 +763,9 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
 
+function registerHarnessDebateHandler12(pi: ExtensionAPI) {
 	pi.registerTool({
 		name: "harness_plan_scope_check",
 		label: "Plan Scope Drift Check",
@@ -770,4 +789,24 @@ export default function harnessDebateTools(pi: ExtensionAPI) {
 			};
 		},
 	});
+}
+
+function registerHarnessDebateToolHandlers(pi: ExtensionAPI) {
+	registerHarnessDebateHandler1(pi);
+	registerHarnessDebateHandler2(pi);
+	registerHarnessDebateHandler3(pi);
+	registerHarnessDebateHandler4(pi);
+	registerHarnessDebateHandler5(pi);
+	registerHarnessDebateHandler6(pi);
+	registerHarnessDebateHandler7(pi);
+	registerHarnessDebateHandler8(pi);
+	registerHarnessDebateHandler9(pi);
+	registerHarnessDebateHandler10(pi);
+	registerHarnessDebateHandler11(pi);
+	registerHarnessDebateHandler12(pi);
+}
+
+export default function harnessDebateTools(pi: ExtensionAPI) {
+	if (!claimHarnessGovernanceLoad("harness-debate-tools", MODULE_URL)) return;
+	registerHarnessDebateToolHandlers(pi);
 }
