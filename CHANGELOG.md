@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.22.1] — 2026-05-27
+
+### 🔧 Chores
+
+- update package metadata and sync harness assets
+
+
 ## [v0.22.0] — 2026-05-27
 
 ### ✨ Features
