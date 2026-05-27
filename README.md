@@ -4,6 +4,11 @@
 
 `ultimate-pi` adds a governed coding workflow to Pi: bootstrap the repo, plan with evidence, execute only against an approved PlanPacket, then run an independent review gate before merge.
 
+## Documentation Paths
+
+Use [`DOCS_BY_AUDIENCE.md`](./DOCS_BY_AUDIENCE.md) as the routing source of truth.
+This README stays focused on the package itself, not on repeating the full doc map.
+
 ## Quick start
 
 **Requirements:** Node 18+, npm 9+, git, and Pi.
