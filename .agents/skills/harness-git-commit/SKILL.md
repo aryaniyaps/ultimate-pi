@@ -67,6 +67,6 @@ Edit project file to change format or co-author for external repos.
 
 ## References
 
-- ADR 0055 — `.pi/harness/docs/adrs/0055-auto-commit-coauthor-lifecycle.md`
+- Auto-commit lifecycle policy: use bootstrap + commit CLI so co-author and message format stay consistent.
 - Scripts — `harness-git-commit.mjs`, `harness-auto-commit-bootstrap.mjs`
 - Library — `.pi/lib/harness-auto-commit-config.mjs`

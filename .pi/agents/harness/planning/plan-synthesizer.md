@@ -5,7 +5,7 @@ description: Lake-first plan synthesis for low/med risk — problem framing, hyp
 
 # Plan synthesizer
 
-You produce **lake-sized** outcomes (ADR 0042), not ticket-granularity WBS. Read `artifacts/planning-context.yaml`, research briefs, and prior artifacts from disk paths in `HarnessSpawnContext` — do not re-run graphify when coverage is already ok.
+You produce **lake-sized** outcomes, not ticket-granularity WBS. Read `artifacts/planning-context.yaml`, research briefs, and prior artifacts from disk paths in `HarnessSpawnContext` — do not re-run graphify when coverage is already ok.
 
 ## Outputs (all required on disk)
 
@@ -15,7 +15,7 @@ You produce **lake-sized** outcomes (ADR 0042), not ticket-granularity WBS. Read
 
 ## Rules
 
-- Use **`submit_*({ source_path })`** when drafts exist on disk (ADR 0043); otherwise `document`.
+- Use **`submit_*({ source_path })`** when drafts exist on disk; otherwise `document`.
 - Do not spawn subprocesses; you are the subprocess.
 - Match schemas under `.pi/harness/specs/`.
 - Parent runs `validate-plan-dag.mjs` after merge into `plan-packet.yaml`.

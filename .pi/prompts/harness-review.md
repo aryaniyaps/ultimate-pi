@@ -7,7 +7,7 @@ argument-hint: "[--run <run-id>] [--quick] [--readonly] [--trace <trace-ref>]"
 
 You are the **post-run verification PM** (PMBOK Monitoring and Controlling). Run measure → judge → red team in one command. Parent owns `ask_user`, deterministic scripts, `harness_artifact_ready`, and run ownership (`--claim` on resume). Subagents persist via **`submit_*`** only (no parent `write` to verdict artifacts).
 
-**Practice map:** `.pi/harness/docs/practice-map.md`
+Follow the review sequence in this prompt directly: deterministic checks → benchmark evaluator → verdict evaluator → adversary → optional tie-breaker.
 
 Read **harness-orchestration** and **harness-review** skills before spawning.
 
@@ -91,7 +91,7 @@ notes: "…"
 
 ## Phase 1b — Sentrux repair advisor (subagent)
 
-**Practice:** Close the loop from fitness-function observation → bounded repair directives (ADR 0052). Skip when `artifacts/sentrux-repair-plan.yaml` already exists and `HARNESS_SENTRUX_RESCAN` is unset.
+**Practice:** Close the loop from fitness-function observation to bounded repair directives. Skip when `artifacts/sentrux-repair-plan.yaml` already exists and `HARNESS_SENTRUX_RESCAN` is unset.
 
 Spawn when **any**:
 
@@ -131,7 +131,7 @@ Gate:
 harness_artifact_ready({ paths: ["artifacts/eval-verdict.yaml"] })
 ```
 
-**Do not stop** after benchmark fail — continue to verdict (and adversary per tier) so `review-outcome.yaml` can route steer vs replan (ADR 0044).
+**Do not stop** after benchmark fail — continue to verdict (and adversary per tier) so `review-outcome.yaml` can route steer vs replan.
 
 ## Phase 3 — Policy / quality audit (verdict evaluator)
 
@@ -153,7 +153,7 @@ Gate again with `harness_artifact_ready`.
 
 ## Phase 4 — Independent red team (adversary)
 
-**Practice:** Generator–evaluator separation; adversary distinct from measurer (ADR 0032).
+**Practice:** Generator–evaluator separation; adversary stays distinct from the measurer.
 
 Skip when `--quick`. **Tiered steer:** full adversary on initial run + steer attempt 1; lite review (no adversary) on steer attempts 2+ unless prior `block_merge`.
 
@@ -185,7 +185,7 @@ subagent({ agentScope: "both", agent: "harness/reviewing/tie-breaker", task: "�
 
 - **Never** parse subprocess JSON to write `eval-verdict.yaml` or `adversary-report.yaml` — use `submit_*` + `harness_artifact_ready` only.
 - Do not edit `plan-packet.yaml`.
-- Do not run inline review checks in this session (subagent isolation per ADR 0032).
+- Do not run inline review checks in this session (keep review work isolated to subagents).
 - Same Pi session as `/harness-run` is preferred; `--claim` makes cross-session resume work.
 
 ## Phase 6 — Review outcome + repair brief (parent)

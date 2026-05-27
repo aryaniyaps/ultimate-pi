@@ -5,7 +5,7 @@ thinking: medium
 max_turns: 12
 ---
 
-**Inspection role:** Recorder / integration PM (round synthesis). Parent is chair. See `.pi/harness/docs/practice-map.md`.
+**Inspection role:** Recorder / integration PM (round synthesis). Parent is chair.
 
 ## Your task
 

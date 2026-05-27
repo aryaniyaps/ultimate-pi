@@ -8,14 +8,14 @@ description: >-
 
 # Harness orchestration
 
-**Practice map:** `.pi/harness/docs/practice-map.md` · **ADR 0040** · **ADR 0041**.
+Follow the orchestration rules and phase sequence in this skill directly.
 
 ## Team management rules
 
 1. **Parallelism law** — Parallel `tasks` only when outputs are independent inputs to a later merge (implementation ∥ stack). Never parallelize debate lanes or decompose ∥ hypothesis.
 2. **Two-pizza cap per batch** — Max 2 research lanes, 1 optional `planning-context` subagent, 1 executor, 1 debate agent per `subagent` call.
 3. **No redundant thinkers** — Downstream agents read artifacts; do not re-derive.
-4. **Sequential dependency chain** — planning context → decompose → hypothesis → research → author → DAG → debate → approve → execute → **/harness-review** → optional **/harness-steer** loop (ADR 0044).
+4. **Sequential dependency chain** — planning context → decompose → hypothesis → research → author → DAG → debate → approve → execute → **/harness-review** → optional **/harness-steer** loop.
 5. **Path-first parent tools** — `approve_plan`, `create_plan`, `submit_*` via `source_path`, `merge_harness_yaml`, `harness_synthesize_repair_brief`.
 6. **Debate = meeting** — Parent is chair; parallel_probes allows evaluator ∥ adversary per batch.
 7. **Tool intelligence** — Parent uses graphify, sg, ccc, and reads by task need; subprocesses optional.
@@ -41,7 +41,7 @@ Harness subprocesses load **`harness-subagent-submit`** (`PI_HARNESS_SUBPROCESS=
 |---------|---------|
 | `/harness-plan` | Parent: planning context (tools) → decompose → hypothesis → Phase 3.5 artifacts → PlanPacket → eligibility + Review Gate → `approve_plan` + `create_plan` |
 | `/harness-run` | `harness/running/executor` (single worker) |
-| `/harness-review` | Parent verify → `evaluator` benchmark → `evaluator` verdict → `adversary` → optional `tie-breaker` (ADR 0039) |
+| `/harness-review` | Parent verify → `evaluator` benchmark → `evaluator` verdict → `adversary` → optional `tie-breaker` |
 | `/harness-eval` | **Deprecated** → `/harness-review` |
 | `/harness-critic` | **Deprecated** → `/harness-review` |
 | `/harness-auto` | plan per `/harness-plan`; `--quick` skips adversary + tie-breaker in review |
@@ -80,5 +80,5 @@ Then execution-plan-author, DAG gate, debate eligibility, sequential debate roun
 
 ## References
 
-- ADR 0032, ADR 0033, ADR 0040, ADR 0041, `.pi/harness/specs/harness-spawn-context.schema.json`
+- Subagent isolation, submit-tool artifact flow, and spawn-context contract: `.pi/harness/specs/harness-spawn-context.schema.json`
 - `node "$UP_PKG/.pi/scripts/harness-agents-manifest.mjs" --check`

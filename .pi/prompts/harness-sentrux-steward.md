@@ -39,14 +39,14 @@ Gate: `harness_artifact_ready({ paths: ["artifacts/sentrux-manifest-proposal.yam
 Read `artifacts/sentrux-manifest-proposal.yaml`.
 
 - `change_class: none` → report no manifest change; stop.
-- Otherwise → `ask_user` with summary, evidence bullets, and `adr_draft` if `adr_required`.
+- Otherwise → `ask_user` with summary, evidence bullets, and any draft decision text when a formal decision record is required.
 
 On approval:
 
 1. Apply `manifest_patch` to `.pi/harness/sentrux/architecture.manifest.json` (parent `write` or manual edit).
 2. `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force`
 3. Append session custom entry `harness-architecture-changed` (triggers rules sync extension).
-4. If `adr_required`, file harness ADR snippet or `docs/adr/` entry per team convention.
+4. If a formal decision record is required, file it in the target project's standard decision-log location.
 
 On reject: keep manifest unchanged; document decision in run notes.
 

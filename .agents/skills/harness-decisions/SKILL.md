@@ -67,7 +67,7 @@ Use during **`/harness-plan` Phase 0** only. Purpose: disambiguate the **task** 
   "options": [
     { "title": "Harness contract only", "description": "Changes under .pi/harness and prompts; harness-verify passes" },
     { "title": "End-to-end feature", "description": "User-visible behavior + tests in the app repo" },
-    { "title": "Docs / ADR only", "description": "No runtime code changes" }
+    { "title": "Docs / decision-record only", "description": "No runtime code changes" }
   ],
   "allowFreeform": true
 }
@@ -94,7 +94,7 @@ Use **`questions[]`** when ≥2 independent dimensions must be resolved together
 ```json
 {
   "question": "Lock the task contract before reconnaissance",
-  "context": "Phase 0 (ADR 0053). Answer both forks to set scope and acceptance.",
+  "context": "Phase 0 task-clarification gate. Answer both forks to set scope and acceptance.",
   "questions": [
     {
       "title": "Scope surface",

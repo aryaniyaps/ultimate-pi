@@ -33,6 +33,7 @@ Created: 2026-05-14
 - ./raw/ is source storage for graphify
 - ADRs in docs/adr/ (repo) and .pi/harness/docs/adrs/ (harness) with structured format
 - `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` for deterministic harness contract checks (`UP_PKG` — see `.pi/scripts/README.md`)
+- Internal prompt surfaces only (`.pi/prompts/**`, `.pi/agents/**`, `.agents/skills/*/SKILL.md`): do not reference ADRs or internal-doc paths; write intended behavior directly. `harness-verify` enforces this policy.
 - Harness context: **context-mode only** — never lean-ctx on harness paths (see harness-context skill)
 - `graphify update .` after significant code changes
 - ast-grep (`sg`) is the default code search tool — use `sg -p 'pattern'` for structural search, never grep for code

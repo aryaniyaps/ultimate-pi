@@ -8,7 +8,7 @@ description: Compile task-specific harness context using context-mode and graphi
 ## When to use
 
 - Preparing context for `/harness-plan`, `/harness-run`, or `/harness-auto`
-- Navigating harness-related code and ADRs without reading entire repos
+- Navigating harness-related code and governance decisions without reading entire repos
 
 ## Mandatory: context-mode only
 
@@ -25,7 +25,7 @@ Use these in rough priority order — not every tool on every task:
 | Structural code patterns | `sg -p '…'` (ast-grep) |
 | Semantic implementation search | `ccc search` (harness pre-indexes before subprocess spawns) |
 | File detail | context-mode maps/signatures, then targeted reads |
-| Harness governance | `.pi/harness/docs/adrs/README.md` |
+| Harness governance | approved policies and decision logs in the target project |
 
 For `/harness-plan` Phase 1, parent compiles findings into `artifacts/planning-context.yaml` — see **harness-plan** skill.
 
@@ -33,7 +33,7 @@ For `/harness-plan` Phase 1, parent compiles findings into `artifacts/planning-c
 
 Compact context block:
 
-- Relevant ADRs (ids + one-line decision)
+- Relevant governance decisions (id/title + one-line decision)
 - Extension entry points (policy-gate, trace-recorder, harness-telemetry)
 - Schema versions in play
 

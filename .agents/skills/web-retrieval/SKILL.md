@@ -160,4 +160,4 @@ Diagnostics: `python3 "$UP_PKG/.pi/scripts/harness-web.py" status` (JSON).
 | `HARNESS_WEB_HEURISTIC_ANGLES_FILE` | — | Extra heuristic angles YAML |
 | `HARNESS_WEB_FAST_MODEL` / `EXPANDER` / `QUALITY` | — | Web subagent models |
 
-See `.pi/harness/docs/harness-web-search.md` for internals.
+Internal implementation notes are package-maintainer-only; this skill already contains the external-facing operating guidance.

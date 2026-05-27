@@ -20,7 +20,7 @@ description: Bootstrap Sentrux architectural rules for harness projects — seed
 | **Sync** | `sentrux-rules-sync.mjs`, `/harness-sentrux-sync` | Regenerates `rules.toml` from manifest after intent change |
 | **Observation** | `/harness-run`, `/harness-review` | `harness-sentrux-cli.mjs gate --save` / `check` / `gate` → `artifacts/sentrux-signal.yaml` |
 
-Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval (ADR 0009).
+Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval.
 
 ## Canonical layout
 
@@ -63,7 +63,7 @@ Do **not** copy ultimate-pi's layer paths blindly into unrelated layouts — edi
 
 ## References
 
-- ADR 0009 — `.pi/harness/docs/adrs/0009-sentrux-rules-lifecycle.md`
+- Rules lifecycle policy: manifest is source of truth; bootstrap/sync regenerate rules from approved intent.
 - Scripts — `.pi/scripts/sentrux-rules-sync.mjs`, `harness-sentrux-bootstrap.mjs`, `harness-sentrux-cli.mjs`
 - Agents — `harness/sentrux-bootstrap` (setup), `harness/sentrux-steward` (intent proposals)
 - Specs — `sentrux-manifest-proposal.schema.json`, `sentrux-signal.schema.json`
