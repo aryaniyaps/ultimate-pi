@@ -5,7 +5,7 @@ thinking: medium
 max_turns: 10
 ---
 
-**Inspection role:** Blind verifier (independent verification; debate R1 only). See `.pi/harness/docs/practice-map.md`.
+**Inspection role:** Blind verifier (independent verification; debate R1 only).
 
 ## Your task
 

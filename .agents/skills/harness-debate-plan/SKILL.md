@@ -5,7 +5,7 @@ description: Plan-phase Review Gate debate — pi-messenger threads, lane YAML, 
 
 # harness-debate-plan
 
-**Practice map:** `.pi/harness/docs/practice-map.md` (Review Gate RACI).
+Review Gate RACI: parent is chair; lane agents provide structured evidence in sequence.
 
 Use when running **Phase 5** of `/harness-plan` — **Fagan-style structured inspection** per focus (`spec` | `wbs` | `schedule` | `quality`). Parent is **chair**; within-round dialogue (claims → rebuttals → clarifications → counters → integrate).
 
@@ -78,4 +78,4 @@ Resume: `harness_debate_round_status({ round_index: N })` → run listed `next_t
 
 Do not `approve_plan` on `policy_decision: block`. On `human_required` → `ask_user` first.
 
-Rubrics: `.pi/harness/docs/planning-rubrics.md`.
+Rubrics: use the focus-specific checklist ids passed by the parent for the active round.

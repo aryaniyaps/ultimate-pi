@@ -5,7 +5,7 @@ argument-hint: "[--attempt N]"
 
 # harness-steer
 
-Thin orchestrator for the **steer loop** (ADR 0044). Run only after `/harness-review` produced `artifacts/review-outcome.yaml` and `artifacts/repair-brief.yaml` with `remediation_class: implementation_gap`.
+Thin orchestrator for the **steer loop**. Run only after `/harness-review` produced `artifacts/review-outcome.yaml` and `artifacts/repair-brief.yaml` with `remediation_class: implementation_gap`.
 
 ## Preconditions
 
@@ -19,10 +19,10 @@ Thin orchestrator for the **steer loop** (ADR 0044). Run only after `/harness-re
 2. Update `artifacts/steer-state.yaml` (`attempt`, `max_attempts`, `active: true`).
 3. Set policy phase to **execute** before spawning executor (required for mutating tools).
 4. One `ask_user` steer gate unless `run-context.steer_approved` is already true.
-5. Spawn **`harness/running/executor`** with `HarnessSpawnContext.mode: repair` and `repair_brief_path: artifacts/repair-brief.yaml`. Repair uses the same hash-anchored `read`/`edit`, batching, and pre-handoff verification rules as `/harness-run` (ADR 0051).
-6. Optional: `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save` after repair to refresh baseline (ADR 0044).
-7. Optional: `node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs"` after repair to confirm filename conventions (ADR 0052).
-7. `next_command`: **`/harness-review`** (always re-verify; tiered adversary on attempts 2+ per practice-map).
+5. Spawn **`harness/running/executor`** with `HarnessSpawnContext.mode: repair` and `repair_brief_path: artifacts/repair-brief.yaml`. Repair uses the same hash-anchored `read`/`edit`, batching, and pre-handoff verification rules as `/harness-run`.
+6. Optional: `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save` after repair to refresh the structural baseline.
+7. Optional: `node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs"` after repair to confirm filename conventions.
+7. `next_command`: **`/harness-review`** (always re-verify; use tiered adversary on attempts 2+).
 
 ## Forbidden
 

@@ -4,7 +4,7 @@ description: Execute only against an approved PlanPacket with strict phase gates
 
 # harness-run
 
-**Practice map:** `.pi/harness/docs/practice-map.md`
+Follow this prompt's execution flow directly: baseline gate → executor spawn → structural observation → review handoff.
 
 You orchestrate the **Executing Process Group** — spawn `harness/running/executor` only. Do **not** implement inline.
 
@@ -106,7 +106,7 @@ phase: execute
 
 ## Parent rules
 
-- On `scope_drift`, finish handoff and recommend **`/harness-review`** (review classifies `plan_gap` vs `implementation_gap` — ADR 0044).
+- On `scope_drift`, finish handoff and recommend **`/harness-review`** (review classifies whether the gap is planning or implementation).
 - Do not call `ask_user` for plan-level ambiguity — return to plan command.
 
 ## Completion

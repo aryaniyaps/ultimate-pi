@@ -20,7 +20,7 @@ description: Bootstrap ls-lint filename rules for harness projects — seed nami
 | **Sync** | `ls-lint-rules-sync.mjs`, `/harness-ls-lint-sync` | Regenerates `.ls-lint.yml` from manifest after intent change |
 | **Observation** | `/harness-run`, `/harness-review` | `harness-ls-lint-cli.mjs` → `artifacts/ls-lint-signal.yaml` |
 
-Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval (ADR 0052).
+Never auto-sync manifest from directory trees. Material manifest edits need steward evidence + chair approval.
 
 ## Canonical layout
 
@@ -54,6 +54,6 @@ Custom YAML **outside** `# --- harness:managed:start/end ---` is preserved on ev
 
 ## References
 
-- ADR 0052 — `.pi/harness/docs/adrs/0052-ls-lint-naming-lifecycle.md`
+- Naming lifecycle policy: steward proposal + chair approval before material manifest changes.
 - Scripts — `ls-lint-rules-sync.mjs`, `harness-ls-lint-bootstrap.mjs`, `harness-ls-lint-cli.mjs`
 - Agent — `harness/ls-lint-steward`

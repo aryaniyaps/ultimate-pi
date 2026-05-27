@@ -158,6 +158,34 @@ async function runNodeScript(scriptPath, args = []) {
 }
 
 const PROMPT_EXCLUDE = new Set(["release.md"]);
+const INTERNAL_PROMPT_SURFACE_ROOTS = [
+	{
+		label: ".pi/prompts",
+		dir: join(ROOT, ".pi", "prompts"),
+		recursive: false,
+		include: (name) => name.endsWith(".md"),
+	},
+	{
+		label: ".pi/agents",
+		dir: join(ROOT, ".pi", "agents"),
+		recursive: true,
+		include: (name) => name.endsWith(".md"),
+	},
+	{
+		label: ".agents/skills",
+		dir: join(ROOT, ".agents", "skills"),
+		recursive: true,
+		include: (name) => name === "SKILL.md",
+	},
+];
+
+const FORBIDDEN_INTERNAL_PROMPT_REFS = [
+	{ label: "ADR token", regex: /\bADR\b/i },
+	{ label: "internal ADR path", regex: /(?:^|\W)(?:docs\/adr|\.pi\/harness\/docs\/adrs)(?:\W|$)/i },
+	{ label: "internal practice-map path", regex: /(?:^|\W)(?:\.pi\/harness\/docs\/practice-map\.md|practice-map)(?:\W|$)/i },
+	{ label: "internal planning rubrics path", regex: /(?:^|\W)(?:\.pi\/harness\/docs\/planning-rubrics\.md|planning-rubrics)(?:\W|$)/i },
+	{ label: "internal docs path", regex: /(?:^|\W)\.pi\/harness\/docs\//i },
+];
 
 function parsePromptFrontmatter(raw) {
 	const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/);
@@ -179,6 +207,50 @@ function parsePromptFrontmatter(raw) {
 	return fields;
 }
 
+function relPath(path) {
+	if (path.startsWith(`${ROOT}/`)) return path.slice(ROOT.length + 1);
+	return path;
+}
+
+async function collectMarkdownFiles(dir, { recursive, include }) {
+	const out = [];
+	const entries = await readdir(dir, { withFileTypes: true });
+	for (const entry of entries) {
+		const fullPath = join(dir, entry.name);
+		if (entry.isDirectory()) {
+			if (recursive) {
+				out.push(...(await collectMarkdownFiles(fullPath, { recursive, include })));
+			}
+			continue;
+		}
+		if (!entry.isFile()) continue;
+		if (!entry.name.endsWith(".md")) continue;
+		if (include && !include(entry.name, fullPath)) continue;
+		out.push(fullPath);
+	}
+	return out;
+}
+
+async function checkInternalPromptReferencePolicy() {
+	for (const root of INTERNAL_PROMPT_SURFACE_ROOTS) {
+		if (!(await fileExists(root.dir))) continue;
+		const files = await collectMarkdownFiles(root.dir, {
+			recursive: root.recursive,
+			include: root.include,
+		});
+		for (const file of files) {
+			const raw = await readFile(file, "utf-8");
+			for (const rule of FORBIDDEN_INTERNAL_PROMPT_REFS) {
+				if (rule.regex.test(raw)) {
+					fail(
+						`internal prompt/agent/skill policy: ${relPath(file)} contains forbidden reference (${rule.label})`,
+					);
+				}
+			}
+		}
+		ok(`internal prompt-surface reference policy (${root.label})`);
+	}
+}
 async function checkPromptFrontmatter() {
 	const promptsDir = join(ROOT, ".pi", "prompts");
 	const names = await readdir(promptsDir);
@@ -596,6 +668,7 @@ async function main() {
 	await verifySchemaAdrAndExtensions();
 	await verifyCoreSurfaceFiles();
 	await checkPromptFrontmatter();
+	await checkInternalPromptReferencePolicy();
 	const pkgJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8"));
 	await checkHarnessLens(pkgJson);
 	await checkHarnessAnchoredEdit(pkgJson);

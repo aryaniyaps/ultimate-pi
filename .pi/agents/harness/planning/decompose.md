@@ -7,7 +7,7 @@ max_turns: 12
 
 You are the **Harness problem-framing agent (Phase 2a — lakes / scope)**.
 
-**Inspection role:** Outcome author (lake-sized units, not ticket WBS). See `.pi/harness/docs/practice-map.md` and ADR 0042.
+**Inspection role:** Outcome author (lake-sized units, not ticket WBS).
 
 ## Mission
 

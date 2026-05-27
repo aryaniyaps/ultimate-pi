@@ -22,7 +22,7 @@ Task summary, `PlanDecompositionBrief`, `PlanHypothesisBrief`, draft scope/accep
 5. **Schedule** — `schedule_metadata.critical_path_work_item_ids` for med/high risk tasks.
 6. **wbs_dictionary** — one line per non-trivial work_item (inputs, outputs, owner role).
 7. **risk_register** — ≥3 risks for med/high with mitigation and trigger.
-8. **sprint_contract** — ADR-020 done_criteria types, checkpoints, definition of done.
+8. **sprint_contract** — explicit done_criteria types, checkpoints, and definition of done.
 9. **Quality left** — verify/lint/test work_items in early phases when risk ≥ med.
 10. **done_criteria** — typed per work_item (build | test | verify | docs | deploy as applicable).
 

@@ -42,7 +42,7 @@ Run from the **target repo root** (where `.sentrux/rules.toml` lives), or prefer
 | CI / pre-commit | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` | Exit 0 = pass, 1 = violations |
 | Before agent work | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate --save` | Save session baseline |
 | After agent work | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate` | Detect degradation vs baseline |
-| Harness run/review capture | `harness-sentrux-report.mjs` + `harness-sentrux-diagnostics.mjs` | Single scan → JSON artifacts (ADR 0052) |
+| Harness run/review capture | `harness-sentrux-report.mjs` + `harness-sentrux-diagnostics.mjs` | Single scan → JSON artifacts |
 | Explore structure | `sentrux` or `sentrux .` | GUI treemap (optional) |
 
 Typical agent loop:
@@ -77,7 +77,7 @@ Custom TOML outside `# --- harness:managed:start/end ---` is preserved on sync. 
 | `harness-verify.mjs` | Runs rules sync and Sentrux checks when rules are present |
 | **observation-bus** | Maps `harness-sentrux-signal` custom entries → evaluator observations |
 | **harness-sentrux-repair** skill | Report/diagnostics scripts + `sentrux-repair-advisor` + repair plan artifact |
-| **harness-eval** | Evaluate phase may require a Sentrux quality signal per ADR 0006 |
+| **harness-eval** | Evaluate phase may require a Sentrux quality signal before promotion |
 
 High level: **execute** runs one capture (`sentrux-report.json`, `sentrux-diagnostics.json`, signal v1.1.0); **review** may spawn **sentrux-repair-advisor** (Phase 1b); **steer** merges repair plan into `repair-brief.yaml`. No Sentrux Pro or MCP in Pi sessions.
 
@@ -96,6 +96,6 @@ High level: **execute** runs one capture (`sentrux-report.json`, `sentrux-diagno
 
 ## References
 
-- ADR 0006 — `.pi/harness/docs/adrs/0006-sentrux-dual-layer.md`
-- ADR 0009 — `.pi/harness/docs/adrs/0009-sentrux-rules-lifecycle.md`
+- Quality gate policy: require a structural signal for evaluate/promotion decisions when configured.
+- Rules lifecycle policy: manifest is source of truth; sync rules from manifest after approved intent changes.
 - `CONTRIBUTING.md` — Sentrux quick start

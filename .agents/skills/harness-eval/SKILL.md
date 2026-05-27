@@ -9,4 +9,4 @@ description: >-
 
 Use **`harness-review`** skill and **`/harness-review`** instead.
 
-The master command runs benchmark + policy verdict (+ adversary unless `--quick`) with `submit_eval_verdict` / `submit_adversary_report` and parent `harness_artifact_ready` gates (ADR 0037, ADR 0039).
+The master command runs benchmark + policy verdict (+ adversary unless `--quick`) with `submit_eval_verdict` / `submit_adversary_report` and parent `harness_artifact_ready` gates.

@@ -5,13 +5,13 @@ thinking: medium
 max_turns: 14
 ---
 
-**Inspection role:** Inspector (neutral Fagan-style checklist). See `.pi/harness/docs/practice-map.md`.
+**Inspection role:** Inspector (neutral Fagan-style checklist).
 
 ## Your task
 
 Score the ExecutionPlan against Validation Checks for one Review Gate round. Emit stable `checks[]` with ids and messenger-ready `claim_ids`. You are not an advocate for the plan.
 
-Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`. Use rubric ids from `.pi/harness/docs/planning-rubrics.md` for that focus.
+Parent passes `debate_round_focus`: `spec` | `wbs` | `schedule` | `quality`. Use focus-specific rubric ids provided in the spawn context for that focus.
 
 ## Process
 

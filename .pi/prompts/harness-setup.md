@@ -289,7 +289,7 @@ Quick smoke test:
 sg -p 'function $NAME($$$ARGS) { $$$BODY }' --json 2>/dev/null | head -5 && echo "✓ ast-grep pattern matching works" || echo "! ast-grep smoke test — may need language-specific config"
 ```
 
-### 2.7 — gh CLI (GitHub Issues Spec Storage — ADR-025)
+### 2.7 — gh CLI (GitHub Issues Spec Storage)
 
 ```bash
 if ! command -v gh &>/dev/null || [ "$FORCE" = "true" ]; then
@@ -335,7 +335,7 @@ Installed and smoke-tested by `harness-cli-verify.sh` (`npm install -g @ls-lint/
 
 ## Step 3 — Pi Extension Packages
 
-Bundled extensions load from the installed `ultimate-pi` package. The harness lens wrapper at `.pi/extensions/harness-lens.ts` loads `.pi/extensions/lib/harness-lens/` for edit autopatch, secrets blocking, deferred format, and LSP tools. Structural search uses shell `sg` (installed globally by setup); architecture gates use Sentrux. See [ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md).
+Bundled extensions load from the installed `ultimate-pi` package. The harness lens wrapper at `.pi/extensions/harness-lens.ts` loads `.pi/extensions/lib/harness-lens/` for edit autopatch, secrets blocking, deferred format, and LSP tools. Structural search uses shell `sg` (installed globally by setup); architecture gates use Sentrux.
 
 Harness lens findings are **complementary** to Sentrux:
 
@@ -471,7 +471,7 @@ Harness `ask_user` supports terminal (TUI), headless (CI), and Glimpse WebView (
 | **Desktop Linux / macOS / WSLg** | `auto` or `glimpse` for richer questionnaires |
 | **CI / `--non-interactive`** | Prompts skipped; do not expect WebView |
 
-Append `HARNESS_ASK_USER_UI=tui` to `.env` when WebView is unavailable. The first real `ask_user` reports `ui_backend` and `ui_degraded` in tool details. See ADR 0054.
+Append `HARNESS_ASK_USER_UI=tui` to `.env` when WebView is unavailable. The first real `ask_user` reports `ui_backend` and `ui_degraded` in tool details.
 
 Template keys (placeholders — user fills secrets): `HARNESS_TELEMETRY_ENABLED`, `HARNESS_WEB_*`, `HARNESS_VCC_COMPACTION`, `HARNESS_VCC_DEBUG`, plus commented optional PostHog / Graphify vars.
 

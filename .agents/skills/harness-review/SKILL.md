@@ -9,7 +9,7 @@ description: >-
 
 # harness-review
 
-**Practice map:** `.pi/harness/docs/practice-map.md` (Monitoring and Controlling: measure → judge → red team).
+Monitoring and Controlling flow: measure → judge → red team.
 
 ## When to use
 
@@ -42,7 +42,7 @@ Pass `sentrux-signal.yaml` path to evaluator `mode: benchmark` spawn context. Ev
 
 ## Rules
 
-- Parent never writes eval/adversary YAML — subprocess `submit_*` only (ADR 0037).
+- Parent never writes eval/adversary YAML — subprocess `submit_*` only.
 - Auto-claim run ownership unless `--readonly`.
 - Disk verdict drives `next_recommended_command` (`resolveCompletionStatuses`).
 

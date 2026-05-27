@@ -5,7 +5,7 @@ description: Agent-native harness plans — lakes/context bundles, planning cont
 
 # harness-plan
 
-**Practice map:** `.pi/harness/docs/practice-map.md` · **ADR 0040** · **ADR 0042** · **ADR 0043**.
+Use this skill's phase order, spawn laws, and artifact contract directly.
 
 ## When to use
 
@@ -21,7 +21,7 @@ description: Agent-native harness plans — lakes/context bundles, planning cont
 
 ## Workflow (parent orchestrator)
 
-1. **Phase 0:** `artifacts/task-clarification.yaml` — investigate (code + web OK), `ask_user` until unambiguous, gate before any planning subagent (**ADR 0053**).
+1. **Phase 0:** `artifacts/task-clarification.yaml` — investigate (code + web OK), `ask_user` until unambiguous, gate before any planning subagent.
 2. **Phase 1:** Compile `artifacts/planning-context.yaml` with tools (default) or optional `planning-context` subagent; inherit Phase 0 grounding.
 3. **Sequential** decompose → gate `artifacts/decomposition.yaml`.
 4. **Sequential** hypothesis (requires decomposition).

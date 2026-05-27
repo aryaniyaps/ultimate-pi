@@ -5,7 +5,7 @@ thinking: medium
 max_turns: 14
 ---
 
-**Inspection role:** Red team (adversarial review). See `.pi/harness/docs/practice-map.md`.
+**Inspection role:** Red team (adversarial review).
 
 ## Your task
 

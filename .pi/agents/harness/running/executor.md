@@ -71,7 +71,7 @@ harness-lens may fix indentation on anchored `edit.text` before apply.
 2. **Read** anchored regions you will change.
 3. **Edit** minimally with batched anchored `edit`.
 
-Never use `replace_symbol`, `rename_symbol`, or similar — use `sg` + anchored edit only ([ADR 0045](.pi/harness/docs/adrs/0045-harness-lens-minimal-contract.md)).
+Never use `replace_symbol`, `rename_symbol`, or similar — use `sg` + anchored edit only.
 
 ## Post-edit verification (before handoff)
 

@@ -1,8 +1,8 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.21.0",
-	"generated_at": "2026-05-27T07:05:16.312Z",
+	"package_version": "0.22.0",
+	"generated_at": "2026-05-27T12:07:19.624Z",
 	"policy_sha256": "799782453e74a1d2d15a28715c985c1b5dc4566701ddcce475ec4725294437e4",
 	"agents": {
 		"pi-pi/agent-expert": {
@@ -51,7 +51,7 @@
 		},
 		"harness/ls-lint-steward": {
 			"path": ".pi/agents/harness/ls-lint-steward.md",
-			"sha256": "e35bf59adf2785e7369a7428793a26691cea43d630e02a9541398cb5a5b1f5dc"
+			"sha256": "abbb43da45a2c9c080cd2043384d481a143acaf440e52b657493425218cb951f"
 		},
 		"harness/sentrux-bootstrap": {
 			"path": ".pi/agents/harness/sentrux-bootstrap.md",
@@ -59,11 +59,11 @@
 		},
 		"harness/sentrux-repair-advisor": {
 			"path": ".pi/agents/harness/sentrux-repair-advisor.md",
-			"sha256": "057618de561d90e597be7a319f3abfa2adaa128d4e92850c50b3e35a447f0371"
+			"sha256": "3c9722806338f680db3d165e633a877e087c1485ad74c2b38781d7ba989b48f0"
 		},
 		"harness/sentrux-steward": {
 			"path": ".pi/agents/harness/sentrux-steward.md",
-			"sha256": "d806cbf2c2e211c6b4c95e35893bc250c8a0fab6fae92190766eab16cd091d51"
+			"sha256": "019740bd4313426edaa36f7fa96471088731abe616282a6e5109e9c538ae34eb"
 		},
 		"harness/trace-librarian": {
 			"path": ".pi/agents/harness/trace-librarian.md",
@@ -95,7 +95,7 @@
 		},
 		"harness/running/executor": {
 			"path": ".pi/agents/harness/running/executor.md",
-			"sha256": "0b602c27f8842af3b1bc702623649de8ba775e77fe59bc156bfabf91b5303d85"
+			"sha256": "e8710179def62a9adaa63ba5b05c3f36dee95da6fd751ef34be773bbee65a5c2"
 		},
 		"harness/reviewing/adversary": {
 			"path": ".pi/agents/harness/reviewing/adversary.md",
@@ -111,19 +111,19 @@
 		},
 		"harness/planning/decompose": {
 			"path": ".pi/agents/harness/planning/decompose.md",
-			"sha256": "ef552be75ff92667e6be90a85768e0804501d00e517b753ca37d174b2561618a"
+			"sha256": "35965f8f8eaa19caee72de1b708178f5ce7bba185f25bed28b9b2ff66c51eaed"
 		},
 		"harness/planning/execution-plan-author": {
 			"path": ".pi/agents/harness/planning/execution-plan-author.md",
-			"sha256": "3b83edca1eb393941e04213c5cabe0e4b180e52df59169ba24904341a369ead5"
+			"sha256": "f0251ac5fb423dda3d6b0b4cff1f63a8e5adfa40806b99454a649c1b0fe3adae"
 		},
 		"harness/planning/hypothesis-validator": {
 			"path": ".pi/agents/harness/planning/hypothesis-validator.md",
-			"sha256": "ee68aa5c04b903320116cfa21cea8f130199fd21e1fd1a8a747830bf53920fdb"
+			"sha256": "70d755da14e146755932c2cb3eb9b828ccd6406b4962d61baeba27c38d9f73dc"
 		},
 		"harness/planning/hypothesis": {
 			"path": ".pi/agents/harness/planning/hypothesis.md",
-			"sha256": "c974f5381aa562589942e8d52b48bdace6663e10caed6bf5f2fb9ce11d84b0bc"
+			"sha256": "5dac1020bc1d5a4100150959d52d983a4860210aa9cbda9120214191c2a17f1d"
 		},
 		"harness/planning/implementation-researcher": {
 			"path": ".pi/agents/harness/planning/implementation-researcher.md",
@@ -131,15 +131,15 @@
 		},
 		"harness/planning/plan-adversary": {
 			"path": ".pi/agents/harness/planning/plan-adversary.md",
-			"sha256": "305cfa6cd0d4e6493a2dad2f01d8cb0b0dddc06df11f871746f6da7124c9d16b"
+			"sha256": "0c9abc088ced31705598baff143df992d435df751b01a9faad9d4af94df16c5a"
 		},
 		"harness/planning/plan-evaluator": {
 			"path": ".pi/agents/harness/planning/plan-evaluator.md",
-			"sha256": "1a6f465f4d400bcf32b9e82a1032ae789354f264af31c8d358b2a0dde7df81bf"
+			"sha256": "f85aba0adbbc7e726a51bfe2d6aa857ab39c8240cd08f06493bc1883ff387c5e"
 		},
 		"harness/planning/plan-synthesizer": {
 			"path": ".pi/agents/harness/planning/plan-synthesizer.md",
-			"sha256": "5bc3ec109179790c196df1328d362c1485cd5ff9295c31c3de93c050330295da"
+			"sha256": "3508126385d338b03f583aaa1f5d75f1cd1fcac8559fed52cd7db11ba1205536"
 		},
 		"harness/planning/planning-context": {
 			"path": ".pi/agents/harness/planning/planning-context.md",
@@ -147,11 +147,11 @@
 		},
 		"harness/planning/review-integrator": {
 			"path": ".pi/agents/harness/planning/review-integrator.md",
-			"sha256": "3f60c41768cad24150718b4a415b9636b0df6892195986a90fc77e2d0a6be537"
+			"sha256": "ea810e3ecf50afe16cf70d12ca3107af94f2272434a72acc5f206bdf7ee89699"
 		},
 		"harness/planning/sprint-contract-auditor": {
 			"path": ".pi/agents/harness/planning/sprint-contract-auditor.md",
-			"sha256": "402c585168c5510b5f22837d2fb157726b928fa59108a8580437ac6ac08d04f5"
+			"sha256": "615feafa48481af0a94b3d6ea9903d58b532575447f5482e60c65e6eb780bfc0"
 		},
 		"harness/planning/stack-researcher": {
 			"path": ".pi/agents/harness/planning/stack-researcher.md",

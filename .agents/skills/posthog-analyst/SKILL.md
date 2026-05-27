@@ -264,7 +264,7 @@ status: complete
 | Medium | ... | ... | ... | ... |
 
 ## Next Steps
-[What to do with these findings. Suggest ADR if recommendations are significant.]
+[What to do with these findings. Suggest a formal decision record update if recommendations are significant.]
 ```
 
 After filing, update `vault/wiki/index.md` (add to analyses if category exists, or note inline), update `vault/wiki/log.md` (append entry at TOP), and update `vault/wiki/hot.md` (add key findings to Recent Context).

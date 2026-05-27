@@ -17,7 +17,7 @@ description: Draft or refine harness artifact contracts under .pi/harness/specs.
 2. Edit or add schema under `.pi/harness/specs/`.
 3. Update affected extensions to emit matching custom entries.
 4. Run `node "$UP_PKG/.pi/scripts/harness-verify.mjs"` (see `.pi/scripts/README.md`).
-5. Add or update an ADR under `.pi/harness/docs/adrs/` for breaking changes.
+5. Add or update a formal decision record in the target project's standard decision-log location for breaking changes.
 
 ## Rules
 

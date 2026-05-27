@@ -8,7 +8,7 @@ description: |
 
 # harness-sentrux-repair
 
-Structured structural feedback for ultimate-pi harness (ADR 0052). **OSS CLI only.**
+Structured structural feedback for the harness. **OSS CLI only.**
 
 ## Artifacts (per run)
 
