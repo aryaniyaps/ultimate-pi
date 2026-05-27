@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.22.0] — 2026-05-27
+
+### ✨ Features
+
+- OSS Sentrux structured repair without Pro or MCP
+
+### 📖 Documentation
+
+- split repo docs by audience
+
+### 🔧 Chores
+
+- apply pending harness and ask-user updates
+- remove obsolete PostHog plan latency dashboard doc
+
 ## [Unreleased]
 
 ### ✨ Features
