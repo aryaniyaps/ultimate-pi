@@ -1,9 +1,9 @@
 {
 	"schema_version": "1.0.0",
 	"package": "ultimate-pi",
-	"package_version": "0.20.0",
-	"generated_at": "2026-05-26T11:40:35.667Z",
-	"policy_sha256": "c4fb5e53f8374527d47bb3bafae5cee0e1cee599232c9d74ef16389f8bc07583",
+	"package_version": "0.21.0",
+	"generated_at": "2026-05-27T04:53:26.860Z",
+	"policy_sha256": "799782453e74a1d2d15a28715c985c1b5dc4566701ddcce475ec4725294437e4",
 	"agents": {
 		"pi-pi/agent-expert": {
 			"path": ".pi/agents/pi-pi/agent-expert.md",
@@ -57,6 +57,10 @@
 			"path": ".pi/agents/harness/sentrux-bootstrap.md",
 			"sha256": "6132e83b400b6bc381841a09205eda00a2349ec127368f9d164631d73faadd1a"
 		},
+		"harness/sentrux-repair-advisor": {
+			"path": ".pi/agents/harness/sentrux-repair-advisor.md",
+			"sha256": "057618de561d90e597be7a319f3abfa2adaa128d4e92850c50b3e35a447f0371"
+		},
 		"harness/sentrux-steward": {
 			"path": ".pi/agents/harness/sentrux-steward.md",
 			"sha256": "d806cbf2c2e211c6b4c95e35893bc250c8a0fab6fae92190766eab16cd091d51"
@@ -91,7 +95,7 @@
 		},
 		"harness/running/executor": {
 			"path": ".pi/agents/harness/running/executor.md",
-			"sha256": "1b8aa6e05ffacc8550569465d47cc8525902b53431e36b1c0f973ca633eab450"
+			"sha256": "0b602c27f8842af3b1bc702623649de8ba775e77fe59bc156bfabf91b5303d85"
 		},
 		"harness/reviewing/adversary": {
 			"path": ".pi/agents/harness/reviewing/adversary.md",

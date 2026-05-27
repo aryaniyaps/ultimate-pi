@@ -1,0 +1,119 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/sentrux-report.schema.json",
+	"title": "SentruxReport",
+	"description": "Single-scan Sentrux check + gate capture for a harness run (OSS CLI parse).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"captured_at",
+		"project_root",
+		"parser_version",
+		"check",
+		"gate"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"captured_at": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"project_root": {
+			"type": "string",
+			"minLength": 1
+		},
+		"parser_version": {
+			"type": "string",
+			"minLength": 1
+		},
+		"sentrux_cli_version": {
+			"type": ["string", "null"]
+		},
+		"upstream_json_available": {
+			"type": "boolean"
+		},
+		"check": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["parse_ok", "check_pass", "violations"],
+			"properties": {
+				"parse_ok": { "type": "boolean" },
+				"parse_errors": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"rules_checked": { "type": ["integer", "null"] },
+				"quality_signal": { "type": ["integer", "null"] },
+				"check_pass": { "type": "boolean" },
+				"violations": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/violation" }
+				},
+				"stdout_sha256": { "type": "string" }
+			}
+		},
+		"gate": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["parse_ok", "status", "degraded_reasons"],
+			"properties": {
+				"parse_ok": { "type": "boolean" },
+				"parse_errors": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"status": {
+					"type": "string",
+					"enum": ["pass", "degraded", "unknown"]
+				},
+				"quality_before": { "type": ["integer", "null"] },
+				"quality_after": { "type": ["integer", "null"] },
+				"metrics": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["name", "before", "after"],
+						"properties": {
+							"name": { "type": "string" },
+							"before": { "type": "string" },
+							"after": { "type": "string" }
+						}
+					}
+				},
+				"degraded_reasons": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"stdout_sha256": { "type": "string" }
+			}
+		}
+	},
+	"$defs": {
+		"violation": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["severity", "rule", "message", "files"],
+			"properties": {
+				"severity": {
+					"type": "string",
+					"enum": ["error", "warning", "info"]
+				},
+				"rule": { "type": "string", "minLength": 1 },
+				"message": { "type": "string" },
+				"files": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"related_rules": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		}
+	}
+}

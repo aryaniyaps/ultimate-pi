@@ -64,6 +64,11 @@ export async function synthesizeRepairBrief(
 	const planRel =
 		input.planPacketPath?.replace(/\\/g, "/") ?? "plan-packet.yaml";
 	const plan = await readArtifactYaml(runRoot, planRel, "plan-packet");
+	const sentruxRepair = await readArtifactYaml(
+		runRoot,
+		"artifacts/sentrux-repair-plan.yaml",
+		"sentrux-repair-plan",
+	);
 
 	const remediation =
 		(typeof review?.remediation_class === "string" &&
@@ -85,6 +90,10 @@ export async function synthesizeRepairBrief(
 	if (plan) {
 		sourceArtifacts["plan-packet"] = planRel;
 	}
+	if (sentruxRepair) {
+		sourceArtifacts["sentrux-repair-plan"] =
+			"artifacts/sentrux-repair-plan.yaml";
+	}
 
 	const failedIds = [
 		...stringList(review?.failed_acceptance_check_ids),
@@ -94,6 +103,32 @@ export async function synthesizeRepairBrief(
 	const uniqueFailed = [...new Set(failedIds)];
 
 	const fixDirectives: string[] = [];
+	if (sentruxRepair) {
+		const actions = Array.isArray(sentruxRepair.actions)
+			? sentruxRepair.actions
+			: [];
+		for (const raw of actions) {
+			const action = asRecord(raw);
+			if (!action) continue;
+			const id = typeof action.id === "string" ? action.id : "action";
+			const target = typeof action.target === "string" ? action.target : "";
+			const instruction =
+				typeof action.instruction === "string" ? action.instruction : "";
+			if (instruction) {
+				fixDirectives.push(`[sentrux:${id}] ${target}: ${instruction}`.trim());
+			}
+		}
+		if (
+			typeof sentruxRepair.summary === "string" &&
+			sentruxRepair.summary.trim()
+		) {
+			fixDirectives.unshift(`[sentrux] ${sentruxRepair.summary.trim()}`);
+		}
+		const verification = stringList(sentruxRepair.verification);
+		for (const v of verification) {
+			fixDirectives.push(`[sentrux:verify] ${v}`);
+		}
+	}
 	for (const key of [
 		"fix_directives",
 		"repair_directives",

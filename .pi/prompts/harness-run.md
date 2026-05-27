@@ -66,29 +66,20 @@ subagent({ agentScope: "both", agent: "harness/running/executor", task: "<Harnes
 
 **Practice:** Monitoring actuals vs baseline — in-process fitness functions after generator work.
 
-After executor subprocess completes:
+After executor subprocess completes, run **one** Sentrux capture (OSS CLI parse — no MCP/Pro):
 
 ```bash
-node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check
-node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate
+node "$UP_PKG/.pi/scripts/harness-sentrux-report.mjs" --out "<run_dir>" --run-id "<run_id>" --signal
+node "$UP_PKG/.pi/scripts/harness-sentrux-diagnostics.mjs" --report "<run_dir>/artifacts/sentrux-report.json" --out "<run_dir>" --churn
 ```
 
-- If `sentrux check` exits non-zero or `gate` reports degradation → set `execution_status: scope_drift` (or `blocked` if unrecoverable); parent runs **`/harness-review`** next (not immediate replan).
-- Write `artifacts/sentrux-signal.yaml` via `write_harness_yaml`:
+- If `sentrux-report.json` → `check.check_pass` is false or `gate.status` is `degraded` → set `execution_status: scope_drift` (or `blocked` if unrecoverable); parent runs **`/harness-review`** next (not immediate replan).
+- `harness-sentrux-report.mjs --signal` writes `artifacts/sentrux-signal.yaml` (schema `1.1.0`) with `report_path`, `diagnostics_path`, `quality_signal`, `violation_count`, `degraded_reasons` when present.
+- If `sentrux` is not installed (exit 127), record `gate_status: not_installed` via minimal `write_harness_yaml` and continue.
 
-```yaml
-schema_version: "1.0.0"
-run_id: "<run_id>"
-check_pass: true|false
-gate_status: pass|degraded|skipped|not_installed
-quality_signal_summary: "<one line from CLI output>"
-recorded_at: "<ISO8601>"
-phase: execute
-```
+Append session custom entry `harness-sentrux-signal` mirroring the signal file (observation bus / telemetry).
 
-- Append session custom entry `harness-sentrux-signal` with the same fields (observation bus / telemetry).
-
-`harness_artifact_ready({ paths: ["artifacts/sentrux-signal.yaml"] })` when written.
+`harness_artifact_ready({ paths: ["artifacts/sentrux-report.json", "artifacts/sentrux-diagnostics.json", "artifacts/sentrux-signal.yaml"] })` when written.
 
 When `HARNESS_LS_LINT_REQUIRED=true`, after executor completes:
 

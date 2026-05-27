@@ -59,7 +59,7 @@ sentrux gate .
 
 ### Pi skill
 
-In Pi sessions, use the **`sentrux`** skill (`/skill:sentrux`) — CLI workflows (`check`, `gate`, GUI), not MCP. Pi does not load `.pi/mcp.json`. For rules bootstrap from the harness manifest, use **harness-sentrux-setup**.
+In Pi sessions, use the **`sentrux`** skill (`/skill:sentrux`) — CLI workflows (`check`, `gate`, GUI), not MCP. Pi does not load `.pi/mcp.json`. For rules bootstrap from the harness manifest, use **harness-sentrux-setup**. For harness run/review capture and repair plans (OSS diagnostics, no Pro), use **harness-sentrux-repair** (ADR 0052).
 
 ### Rules Engine
 

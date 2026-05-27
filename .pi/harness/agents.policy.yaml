@@ -9,11 +9,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   executor:
@@ -22,10 +17,11 @@ kinds:
       - write
       - edit
       - bash
+      - grep
+      - find
       - ls
-    # Subprocess bundle (governance + anchored read/edit + lens) — not full .pi/extensions (parent phase hooks).
+    extensions: true
     extension_bundle: executor
-    extensions: false
     read_only: false
   evaluator:
     tools:
@@ -33,11 +29,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   adversary:
@@ -46,11 +37,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   tie_breaker:
@@ -59,11 +45,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   trace:
@@ -72,11 +53,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   incident:
@@ -85,11 +61,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_batch_execute
-      - ctx_tree
     extensions: false
     read_only: true
   other:
@@ -98,10 +69,6 @@ kinds:
       - grep
       - find
       - ls
-      - ctx_read
-      - ctx_search
-      - ctx_execute
-      - ctx_tree
     extensions: false
     read_only: true
 agents:
@@ -113,31 +80,35 @@ agents:
     max_turns: 15
     thinking: medium
     submit_tool: submit_human_required
-  harness/sentrux-bootstrap:
-    kind: planner
-    tools_add:
-      - bash
-    extensions: true
-    max_turns: 12
-    thinking: low
-  harness/sentrux-steward:
-    kind: planner
-    tools_add:
-      - bash
-      - submit_sentrux_manifest_proposal
-    extensions: false
-    max_turns: 16
-    thinking: high
-    submit_tool: submit_sentrux_manifest_proposal
   harness/ls-lint-steward:
     kind: planner
     tools_add:
-      - bash
       - submit_ls_lint_manifest_proposal
     extensions: false
     max_turns: 16
     thinking: high
     submit_tool: submit_ls_lint_manifest_proposal
+  harness/sentrux-bootstrap:
+    kind: planner
+    extensions: true
+    max_turns: 12
+    thinking: low
+  harness/sentrux-repair-advisor:
+    kind: evaluator
+    tools_add:
+      - submit_sentrux_repair_plan
+    extensions: false
+    max_turns: 14
+    thinking: high
+    submit_tool: submit_sentrux_repair_plan
+  harness/sentrux-steward:
+    kind: planner
+    tools_add:
+      - submit_sentrux_manifest_proposal
+    extensions: false
+    max_turns: 16
+    thinking: high
+    submit_tool: submit_sentrux_manifest_proposal
   harness/trace-librarian:
     kind: trace
     tools_add:
@@ -146,6 +117,36 @@ agents:
     max_turns: 20
     thinking: medium
     submit_tool: submit_human_required
+  harness/web-retrieval/web-answerer:
+    kind: other
+    extensions: false
+    max_turns: 12
+    thinking: medium
+  harness/web-retrieval/web-criteria-verifier:
+    kind: other
+    extensions: false
+    max_turns: 14
+    thinking: medium
+  harness/web-retrieval/web-gap-analyzer:
+    kind: other
+    extensions: false
+    max_turns: 10
+    thinking: low
+  harness/web-retrieval/web-query-expander-fast:
+    kind: other
+    extensions: false
+    max_turns: 5
+    thinking: off
+  harness/web-retrieval/web-query-expander:
+    kind: other
+    extensions: false
+    max_turns: 8
+    thinking: low
+  harness/web-retrieval/web-summarizer:
+    kind: other
+    extensions: false
+    max_turns: 6
+    thinking: low
   harness/running/executor:
     kind: executor
     tools_add:
@@ -180,7 +181,6 @@ agents:
   harness/planning/decompose:
     kind: planner
     tools_add:
-      - bash
       - submit_decomposition_brief
       - submit_human_required
     extensions: false
@@ -205,50 +205,14 @@ agents:
   harness/planning/hypothesis:
     kind: planner
     tools_add:
-      - bash
       - submit_hypothesis_brief
     extensions: false
     max_turns: 14
     thinking: medium
     submit_tool: submit_hypothesis_brief
-  harness/web-retrieval/web-query-expander:
-    kind: other
-    extensions: false
-    max_turns: 8
-    thinking: low
-  harness/web-retrieval/web-query-expander-fast:
-    kind: other
-    extensions: false
-    max_turns: 5
-    thinking: off
-  harness/web-retrieval/web-gap-analyzer:
-    kind: other
-    extensions: false
-    max_turns: 8
-    thinking: low
-  harness/web-retrieval/web-answerer:
-    kind: other
-    extensions: false
-    max_turns: 12
-    thinking: medium
-  harness/web-retrieval/web-summarizer:
-    kind: other
-    extensions: false
-    max_turns: 6
-    thinking: low
-  harness/web-retrieval/web-criteria-verifier:
-    kind: other
-    extensions: false
-    max_turns: 14
-    thinking: medium
   harness/planning/implementation-researcher:
     kind: planner
     tools_add:
-      - bash
-      - web_search
-      - web_fetch
-      - web_find_similar
-      - web_contents
       - submit_implementation_research
     extensions: false
     max_turns: 14
@@ -280,7 +244,6 @@ agents:
   harness/planning/planning-context:
     kind: planner
     tools_add:
-      - bash
       - submit_planning_context
     extensions: false
     max_turns: 12
@@ -305,11 +268,6 @@ agents:
   harness/planning/stack-researcher:
     kind: planner
     tools_add:
-      - bash
-      - web_search
-      - web_fetch
-      - web_find_similar
-      - web_contents
       - submit_stack_brief
     extensions: false
     max_turns: 16

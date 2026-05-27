@@ -13,6 +13,7 @@ Read **harness-orchestration** and **harness-review** skills before spawning.
 
 ## Allowed subagents
 
+- `harness/sentrux-repair-advisor` (Phase 1b — structural repair plan from OSS diagnostics; before benchmark evaluator)
 - `harness/reviewing/evaluator` (`mode: benchmark` then `mode: verdict`)
 - `harness/reviewing/adversary` (independent red team)
 - `harness/reviewing/tie-breaker` (escalation only when adversary blocks and eval was `conditional_pass`; skip when `--quick`)
@@ -53,15 +54,16 @@ Ownership: this command **auto-claims** the run for the current Pi session unles
 node "$UP_PKG/.pi/scripts/harness-verify.mjs"
 ```
 
-When `HARNESS_SENTRUX_REQUIRED=true`, after verify succeeds:
+**Sentrux single-scan rule:** run capture **once** per review unless `artifacts/sentrux-report.json` is missing or `HARNESS_SENTRUX_RESCAN=1`.
+
+When `HARNESS_SENTRUX_REQUIRED=true` (or report missing), after verify succeeds:
 
 ```bash
-node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" gate
+node "$UP_PKG/.pi/scripts/harness-sentrux-report.mjs" --out "<run_dir>" --run-id "<run_id>" --signal
+node "$UP_PKG/.pi/scripts/harness-sentrux-diagnostics.mjs" --report "<run_dir>/artifacts/sentrux-report.json" --out "<run_dir>" --churn
 ```
 
-Compare to baseline from `/harness-run` (`harness-sentrux-cli.mjs gate --save`). The wrapper resolves the project root before invoking Sentrux so `.sentrux/rules.toml` is found from run directories. If CLI missing, record `gate_status: not_installed`.
-
-Ensure `artifacts/sentrux-signal.yaml` exists under the run dir (written during `/harness-run`). If missing, write it from the latest `sentrux check` / `gate` output. Append or refresh session entry `harness-sentrux-signal`.
+Otherwise read existing `artifacts/sentrux-report.json`, `artifacts/sentrux-diagnostics.json`, and `artifacts/sentrux-signal.yaml` from `/harness-run`. If CLI missing (127), record `gate_status: not_installed`. Append or refresh session entry `harness-sentrux-signal`.
 
 When `HARNESS_LS_LINT_REQUIRED=true`:
 
@@ -85,7 +87,29 @@ ls_lint_violations: 0
 notes: "…"
 ```
 
-`harness_artifact_ready({ paths: ["artifacts/benchmark-log.yaml", "artifacts/sentrux-signal.yaml", "artifacts/ls-lint-signal.yaml"] })` when written.
+`harness_artifact_ready({ paths: ["artifacts/benchmark-log.yaml", "artifacts/sentrux-report.json", "artifacts/sentrux-diagnostics.json", "artifacts/sentrux-signal.yaml", "artifacts/ls-lint-signal.yaml"] })` when written.
+
+## Phase 1b — Sentrux repair advisor (subagent)
+
+**Practice:** Close the loop from fitness-function observation → bounded repair directives (ADR 0052). Skip when `artifacts/sentrux-repair-plan.yaml` already exists and `HARNESS_SENTRUX_RESCAN` is unset.
+
+Spawn when **any**:
+
+- `artifacts/sentrux-report.json` → `check.check_pass` is false, or
+- `gate.status` is `degraded`, or
+- `artifacts/sentrux-diagnostics.json` lists non-empty `diagnostics.complex_functions` or boundary/layer violations
+
+```
+subagent({
+  agentScope: "both",
+  agent: "harness/sentrux-repair-advisor",
+  task: "<HarnessSpawnContext run_dir + plan_packet_path + paths: sentrux-report.json, sentrux-diagnostics.json, sentrux-signal.yaml — read only; emit repair plan>"
+})
+```
+
+Subagent calls **`submit_sentrux_repair_plan`** → `artifacts/sentrux-repair-plan.yaml`.
+
+`harness_artifact_ready({ paths: ["artifacts/sentrux-repair-plan.yaml"] })` when written.
 
 ## Phase 2 — Measure actuals vs plan (benchmark evaluator)
 

@@ -23,6 +23,22 @@
 				"drift_score_gte": 0.65
 			},
 			"suggestion": "User must harness-drift-replan or harness-drift-proceed with ack."
+		},
+		{
+			"id": "sentrux-gate-degraded",
+			"match": {
+				"customType": "harness-sentrux-signal",
+				"gate_status": "degraded"
+			},
+			"suggestion": "Run /harness-review Phase 1b (sentrux-repair-advisor); steer on implementation_gap; do not tune manifest on one noisy gate."
+		},
+		{
+			"id": "sentrux-check-fail",
+			"match": {
+				"customType": "harness-sentrux-signal",
+				"check_pass": false
+			},
+			"suggestion": "Read artifacts/sentrux-diagnostics.json; spawn sentrux-repair-advisor or sentrux-steward if boundary/layer rules need intent change."
 		}
 	]
 }

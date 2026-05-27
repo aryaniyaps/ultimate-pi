@@ -107,6 +107,11 @@ export const SUBMIT_TOOL_SPECS: readonly SubmitToolSpec[] = [
 		artifactPath: "artifacts/sentrux-manifest-proposal.yaml",
 	},
 	{
+		toolName: "submit_sentrux_repair_plan",
+		schemaFile: "sentrux-repair-plan.schema.json",
+		artifactPath: "artifacts/sentrux-repair-plan.yaml",
+	},
+	{
 		toolName: "submit_ls_lint_manifest_proposal",
 		schemaFile: "ls-lint-manifest-proposal.schema.json",
 		artifactPath: "artifacts/ls-lint-manifest-proposal.yaml",

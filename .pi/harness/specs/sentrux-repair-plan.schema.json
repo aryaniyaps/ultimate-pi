@@ -1,0 +1,133 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/sentrux-repair-plan.schema.json",
+	"title": "SentruxRepairPlan",
+	"description": "Actionable repair plan from sentrux-repair-advisor (steer/executor input).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"status",
+		"summary",
+		"bottleneck",
+		"root_causes",
+		"actions",
+		"human_required"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"status": {
+			"type": "string",
+			"enum": ["ok", "partial", "blocked"]
+		},
+		"summary": {
+			"type": "string",
+			"minLength": 1
+		},
+		"bottleneck": {
+			"type": "string",
+			"enum": [
+				"modularity",
+				"equality",
+				"acyclicity",
+				"stability",
+				"abstraction"
+			]
+		},
+		"root_causes": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 },
+			"minItems": 1
+		},
+		"actions": {
+			"type": "array",
+			"minItems": 1,
+			"items": { "$ref": "#/$defs/action" }
+		},
+		"do_not_touch": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"verification": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"human_required": {
+			"type": "boolean"
+		},
+		"open_questions": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"evidence": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["source", "ref", "summary"],
+				"properties": {
+					"source": {
+						"type": "string",
+						"enum": [
+							"sentrux-report",
+							"sentrux-diagnostics",
+							"graphify",
+							"plan",
+							"diff"
+						]
+					},
+					"ref": { "type": "string", "minLength": 1 },
+					"summary": { "type": "string", "minLength": 1 }
+				}
+			}
+		}
+	},
+	"$defs": {
+		"action": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["id", "priority", "kind", "target", "instruction"],
+			"properties": {
+				"id": {
+					"type": "string",
+					"pattern": "^[a-z][a-z0-9-]*$"
+				},
+				"priority": {
+					"type": "integer",
+					"minimum": 1,
+					"maximum": 10
+				},
+				"kind": {
+					"type": "string",
+					"enum": [
+						"refactor",
+						"extract",
+						"move",
+						"split",
+						"tune",
+						"document",
+						"defer"
+					]
+				},
+				"target": {
+					"type": "string",
+					"minLength": 1
+				},
+				"instruction": {
+					"type": "string",
+					"minLength": 1
+				},
+				"acceptance": {
+					"type": "string"
+				},
+				"rule_ids": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		}
+	}
+}

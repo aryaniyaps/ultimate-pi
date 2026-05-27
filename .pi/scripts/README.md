@@ -28,6 +28,8 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Sentrux rules re-sync after manifest edit | `node "$UP_PKG/.pi/scripts/harness-sentrux-bootstrap.mjs" --force` or `/harness-sentrux-sync` |
 | Sentrux rules drift check (CI) | `node "$UP_PKG/.pi/scripts/sentrux-rules-sync.mjs" --check` |
 | Sentrux run/review check or gate (root-resolving) | `node "$UP_PKG/.pi/scripts/harness-sentrux-cli.mjs" check` / `gate [--save]` |
+| Sentrux single-scan report + signal (ADR 0052) | `node "$UP_PKG/.pi/scripts/harness-sentrux-report.mjs" --out <run_dir> --run-id <id> --signal` |
+| Sentrux diagnostics synthesis | `node "$UP_PKG/.pi/scripts/harness-sentrux-diagnostics.mjs" --report <run_dir>/artifacts/sentrux-report.json --out <run_dir> [--churn]` |
 | ls-lint naming bootstrap (harness-setup) | `node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs"` |
 | ls-lint naming re-sync after manifest edit | `node "$UP_PKG/.pi/scripts/harness-ls-lint-bootstrap.mjs" --force` or `/harness-ls-lint-sync` |
 | ls-lint config drift check (CI) | `node "$UP_PKG/.pi/scripts/ls-lint-rules-sync.mjs" --check` |

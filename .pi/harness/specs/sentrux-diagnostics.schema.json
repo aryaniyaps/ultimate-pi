@@ -1,0 +1,173 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://ultimate-pi.local/.pi/harness/specs/sentrux-diagnostics.schema.json",
+	"title": "SentruxDiagnostics",
+	"description": "Pro-shaped repair-oriented diagnostics synthesized from OSS Sentrux report (no MCP/Pro).",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"schema_version",
+		"synthesized_at",
+		"project_root",
+		"quality_signal",
+		"bottleneck",
+		"bottleneck_inferred",
+		"root_causes",
+		"diagnostics"
+	],
+	"properties": {
+		"schema_version": {
+			"type": "string",
+			"const": "1.0.0"
+		},
+		"synthesized_at": {
+			"type": "string",
+			"format": "date-time"
+		},
+		"project_root": {
+			"type": "string",
+			"minLength": 1
+		},
+		"report_sha256": {
+			"type": "string"
+		},
+		"quality_signal": {
+			"type": ["integer", "null"]
+		},
+		"gate_status": {
+			"type": "string",
+			"enum": ["pass", "degraded", "unknown"]
+		},
+		"bottleneck": {
+			"type": "string",
+			"enum": [
+				"modularity",
+				"equality",
+				"acyclicity",
+				"stability",
+				"abstraction"
+			]
+		},
+		"bottleneck_inferred": {
+			"type": "boolean"
+		},
+		"root_causes": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 },
+			"minItems": 1
+		},
+		"diagnostics": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"god_files",
+				"hotspots",
+				"complex_functions",
+				"cycles",
+				"violations_summary"
+			],
+			"properties": {
+				"god_files": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/god_file" }
+				},
+				"hotspots": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/hotspot" }
+				},
+				"complex_functions": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/complex_function" }
+				},
+				"cycles": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/cycle" }
+				},
+				"violations_summary": {
+					"type": "array",
+					"items": { "$ref": "#/$defs/violation_summary" }
+				},
+				"gate_degraded_reasons": {
+					"type": "array",
+					"items": { "type": "string" }
+				}
+			}
+		},
+		"graphify_refs": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["path", "summary"],
+				"properties": {
+					"path": { "type": "string" },
+					"summary": { "type": "string" }
+				}
+			}
+		}
+	},
+	"$defs": {
+		"god_file": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["path"],
+			"properties": {
+				"path": { "type": "string" },
+				"fan_out": { "type": ["integer", "null"] },
+				"reason": { "type": "string" }
+			}
+		},
+		"hotspot": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["path", "score"],
+			"properties": {
+				"path": { "type": "string" },
+				"score": { "type": "number" },
+				"churn_14d": { "type": ["integer", "null"] },
+				"reason": { "type": "string" }
+			}
+		},
+		"complex_function": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["file", "func", "cc"],
+			"properties": {
+				"file": { "type": "string" },
+				"func": { "type": "string" },
+				"cc": { "type": "integer" },
+				"priority": {
+					"type": "string",
+					"enum": ["critical", "high", "medium", "low"]
+				}
+			}
+		},
+		"cycle": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["members"],
+			"properties": {
+				"members": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"reason": { "type": "string" }
+			}
+		},
+		"violation_summary": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": ["rule", "count", "severity"],
+			"properties": {
+				"rule": { "type": "string" },
+				"count": { "type": "integer", "minimum": 0 },
+				"severity": { "type": "string" },
+				"sample_files": {
+					"type": "array",
+					"items": { "type": "string" },
+					"maxItems": 5
+				}
+			}
+		}
+	}
+}
