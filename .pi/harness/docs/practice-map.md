@@ -42,6 +42,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | 4c | Deterministic quality gate | Script, not LLM | `validate-plan-dag.mjs` | Parent; hard stop |
 | 4d | Tailor process to risk | Probe depth, not meeting count | `harness_plan_debate_eligibility` | Pre plan-verify |
 | 4e | Architectural intent | Fitness-function spec | `harness/sentrux-steward` optional | When structural risk |
+| 4e″ | Structural repair plan | OSS diagnostics → actions | `harness/sentrux-repair-advisor` | `/harness-review` when violations/degraded |
 | 4e′ | Naming intent | Filename convention spec | `harness/ls-lint-steward` optional | New paths/extensions |
 | 5 | Plan-verify (Review Gate) | Parallel probes + integrator | Debate cast / probes | `parallel_probes` or threaded |
 | 6 | Baseline + approve | Path-only `approve_plan` | Parent | `approve_plan`, `create_plan` |
@@ -73,7 +74,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | Gate | Change control | `plan_ready` required | Parent |
 | Pre-work | Fitness baseline | `sentrux gate --save` + ls-lint pre-check | Parent |
 | Work | Single implementer | `executor_strategy` | `harness/running/executor` |
-| Post-work | Observation | `sentrux check` / `ls-lint` signal artifacts | Parent |
+| Post-work | Observation | `harness-sentrux-report.mjs` + diagnostics; ls-lint signal | Parent |
 | Handoff | Generator–evaluator | `submit_executor_handoff` | Executor |
 | Next | Always verify | **`/harness-review`** (not replan on blocked) | Parent routing |
 
@@ -93,6 +94,7 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 | Phase | Practice | Agent translation | Actor |
 |-------|----------|-------------------|-------|
 | 1 | Automated QC + fitness | Deterministic first | Parent scripts |
+| 1b | Structural repair plan | OSS diagnostics → actions | `sentrux-repair-advisor` |
 | 2 | Measure vs plan | Benchmark on disk | `evaluator` benchmark |
 | 3 | Policy audit | Verdict (no fail-fast skip) | `evaluator` verdict |
 | 4 | Red team | Tiered: full attempt 1, lite 2+ steer | `adversary` |

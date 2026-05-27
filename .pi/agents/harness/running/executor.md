@@ -12,7 +12,7 @@ Implement the approved plan with surgical diffs and strict scope control. The pa
 
 ## Repair mode (`mode: repair`)
 
-When spawn context sets `mode: repair`, read `repair_brief_path` (typically `artifacts/repair-brief.yaml`). Fix only what the brief lists — failed acceptance checks, `fix_directives`, and `priority_lake_ids`. Do **not** widen scope beyond `plan_packet_path`. Set `repair_attempt` in handoff metadata when the schema allows.
+When spawn context sets `mode: repair`, read `repair_brief_path` (typically `artifacts/repair-brief.yaml`). Fix only what the brief lists — failed acceptance checks, `fix_directives`, and `priority_lake_ids`. Directives prefixed `[sentrux:…]` come from `artifacts/sentrux-repair-plan.yaml` (merged by the parent); treat them as structural fixes before widening scope. Optional context: `artifacts/sentrux-diagnostics.json` for hotspot ordering only — do not re-run Sentrux CLI unless the brief asks. Do **not** widen scope beyond `plan_packet_path`. Set `repair_attempt` in handoff metadata when the schema allows.
 
 ## Process
 

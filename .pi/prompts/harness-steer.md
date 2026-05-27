@@ -15,7 +15,7 @@ Thin orchestrator for the **steer loop** (ADR 0044). Run only after `/harness-re
 
 ## Steps
 
-1. Read `artifacts/review-outcome.yaml`, `artifacts/repair-brief.yaml`, `plan_packet_path` (paths only — do not paste bodies into tool args).
+1. Read `artifacts/review-outcome.yaml`, `artifacts/repair-brief.yaml`, `plan_packet_path` (paths only — do not paste bodies into tool args). When present, `repair-brief.yaml` already merges `artifacts/sentrux-repair-plan.yaml` (`[sentrux:…]` directives).
 2. Update `artifacts/steer-state.yaml` (`attempt`, `max_attempts`, `active: true`).
 3. Set policy phase to **execute** before spawning executor (required for mutating tools).
 4. One `ask_user` steer gate unless `run-context.steer_approved` is already true.

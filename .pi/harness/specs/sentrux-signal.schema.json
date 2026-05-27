@@ -15,7 +15,7 @@
 	"properties": {
 		"schema_version": {
 			"type": "string",
-			"const": "1.0.0"
+			"oneOf": [{ "const": "1.0.0" }, { "const": "1.1.0" }]
 		},
 		"run_id": {
 			"type": "string",
@@ -38,6 +38,39 @@
 		"phase": {
 			"type": "string",
 			"enum": ["execute", "evaluate", "review"]
+		},
+		"quality_signal": {
+			"type": "integer"
+		},
+		"bottleneck": {
+			"type": "string",
+			"enum": [
+				"modularity",
+				"equality",
+				"acyclicity",
+				"stability",
+				"abstraction"
+			]
+		},
+		"violation_count": {
+			"type": "integer",
+			"minimum": 0
+		},
+		"report_path": {
+			"type": "string",
+			"description": "Run-relative path to sentrux-report.json"
+		},
+		"diagnostics_path": {
+			"type": "string",
+			"description": "Run-relative path to sentrux-diagnostics.json"
+		},
+		"repair_plan_path": {
+			"type": "string",
+			"description": "Run-relative path to sentrux-repair-plan.yaml"
+		},
+		"degraded_reasons": {
+			"type": "array",
+			"items": { "type": "string" }
 		}
 	}
 }

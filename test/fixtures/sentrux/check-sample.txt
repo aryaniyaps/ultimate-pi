@@ -1,0 +1,16 @@
+sentrux check — 11 rules checked
+
+Quality: 6718
+
+✗ [Error] max_cc: 3 function(s) exceed max cyclomatic complexity of 35
+    .pi/extensions/harness-web-tools.ts:harnessWebTools (cc=69)
+    .pi/lib/harness-run-context.ts:harnessRunContext (cc=42)
+    .pi/lib/harness-lens/index.ts:harnessLensExtension (cc=37)
+✗ [Error] layer_direction: Layer violation: .pi/lib/harness-subagents-bridge.ts (foundation) imports .pi/extensions/subagent-governance.ts (runtime). foundation must not depend on runtime.
+    .pi/lib/harness-subagents-bridge.ts
+    .pi/extensions/subagent-governance.ts
+✗ [Error] boundary: Boundary violation: .pi/lib/harness-subagents-bridge.ts imports .pi/extensions/subagent-governance.ts — Foundation lib must not import extension modules
+    .pi/lib/harness-subagents-bridge.ts
+    .pi/extensions/subagent-governance.ts
+
+✗ 3 violation(s) found

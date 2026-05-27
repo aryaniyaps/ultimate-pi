@@ -27,6 +27,7 @@ const ARTIFACT_SCHEMA: Record<string, string> = {
 	"artifacts/planning-context.yaml": "plan-planning-context.schema.json",
 	"artifacts/eval-verdict.yaml": "eval-verdict.schema.json",
 	"artifacts/adversary-report.yaml": "adversary-report.schema.json",
+	"artifacts/sentrux-repair-plan.yaml": "sentrux-repair-plan.schema.json",
 };
 
 const PREREQUISITE_ORDER: Record<string, string[]> = {

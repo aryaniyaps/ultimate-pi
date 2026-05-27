@@ -32,6 +32,7 @@ const SUBMIT_BY_AGENT = {
 	"harness/trace-librarian": ["submit_human_required"],
 	"harness/incident-recorder": ["submit_human_required"],
 	"harness/sentrux-steward": ["submit_sentrux_manifest_proposal"],
+	"harness/sentrux-repair-advisor": ["submit_sentrux_repair_plan"],
 	"harness/ls-lint-steward": ["submit_ls_lint_manifest_proposal"],
 };
 
@@ -49,6 +50,7 @@ function kindFor(id) {
 	if (id === "harness/reviewing/tie-breaker") return "tie_breaker";
 	if (id === "harness/trace-librarian") return "trace";
 	if (id === "harness/incident-recorder") return "incident";
+	if (id === "harness/sentrux-repair-advisor") return "evaluator";
 	if (
 		id === "harness/sentrux-steward" ||
 		id === "harness/sentrux-bootstrap" ||
@@ -84,7 +86,12 @@ async function main() {
 
 	const kinds = {
 		planner: { tools: KIND_BASE.planner, extensions: false, read_only: true },
-		executor: { tools: KIND_BASE.executor, extensions: true, read_only: false },
+		executor: {
+			tools: KIND_BASE.executor,
+			extensions: true,
+			extension_bundle: "executor",
+			read_only: false,
+		},
 		evaluator: { tools: KIND_BASE.evaluator, extensions: false, read_only: true },
 		adversary: { tools: KIND_BASE.adversary, extensions: false, read_only: true },
 		tie_breaker: {
