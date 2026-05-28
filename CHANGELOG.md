@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented in this file.
 
+
+## [v0.23.0] — 2026-05-28
+
+### ✨ Features
+
+- strengthen run context human gates
+
 ## [v0.22.2] — 2026-05-28
 
 ### 🐛 Fixes
