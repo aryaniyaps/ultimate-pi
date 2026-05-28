@@ -11,6 +11,10 @@ Use the phase order and spawn topology defined in this prompt directly.
 
 Subagents persist artifacts via scoped **`submit_*`** tools (deterministic YAML under the run dir). Parent uses **`harness_artifact_ready`** to gate phases (no JSON parsing). Parent merges still use **`write_harness_yaml`** for `research-brief.yaml`, `plan-packet.yaml`, `planning-context.yaml`, and integrator patches.
 
+### Subagent submit → gate (required)
+
+After a subprocess **`submit_*`** succeeds (or the artifact path is on disk and schema-valid), call **`harness_artifact_ready({ paths: ["<that-artifact>"] })` once** before the next phase or spawn. If spawn topology returns **Duplicate spawn blocked**, do **not** re-spawn that agent — call `harness_artifact_ready` on the existing artifact and advance. Never call the same `submit_*` twice with identical content (idempotent noop — end the subprocess turn instead).
+
 **Phase 0 is mandatory** before reconnaissance or any planning subagent. `write_harness_yaml` and spawn topology enforce `artifacts/task-clarification.yaml` with `status: ready`.
 
 ## Allowed subagents

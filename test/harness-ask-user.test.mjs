@@ -110,6 +110,26 @@ test("resolvePresenterChoice forces tui for inline displayMode", () => {
 	}
 });
 
+test("resolvePresenterChoice prefers tui in CURSOR_AGENT sessions", () => {
+	const v = validateAskParams({
+		question: "Scope?",
+		questions: [{ title: "Risk", options: ["Low", "Med", "High"] }],
+	});
+	assert.equal(typeof v, "object");
+	const prevUi = process.env.HARNESS_ASK_USER_UI;
+	const prevCursor = process.env.CURSOR_AGENT;
+	delete process.env.HARNESS_ASK_USER_UI;
+	process.env.CURSOR_AGENT = "1";
+	try {
+		assert.equal(resolvePresenterChoice(v, true), "tui");
+	} finally {
+		if (prevUi === undefined) delete process.env.HARNESS_ASK_USER_UI;
+		else process.env.HARNESS_ASK_USER_UI = prevUi;
+		if (prevCursor === undefined) delete process.env.CURSOR_AGENT;
+		else process.env.CURSOR_AGENT = prevCursor;
+	}
+});
+
 test("buildGlimpsePayload questionnaire type", () => {
 	const v = validateAskParams({
 		question: "Scope",
@@ -160,4 +180,23 @@ test("applyAskUserToTaskClarification maps risk and success", () => {
 	assert.equal(next.risk_level, "high");
 	assert.equal(next.success_definition, "Harness contract");
 	assert.deepEqual(next.unresolved_questions, []);
+});
+
+test("isHarnessNonInteractive is true for print mode argv", async () => {
+	const { isHarnessNonInteractive } = await import(
+		new URL("../.pi/lib/ask-user/policy.ts", import.meta.url).href
+	);
+	const prevArgv = process.argv;
+	const prevTTY = process.stdin.isTTY;
+	try {
+		process.argv = [...prevArgv, "-p"];
+		Object.defineProperty(process.stdin, "isTTY", { value: true, configurable: true });
+		assert.equal(isHarnessNonInteractive(), true);
+	} finally {
+		process.argv = prevArgv;
+		Object.defineProperty(process.stdin, "isTTY", {
+			value: prevTTY,
+			configurable: true,
+		});
+	}
 });

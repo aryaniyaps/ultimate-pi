@@ -46,9 +46,20 @@ experiments: []
 falsification: "f"
 `;
 
+const TASK_CLARIFICATION = `schema_version: "1.0.0"
+status: ready
+clarified_task: "Harness readiness unit test task with enough detail for gates."
+unresolved_questions: []
+risk_level: med
+`;
+
 async function seedRun(projectRoot, runId, extras = {}) {
 	const art = join(projectRoot, ".pi", "harness", "runs", runId, "artifacts");
 	await mkdir(art, { recursive: true });
+	await writeFile(
+		join(art, "task-clarification.yaml"),
+		extras.taskClarification ?? TASK_CLARIFICATION,
+	);
 	await writeFile(join(art, "planning-context.yaml"), extras.planningContext ?? PLANNING_CONTEXT);
 	await writeFile(join(art, "decomposition.yaml"), extras.decomposition ?? DECOMP);
 	await writeFile(join(art, "hypothesis.yaml"), extras.hypothesis ?? HYP);

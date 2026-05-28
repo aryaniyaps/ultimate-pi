@@ -95,7 +95,14 @@ export async function runGlimpsePresenter(
 			unknown
 		> | null;
 
-		const cancelled = raw === null || raw?.__cancelled === true;
+		const explicitCancel = raw?.__cancelled === true;
+		if (raw === null && !explicitCancel) {
+			throw new Error(
+				"glimpse prompt returned null without user cancel — degrade to TUI",
+			);
+		}
+
+		const cancelled = raw === null || explicitCancel;
 		const response = parseGlimpseRawResult(raw, cancelled);
 
 		return {

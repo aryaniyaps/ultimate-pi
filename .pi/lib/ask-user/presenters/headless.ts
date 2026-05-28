@@ -5,6 +5,7 @@ import {
 	mergeQuestionnaireResults,
 	questionToFlatParams,
 } from "../core/questionnaire.js";
+import { isHarnessNonInteractive } from "../policy.js";
 import type { DialogResult, ValidatedAskParams } from "../types.js";
 
 async function runFlatHeadless(
@@ -16,6 +17,20 @@ async function runFlatHeadless(
 
 	const title = context ? `${context}\n\n${question}` : question;
 	const labels = options.map((o) => o.title);
+
+	if (isHarnessNonInteractive() && labels.length > 0) {
+		const preferred =
+			labels.find((l) =>
+				/^(approve(d)?(\s+plan)?|yes,?\s+proceed|looks\s+good|yes|proceed|continue)$/i.test(
+					l.trim(),
+				),
+			) ?? labels[0];
+		return {
+			response: { kind: "selection", selections: [preferred] },
+			cancelled: false,
+			ui_backend: "headless",
+		};
+	}
 
 	if (labels.length === 0) {
 		if (!allowFreeform) {

@@ -26,7 +26,9 @@ export async function evaluateLegacyHarnessToolPolicy(
 	const isSubprocess = process.env.PI_HARNESS_SUBPROCESS === "1";
 	const isParent = agentId === "parent-orchestrator";
 
-	const spawn = evaluateSubagentToolCall(toolName, agentId);
+	const spawn = evaluateSubagentToolCall(toolName, agentId, {
+		isParentOrchestrator: isParent,
+	});
 	if (spawn.action === "block") {
 		return { allowed: false, reason: spawn.reason ?? "spawn policy" };
 	}

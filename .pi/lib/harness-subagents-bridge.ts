@@ -216,6 +216,9 @@ export function createHarnessSubagentsExtension(
 					{
 						projectRoot: ctx.cwd,
 						runId: runCtx?.run_id ?? null,
+						entries,
+						taskSummary: runCtx?.task_summary ?? undefined,
+						lastOutcome: runCtx?.last_outcome ?? undefined,
 					},
 				);
 				if (!pre.ok) {

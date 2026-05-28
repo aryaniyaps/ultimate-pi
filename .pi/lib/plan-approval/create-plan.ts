@@ -106,12 +106,8 @@ export async function executeCreatePlan(
 		updated_at: new Date().toISOString(),
 	};
 
-	try {
-		await saveRunContextToDisk(updated);
-		await saveProjectActiveRun(updated);
-	} catch {
-		/* disk mirror best-effort */
-	}
+	await saveRunContextToDisk(updated);
+	await saveProjectActiveRun(updated);
 
 	await writePlanReviewMarkdown(deps.projectRoot, updated, planPacket, {
 		status: "committed",

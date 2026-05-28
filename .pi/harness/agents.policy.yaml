@@ -9,17 +9,28 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   executor:
     tools:
       - read
-      - write
-      - edit
-      - bash
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
+      - write
+      - edit
     extensions: true
     extension_bundle: executor
     read_only: false
@@ -29,6 +40,12 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   adversary:
@@ -37,6 +54,12 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   tie_breaker:
@@ -45,6 +68,12 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   trace:
@@ -53,6 +82,12 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   incident:
@@ -61,6 +96,12 @@ kinds:
       - grep
       - find
       - ls
+      - bash
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     extensions: false
     read_only: true
   other:
@@ -196,6 +237,16 @@ agents:
     submit_tool: submit_execution_plan_brief
   harness/planning/hypothesis-validator:
     kind: planner
+    tools_deny:
+      - bash
+      - grep
+      - find
+      - ls
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     tools_add:
       - submit_hypothesis_validation
     extensions: false
@@ -212,6 +263,12 @@ agents:
     submit_tool: submit_hypothesis_brief
   harness/planning/implementation-researcher:
     kind: planner
+    tools_deny:
+      - bash
+      - find
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
     tools_add:
       - submit_implementation_research
     extensions: false
@@ -251,6 +308,15 @@ agents:
     submit_tool: submit_planning_context
   harness/planning/review-integrator:
     kind: planner
+    tools_deny:
+      - bash
+      - grep
+      - find
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_search
+      - ctx_fetch_and_index
     tools_add:
       - submit_review_round_draft
     extensions: false
@@ -259,6 +325,13 @@ agents:
     submit_tool: submit_review_round_draft
   harness/planning/sprint-contract-auditor:
     kind: planner
+    tools_deny:
+      - bash
+      - find
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
+      - ctx_fetch_and_index
     tools_add:
       - submit_sprint_audit
     extensions: false
@@ -267,6 +340,12 @@ agents:
     submit_tool: submit_sprint_audit
   harness/planning/stack-researcher:
     kind: planner
+    tools_deny:
+      - bash
+      - find
+      - ctx_batch_execute
+      - ctx_execute
+      - ctx_execute_file
     tools_add:
       - submit_stack_brief
     extensions: false

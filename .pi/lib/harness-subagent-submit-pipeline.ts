@@ -4,13 +4,14 @@
 
 import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
+import { parse as parseYaml } from "yaml";
 import { validateAgainstHarnessSchema } from "./harness-schema-validate.js";
 import { resolveGuardedRunDir } from "./harness-subagent-submit-path.js";
 import {
 	resolveArtifactRelPath,
 	type SubmitToolSpec,
 } from "./harness-subagent-submit-registry.js";
-import { writeYamlFile } from "./harness-yaml.js";
+import { stringifyYaml, writeYamlFile } from "./harness-yaml.js";
 import {
 	type ApplyDebateLaneResult,
 	applyDebateLaneFromDoc,
@@ -22,6 +23,34 @@ export interface SubmitPipelineResult {
 	validation_errors?: string[];
 	lane_result?: ApplyDebateLaneResult;
 	human_required?: boolean;
+	/** Artifact already passed gate with equivalent content — do not resubmit. */
+	idempotent?: boolean;
+}
+
+async function artifactBytesMatch(
+	absPath: string,
+	document: Record<string, unknown>,
+): Promise<boolean> {
+	try {
+		const existingDoc = await readYamlObject(absPath);
+		if (!existingDoc) return false;
+		return stringifyYaml(existingDoc).trim() === stringifyYaml(document).trim();
+	} catch {
+		return false;
+	}
+}
+
+async function readYamlObject(
+	absPath: string,
+): Promise<Record<string, unknown> | null> {
+	try {
+		const raw = await readFile(absPath, "utf-8");
+		const doc = parseYaml(raw) as Record<string, unknown>;
+		if (!doc || typeof doc !== "object" || Array.isArray(doc)) return null;
+		return doc;
+	} catch {
+		return null;
+	}
 }
 
 export async function loadSubmitDocument(opts: {
@@ -54,8 +83,7 @@ export async function loadSubmitDocument(opts: {
 	}
 	try {
 		const raw = await readFile(abs, "utf-8");
-		const { parse } = await import("yaml");
-		const doc = parse(raw) as Record<string, unknown>;
+		const doc = parseYaml(raw) as Record<string, unknown>;
 		if (!doc || typeof doc !== "object") {
 			return {
 				ok: false,
@@ -101,6 +129,70 @@ export async function executeSubmitPipeline(opts: {
 
 	const relPath = resolveArtifactRelPath(opts.spec, opts.document);
 	const absPath = join(runResolved.runDir, relPath);
+
+	const existingDoc = await readYamlObject(absPath);
+	if (existingDoc) {
+		const existingValidation = await validateAgainstHarnessSchema(
+			opts.specsDir,
+			opts.spec.schemaFile,
+			existingDoc,
+		);
+		if (
+			existingValidation.ok &&
+			(await artifactBytesMatch(absPath, opts.document))
+		) {
+			let laneResult: ApplyDebateLaneResult | undefined;
+			if (opts.spec.debateLane) {
+				laneResult = await applyDebateLaneFromDoc({
+					runDir: runResolved.runDir,
+					lane: opts.spec.debateLane,
+					doc: opts.document,
+					skipArtifactWrite: true,
+				});
+				if (!laneResult.ok) {
+					return {
+						ok: false,
+						artifact_path: relPath,
+						validation_errors: [
+							...laneResult.errors,
+							"Artifact already on disk with the same content; fix messenger/lane fields above and resubmit once (do not loop identical submits).",
+						],
+						lane_result: laneResult,
+					};
+				}
+			}
+			return {
+				ok: true,
+				artifact_path: relPath,
+				lane_result: laneResult,
+				human_required: opts.spec.humanRequired === true,
+				idempotent: true,
+			};
+		}
+	}
+
+	if (opts.spec.debateLane) {
+		const laneResult = await applyDebateLaneFromDoc({
+			runDir: runResolved.runDir,
+			lane: opts.spec.debateLane,
+			doc: opts.document,
+		});
+		if (!laneResult.ok) {
+			return {
+				ok: false,
+				artifact_path: relPath,
+				validation_errors: laneResult.errors,
+				lane_result: laneResult,
+			};
+		}
+		return {
+			ok: true,
+			artifact_path: relPath,
+			lane_result: laneResult,
+			human_required: opts.spec.humanRequired === true,
+		};
+	}
+
 	await mkdir(dirname(absPath), { recursive: true });
 	await writeYamlFile(absPath, opts.document);
 
@@ -120,27 +212,9 @@ export async function executeSubmitPipeline(opts: {
 		}
 	}
 
-	let laneResult: ApplyDebateLaneResult | undefined;
-	if (opts.spec.debateLane) {
-		laneResult = await applyDebateLaneFromDoc({
-			runDir: runResolved.runDir,
-			lane: opts.spec.debateLane,
-			doc: opts.document,
-		});
-		if (!laneResult.ok) {
-			return {
-				ok: false,
-				artifact_path: relPath,
-				validation_errors: laneResult.errors,
-				lane_result: laneResult,
-			};
-		}
-	}
-
 	return {
 		ok: true,
 		artifact_path: relPath,
-		lane_result: laneResult,
 		human_required: opts.spec.humanRequired === true,
 	};
 }

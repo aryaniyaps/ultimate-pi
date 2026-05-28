@@ -10,6 +10,7 @@ import {
 	readdir,
 	readFile,
 	rename,
+	rm,
 	stat,
 	writeFile,
 } from "node:fs/promises";
@@ -17,14 +18,25 @@ import { basename, dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 import { allowsAgentTool } from "../lib/agents-policy.mjs";
+import {
+	disarmHarnessKillSwitch,
+	resetHarnessPolicyDenyCount,
+} from "../lib/agt/kill-switch-state.js";
+import { runAskUser } from "../lib/ask-user/index.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import {
+	blockingHarnessAutoCommandReason,
+	blockingReviewCommandReason,
+	blockingRunCommandReason,
+	blockingSteerCommandReason,
+	buildHarnessClearManifest,
 	canonicalPlanPath,
 	claimRunOwnership,
 	createFreshRunContext,
 	criticalPathWorkItemIdsFromPlanPacket,
 	driftGateActive,
+	ensureReviewOutcomeFromEval,
 	evaluateCrossSessionResume,
 	extractWritePathFromToolInput,
 	formatActivePlanBlock,
@@ -36,6 +48,7 @@ import {
 	getPolicyTransitionBlock,
 	type HarnessRunContext,
 	type HarnessTurnEntry,
+	harnessAutoTasksDiffer,
 	hasHarnessAbortSignal,
 	hasPlanUserApproval,
 	inferHarnessPhase,
@@ -51,6 +64,7 @@ import {
 	normalizeHarnessPath,
 	nowIso,
 	type PlanPacketSummary,
+	parseArgFlag,
 	parseHarnessSlashInput,
 	parseHarnessUseRunArgs,
 	parsePlanApprovalFromMessage,
@@ -58,14 +72,23 @@ import {
 	readExecutorHandoffFromRun,
 	readPlanPacketFromPath,
 	readReviewOutcomeFromRun,
+	reconcileReviewRouting,
+	reconcileStaleExecuteCompletion,
+	relPathUnderActiveRun,
+	resetRunContextForHarnessAuto,
 	resolveArgsForCommand,
 	resolveCompletionStatuses,
+	resolveHarnessRunPostAgentState,
+	resolveHarnessRunWriteTarget,
+	resolveRemediationClassForRun,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
 	sessionHasResumePromptForRun,
 	shouldAutoClaimHarnessRun,
 	shouldReuseHarnessRunId,
 	steerMaxAttemptsFromEnv,
+	syncPlanLastOutcomeFromTaskClarification,
+	syncPlanReadyFromDisk,
 	userVisiblePromptSlice,
 	validatePlanOverridePath,
 	validatePlanPacket,
@@ -80,6 +103,11 @@ import {
 } from "../lib/harness-yaml.js";
 import { isReviewRoundArtifactPath } from "../lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js";
+import {
+	formatPlanHumanGateBlock,
+	resolvePlanHumanGateStatus,
+	validateTaskClarificationHumanGate,
+} from "../lib/plan-human-gates.js";
 import {
 	assertTaskClarificationReadyForPlanWrite,
 	readTaskClarificationDoc,
@@ -102,8 +130,20 @@ function getEntries(ctx: {
 
 function persistContext(pi: ExtensionAPI, ctx: HarnessRunContext): void {
 	pi.appendEntry("harness-run-context", ctx);
-	void saveRunContextToDisk(ctx);
-	void saveProjectActiveRun(ctx);
+	void saveRunContextToDisk(ctx).catch((err) => {
+		pi.appendEntry("harness-run-context-disk-error", {
+			run_id: ctx.run_id,
+			error: err instanceof Error ? err.message : String(err),
+			recorded_at: nowIso(),
+		});
+	});
+	void saveProjectActiveRun(ctx).catch((err) => {
+		pi.appendEntry("harness-run-context-disk-error", {
+			run_id: ctx.run_id,
+			error: err instanceof Error ? err.message : String(err),
+			recorded_at: nowIso(),
+		});
+	});
 	pi.events.emit("harness-run-context:updated", { run_id: ctx.run_id });
 }
 
@@ -215,7 +255,8 @@ export async function archivePlanRevisionArtifacts(input: {
 	return { archiveDir, moved };
 }
 
-function shouldArchiveForPlanRevise(input: {
+/** Exported for tests — avoid archiving on every /harness-plan continue. */
+export function shouldArchiveForPlanRevise(input: {
 	command: string;
 	mode: "create" | "revise" | null;
 	runCtx: HarnessRunContext;
@@ -226,15 +267,20 @@ function shouldArchiveForPlanRevise(input: {
 		return false;
 	}
 	if (input.mode !== "revise") return false;
-	const next = (input.runCtx.next_recommended_command ?? "").toLowerCase();
 	const prompt = input.userPrompt.toLowerCase();
-	return (
-		input.reviewOutcome?.remediation_class === "plan_gap" ||
-		next.includes("/harness-plan") ||
-		next.includes("revise") ||
+	const explicitRevise =
 		prompt.includes("--mode revise") ||
 		prompt.includes("--mode=revise") ||
-		prompt.includes("mode: revise")
+		prompt.includes("mode: revise") ||
+		/\b(revise\s+(the\s+)?plan|reset\s+plan|start\s+over\s+on\s+the\s+plan)\b/.test(
+			prompt,
+		);
+	if (explicitRevise) return true;
+	if (input.reviewOutcome?.remediation_class !== "plan_gap") return false;
+	return (
+		prompt.includes("plan_gap") ||
+		prompt.includes("remediation_class") ||
+		/\brevise\s+per\s+review\b/.test(prompt)
 	);
 }
 
@@ -341,13 +387,22 @@ async function hydrateFromDisk(
 	entries: unknown[],
 ): Promise<HarnessRunContext | null> {
 	const fromSession = getLatestRunContext(entries);
-	if (fromSession) return fromSession;
+	if (fromSession) {
+		return reconcileStaleExecuteCompletion(projectRoot, fromSession, entries);
+	}
 
 	const pointer = await loadProjectActiveRun(projectRoot);
 	if (!pointer || isStaleActiveRunPointer(pointer, projectRoot)) return null;
 
 	const disk = await loadRunContextFromDisk(pointer.run_id, projectRoot);
-	if (disk) return disk;
+	if (disk) {
+		const clar = await syncPlanLastOutcomeFromTaskClarification(
+			projectRoot,
+			disk,
+		);
+		const planSynced = await syncPlanReadyFromDisk(projectRoot, clar, entries);
+		return reconcileStaleExecuteCompletion(projectRoot, planSynced, entries);
+	}
 
 	return {
 		schema_version: "1.0.0",
@@ -476,10 +531,13 @@ function startFreshPlanAttempt(input: {
 	activeCtx: HarnessRunContext;
 	command: string;
 	turn: HarnessTurnEntry | null;
+	sessionId: string;
 }): void {
 	input.activeCtx.plan_ready = false;
 	input.activeCtx.phase = "plan";
 	input.activeCtx.status = "active";
+	disarmHarnessKillSwitch(input.sessionId);
+	resetHarnessPolicyDenyCount(input.sessionId);
 	input.pi.appendEntry("harness-plan-attempt", {
 		run_id: input.activeCtx.run_id,
 		command: input.command,
@@ -583,6 +641,159 @@ type ActiveContextAccess = {
 	get(): HarnessRunContext | null;
 	set(ctx: HarnessRunContext | null): void;
 };
+
+const HARNESS_CLEAR_CONFIRM_OPTION = "Delete historical runs";
+
+function isHarnessClearConfirmed(response: unknown): boolean {
+	if (!response || typeof response !== "object") return false;
+	const payload = response as {
+		kind?: string;
+		selections?: unknown;
+	};
+	if (payload.kind !== "selection" || !Array.isArray(payload.selections)) {
+		return false;
+	}
+	return (
+		payload.selections.length === 1 &&
+		payload.selections[0] === HARNESS_CLEAR_CONFIRM_OPTION
+	);
+}
+
+function registerHarnessClearCommand(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+): void {
+	pi.registerCommand("harness-clear", {
+		description:
+			"Delete historical harness runs under .pi/harness/runs while preserving the active run",
+		handler: async (_args, ctx) => {
+			const entries = getEntries(ctx);
+			const projectRoot = process.cwd();
+			const latest = active.get() ?? getLatestRunContext(entries);
+			const pointer = await loadProjectActiveRun(projectRoot);
+			const protectedRunIds = new Set<string>();
+			if (latest?.run_id) protectedRunIds.add(latest.run_id);
+			if (pointer?.run_id) protectedRunIds.add(pointer.run_id);
+			const manifest = await buildHarnessClearManifest(
+				projectRoot,
+				protectedRunIds,
+			);
+			if (manifest.candidates.length === 0) {
+				const message = [
+					"/harness-clear: no historical run directories eligible for deletion.",
+					`  protected: ${manifest.protected_run_ids.join(", ") || "(none)"}`,
+					`  skipped: ${manifest.skipped.length}`,
+				].join("\n");
+				if (ctx.hasUI) ctx.ui.notify(message, "info");
+				else
+					pi.sendMessage({
+						customType: "harness-clear-result",
+						content: message,
+						display: true,
+					});
+				pi.appendEntry("harness-clear-result", {
+					approved: false,
+					deleted: 0,
+					protected: manifest.protected_run_ids,
+					skipped: manifest.skipped,
+					recorded_at: nowIso(),
+				});
+				return;
+			}
+			const ask = await runAskUser(
+				{
+					question: `Delete ${manifest.candidates.length} historical harness run directories?`,
+					context: [
+						"Scope: .pi/harness/runs/<run_id> only (historical runs).",
+						`Preserved active run ids: ${manifest.protected_run_ids.join(", ") || "(none)"}`,
+						`Candidates: ${manifest.candidates.map((item) => item.run_id).join(", ")}`,
+					].join("\n"),
+					options: [HARNESS_CLEAR_CONFIRM_OPTION, "Cancel"],
+					allowSkip: true,
+				},
+				{ ui: ctx.ui, hasUI: ctx.hasUI },
+			);
+			if ("error" in ask) {
+				const message = [
+					"/harness-clear: confirmation unavailable; no files deleted (fail-closed).",
+					`  reason: ${ask.error}`,
+				].join("\n");
+				if (ctx.hasUI) ctx.ui.notify(message, "warning");
+				else
+					pi.sendMessage({
+						customType: "harness-clear-result",
+						content: message,
+						display: true,
+					});
+				pi.appendEntry("harness-clear-result", {
+					approved: false,
+					deleted: 0,
+					protected: manifest.protected_run_ids,
+					skipped: manifest.skipped,
+					ask_error: ask.error,
+					recorded_at: nowIso(),
+				});
+				return;
+			}
+			const confirmed =
+				!ask.details.cancelled && isHarnessClearConfirmed(ask.details.response);
+			if (!confirmed) {
+				const message = [
+					"/harness-clear: cancelled; no files deleted.",
+					`  candidates: ${manifest.candidates.length}`,
+				].join("\n");
+				if (ctx.hasUI) ctx.ui.notify(message, "info");
+				else
+					pi.sendMessage({
+						customType: "harness-clear-result",
+						content: message,
+						display: true,
+					});
+				pi.appendEntry("harness-clear-result", {
+					approved: false,
+					deleted: 0,
+					protected: manifest.protected_run_ids,
+					skipped: manifest.skipped,
+					recorded_at: nowIso(),
+				});
+				return;
+			}
+			let deleted = 0;
+			const failed: Array<{ run_id: string; reason: string }> = [];
+			for (const candidate of manifest.candidates) {
+				try {
+					await rm(candidate.canonical_path, { recursive: true, force: true });
+					deleted += 1;
+				} catch (err) {
+					failed.push({
+						run_id: candidate.run_id,
+						reason: err instanceof Error ? err.message : String(err),
+					});
+				}
+			}
+			const message = [
+				"/harness-clear complete.",
+				`  deleted: ${deleted}`,
+				`  protected: ${manifest.protected_run_ids.length}`,
+				`  skipped: ${manifest.skipped.length + failed.length}`,
+			].join("\n");
+			if (ctx.hasUI) ctx.ui.notify(message, "info");
+			else
+				pi.sendMessage({
+					customType: "harness-clear-result",
+					content: message,
+					display: true,
+				});
+			pi.appendEntry("harness-clear-result", {
+				approved: true,
+				deleted,
+				protected: manifest.protected_run_ids,
+				skipped: [...manifest.skipped, ...failed],
+				recorded_at: nowIso(),
+			});
+		},
+	});
+}
 
 function registerHarnessRunStatusCommand(
 	pi: ExtensionAPI,
@@ -926,6 +1137,13 @@ async function archivePlanRevisionIfNeeded(input: {
 		reason: "review_plan_gap_revise",
 	});
 	if (reset.moved.length === 0) return;
+	input.activeCtx.plan_ready = false;
+	const synced = await syncPlanLastOutcomeFromTaskClarification(
+		input.projectRoot,
+		input.activeCtx,
+	);
+	Object.assign(input.activeCtx, synced);
+	persistContext(input.pi, input.activeCtx);
 	input.pi.appendEntry("harness-plan-revision-reset", {
 		run_id: input.activeCtx.run_id,
 		archive_dir: reset.archiveDir,
@@ -989,18 +1207,27 @@ async function updatePlanReadinessAfterAgent(input: {
 	)
 		return;
 	if (!input.activeCtx.plan_packet_path) return;
-	const packet = await readPlanPacketFromPath(input.activeCtx.plan_packet_path);
-	const validation = validatePlanPacket(packet);
-	const approved = hasPlanUserApproval(input.entries, {
-		sincePlanCommand: true,
-		planId: packet?.plan_id ?? null,
-	});
-	input.activeCtx.plan_ready = validation.valid && approved;
-	if (validation.valid && !approved) {
-		input.activeCtx.last_outcome = "needs_clarification";
-		input.activeCtx.last_completed_step = "plan";
+	const beforeReady = input.activeCtx.plan_ready;
+	const synced = await syncPlanReadyFromDisk(
+		process.cwd(),
+		input.activeCtx,
+		input.entries,
+	);
+	Object.assign(input.activeCtx, synced);
+	if (!beforeReady && synced.plan_ready && synced.plan_packet_path) {
+		const packet = await readPlanPacketFromPath(synced.plan_packet_path);
+		if (packet?.plan_id) {
+			syncPolicyFromPlan(input.pi, input.entries, packet.plan_id, "plan", true);
+			const summary = planPacketSummary(packet, synced.plan_packet_path);
+			input.pi.appendEntry("harness-plan-packet", summary);
+		}
+	} else if (
+		synced.plan_packet_path &&
+		!synced.plan_ready &&
+		synced.last_outcome === "pending_approval"
+	) {
 		const msg =
-			"Plan file exists but user approval was not recorded. Planner must call approve_plan (or bridged ask_user Approve) before writing plan-packet.yaml.";
+			"A draft plan-packet.yaml is on disk, but user approval was not recorded. Complete Review Gate (debate rounds + harness_debate_consensus), then call approve_plan; use create_plan only after Approve.";
 		if (input.ctx.hasUI) input.ctx.ui.notify(msg, "warning");
 		else
 			input.pi.sendMessage({
@@ -1008,17 +1235,8 @@ async function updatePlanReadinessAfterAgent(input: {
 				content: msg,
 				display: true,
 			});
-	} else if (input.activeCtx.plan_ready && packet?.plan_id) {
-		input.activeCtx.plan_id = packet.plan_id;
-		syncPolicyFromPlan(input.pi, input.entries, packet.plan_id, "plan", true);
-		const summary = planPacketSummary(packet, input.activeCtx.plan_packet_path);
-		input.pi.appendEntry("harness-plan-packet", summary);
-		input.activeCtx.last_completed_step = "plan";
-		input.activeCtx.last_outcome = summary.plan_status;
-	} else if (!validation.valid) {
-		input.activeCtx.last_outcome = "needs_clarification";
-		input.activeCtx.last_completed_step = "plan";
 	}
+	persistContext(input.pi, input.activeCtx);
 }
 
 function registerPlanApprovalCapture(
@@ -1029,15 +1247,46 @@ function registerPlanApprovalCapture(
 		if (event.isError) return;
 		if (event.toolName !== "ask_user" && event.toolName !== "approve_plan")
 			return;
+		const entries = getEntries(ctx);
+		const runCtx = getLatestRunContext(entries) ?? active.get();
+		if (!runCtx) return;
+		if (event.toolName === "ask_user") {
+			const details = event.details as { cancelled?: boolean; input?: unknown };
+			if (details?.cancelled) {
+				const synced = await syncPlanLastOutcomeFromTaskClarification(
+					process.cwd(),
+					runCtx,
+				);
+				Object.assign(runCtx, synced);
+				persistContext(pi, runCtx);
+			} else if (
+				!isPlanApprovalAskUser(
+					(details?.input ?? {}) as {
+						question?: string;
+						options?: unknown[];
+						questions?: unknown[];
+					},
+				)
+			) {
+				pi.appendEntry("harness-task-clarification-engagement", {
+					run_id: runCtx.run_id,
+					recorded_at: nowIso(),
+					source: "ask_user",
+				});
+				const synced = await syncPlanLastOutcomeFromTaskClarification(
+					process.cwd(),
+					runCtx,
+				);
+				Object.assign(runCtx, synced);
+				persistContext(pi, runCtx);
+			}
+		}
 		const approval = parsePlanApprovalFromMessage({
 			toolName: event.toolName,
 			details: event.details,
 			content: event.content,
 		});
 		if (!approval) return;
-		const entries = getEntries(ctx);
-		const runCtx = getLatestRunContext(entries) ?? active.get();
-		if (!runCtx) return;
 		pi.appendEntry("harness-plan-approval", {
 			plan_id: approval.plan_id ?? runCtx.plan_id,
 			approved_at: approval.approved_at,
@@ -1165,18 +1414,41 @@ async function resolveCommandRunContext(input: {
 		input.command === "harness-auto" ||
 		(!activeCtx && input.command !== "harness-abort")
 	) {
+		const task = extractTaskSummary(input.args, input.userPrompt);
 		if (
-			!activeCtx ||
-			!shouldReuseHarnessRunId(input.userPrompt, activeCtx, input.command)
+			input.command === "harness-auto" &&
+			activeCtx &&
+			task &&
+			harnessAutoTasksDiffer(activeCtx, task)
 		) {
+			activeCtx.status = "aborted";
+			activeCtx.plan_ready = false;
+			activeCtx.last_outcome = "abandoned";
+			activeCtx.last_completed_step = "abort";
+			persistContext(input.pi, activeCtx);
+			activeCtx = null;
+		}
+		const reuseRun =
+			activeCtx &&
+			shouldReuseHarnessRunId(input.userPrompt, activeCtx, input.command);
+		if (!activeCtx || !reuseRun) {
+			if (activeCtx?.status === "active") {
+				activeCtx.status = "aborted";
+				activeCtx.plan_ready = false;
+				activeCtx.last_outcome = "abandoned";
+				activeCtx.last_completed_step = "abort";
+				persistContext(input.pi, activeCtx);
+			}
 			activeCtx = createFreshRunContext(
 				input.sessionId,
 				input.projectRoot,
-				extractTaskSummary(input.args, input.userPrompt),
+				task,
 			);
+		} else if (input.command === "harness-auto") {
+			activeCtx = resetRunContextForHarnessAuto(activeCtx);
+			if (task) activeCtx.task_summary = task;
 		}
 		if (input.command === "harness-plan") {
-			const task = extractTaskSummary(input.args, input.userPrompt);
 			if (task) activeCtx.task_summary = task;
 		}
 		startFreshPlanAttempt({
@@ -1184,6 +1456,7 @@ async function resolveCommandRunContext(input: {
 			activeCtx,
 			command: input.command,
 			turn: input.turn,
+			sessionId: input.sessionId,
 		});
 	} else if (
 		activeCtx &&
@@ -1297,7 +1570,7 @@ async function handlePreResolvedHarnessCommand(args: {
 			handled: true,
 		};
 	}
-	if (command === "harness-run-status") {
+	if (command === "harness-run-status" || command === "harness-clear") {
 		return { activeCtx, response: undefined, handled: true };
 	}
 	if (
@@ -1315,21 +1588,6 @@ async function handlePreResolvedHarnessCommand(args: {
 		};
 	}
 	return { activeCtx, response: null, handled: false };
-}
-
-function blockingRunCommandReason(
-	command: string,
-	activeCtx: HarnessRunContext,
-): string | null {
-	if (command !== "harness-run") return null;
-	if (!activeCtx.plan_ready) return "Plan not ready. Run /harness-plan first.";
-	if (
-		activeCtx.last_completed_step === "execute" &&
-		activeCtx.last_outcome === "completed"
-	) {
-		return "Execute already completed for this run. Next: /harness-review (same session), or /harness-abort to replan.";
-	}
-	return null;
 }
 
 async function handleBeforeAgentStart(input: {
@@ -1371,12 +1629,21 @@ async function handleBeforeAgentStart(input: {
 		"plan";
 	const driftActive = driftGateActive(entries);
 	if (!parsed && needsClarificationFollowUp(activeCtx) && activeCtx) {
-		return maybeHandleClarificationFollowUp({
-			pi: input.pi,
+		const synced = await syncPlanLastOutcomeFromTaskClarification(
+			projectRoot,
 			activeCtx,
-			entries,
-			systemPrompt: input.event.systemPrompt,
-		});
+		);
+		if (synced.last_outcome !== "needs_clarification") {
+			input.active.set(synced);
+			persistContext(input.pi, synced);
+		} else {
+			return maybeHandleClarificationFollowUp({
+				pi: input.pi,
+				activeCtx,
+				entries,
+				systemPrompt: input.event.systemPrompt,
+			});
+		}
 	}
 	if (!parsed) return undefined;
 	const { command, args } = parsed;
@@ -1433,8 +1700,40 @@ async function handleBeforeAgentStart(input: {
 			return blockRunContextMessage(check.reason ?? "Invalid --plan override");
 		activeCtx.plan_packet_path = resolved.planPath;
 	}
-	const runBlockReason = blockingRunCommandReason(command, activeCtx);
+	let planSynced = await reconcileStaleExecuteCompletion(
+		projectRoot,
+		activeCtx,
+		entries,
+	);
+	planSynced = await reconcileReviewRouting(projectRoot, planSynced);
+	Object.assign(activeCtx, planSynced);
+	persistContext(input.pi, activeCtx);
+	const autoBlockReason = await blockingHarnessAutoCommandReason(
+		command,
+		activeCtx,
+		args,
+		userPrompt,
+	);
+	if (autoBlockReason) return blockRunContextMessage(autoBlockReason);
+	const runBlockReason = await blockingRunCommandReason(
+		command,
+		activeCtx,
+		projectRoot,
+		entries,
+	);
 	if (runBlockReason) return blockRunContextMessage(runBlockReason);
+	const reviewBlockReason = await blockingReviewCommandReason(
+		command,
+		activeCtx,
+		projectRoot,
+	);
+	if (reviewBlockReason) return blockRunContextMessage(reviewBlockReason);
+	const steerBlockReason = await blockingSteerCommandReason(
+		command,
+		activeCtx,
+		projectRoot,
+	);
+	if (steerBlockReason) return blockRunContextMessage(steerBlockReason);
 	const { planSummary, planPacketForSpawn } =
 		await readPlanSpawnState(activeCtx);
 	const { activePlanBlock, planMode, contextSpawnOpts } =
@@ -1452,10 +1751,34 @@ async function handleBeforeAgentStart(input: {
 		projectRoot,
 		userPrompt,
 	});
+	const syncedCtx = await syncPlanLastOutcomeFromTaskClarification(
+		projectRoot,
+		activeCtx,
+	);
+	Object.assign(activeCtx, syncedCtx);
 	input.active.set(activeCtx);
 	persistContext(input.pi, activeCtx);
+	if (command === "harness-plan" || command === "harness-auto") {
+		syncPolicyFromRunContext(input.pi, entries, activeCtx);
+	}
+	let gateBlock = "";
+	if (command === "harness-plan" || command === "harness-auto") {
+		const quick = parseArgFlag(args, "--quick") != null;
+		const gateStatus = await resolvePlanHumanGateStatus(
+			projectRoot,
+			activeCtx.run_id,
+			entries,
+			{
+				quick,
+				taskSummary: activeCtx.task_summary ?? undefined,
+				lastOutcome: activeCtx.last_outcome ?? undefined,
+			},
+		);
+		gateBlock = formatPlanHumanGateBlock(gateStatus);
+	}
+	const gateSuffix = gateBlock ? `\n\n${gateBlock}` : "";
 	return {
-		systemPrompt: `${input.event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}`,
+		systemPrompt: `${input.event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}${gateSuffix}`,
 	};
 }
 
@@ -1468,6 +1791,13 @@ async function handleAgentEnd(input: {
 	const entries = getEntries(input.ctx);
 	const activeCtx = input.active.get() ?? getLatestRunContext(entries);
 	if (!activeCtx) return;
+	let reconciledOnEnd = await reconcileStaleExecuteCompletion(
+		projectRoot,
+		activeCtx,
+		entries,
+	);
+	reconciledOnEnd = await reconcileReviewRouting(projectRoot, reconciledOnEnd);
+	Object.assign(activeCtx, reconciledOnEnd);
 	input.active.set(activeCtx);
 	const parsed = latestParsedHarnessCommand(entries);
 	if (!parsed && !needsClarificationFollowUp(activeCtx)) return;
@@ -1482,13 +1812,23 @@ async function handleAgentEnd(input: {
 		parsed,
 		activeCtx,
 	});
+	if (
+		parsed?.command === "harness-plan" ||
+		parsed?.command === "harness-auto"
+	) {
+		const synced = await syncPlanLastOutcomeFromTaskClarification(
+			projectRoot,
+			activeCtx,
+		);
+		Object.assign(activeCtx, synced);
+		persistContext(input.pi, activeCtx);
+	}
 	const statuses = await resolveCompletionStatuses(
 		entries,
 		activeCtx.run_id,
 		projectRoot,
 	);
 	if (parsed?.command === "harness-run") {
-		activeCtx.last_completed_step = "execute";
 		let execStatus = statuses.executionStatus;
 		if (!execStatus) {
 			const handoff = await readExecutorHandoffFromRun(
@@ -1497,8 +1837,11 @@ async function handleAgentEnd(input: {
 			);
 			execStatus = handoff?.execution_status ?? null;
 		}
-		activeCtx.last_outcome = execStatus ?? "completed";
-		activeCtx.phase = "evaluate";
+		const runPost = resolveHarnessRunPostAgentState(
+			execStatus,
+			activeCtx.plan_ready,
+		);
+		Object.assign(activeCtx, runPost);
 	}
 	if (parsed?.command === "harness-steer") {
 		activeCtx.last_completed_step = "steer";
@@ -1521,7 +1864,14 @@ async function handleAgentEnd(input: {
 			activeCtx.last_completed_step = "adversary";
 		} else if (statuses.evalStatus) activeCtx.phase = "evaluate";
 	}
-	const reviewOutcome = await readReviewOutcomeFromRun(
+	if (
+		["harness-eval", "harness-review", "harness-critic"].includes(
+			parsed?.command ?? "",
+		)
+	) {
+		await ensureReviewOutcomeFromEval(activeCtx.run_id, projectRoot);
+	}
+	const remediationClass = await resolveRemediationClassForRun(
 		activeCtx.run_id,
 		projectRoot,
 	);
@@ -1537,7 +1887,7 @@ async function handleAgentEnd(input: {
 		evalStatus: statuses.evalStatus,
 		adversaryComplete: statuses.adversaryComplete,
 		aborted: activeCtx.status === "aborted",
-		remediationClass: reviewOutcome?.remediation_class ?? null,
+		remediationClass,
 		steerAttempt: activeCtx.steer_attempt ?? 0,
 		steerMaxAttempts: activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv(),
 		reviewComplete,
@@ -1590,7 +1940,7 @@ function registerHarnessRunContextTool1(
 		parameters: Type.Object({
 			path: Type.String({
 				description:
-					"Path under the active run, e.g. artifacts/decomposition.yaml or research-brief.yaml",
+					"Run-relative path (preferred): artifacts/decomposition.yaml, research-brief.yaml, plan-packet.yaml. The active run id is applied automatically — do not prefix with .pi/harness/runs/.",
 			}),
 			content: Type.String({
 				description:
@@ -1640,21 +1990,32 @@ function registerHarnessRunContextTool1(
 				};
 			}
 			const projectRoot = process.cwd();
-			const absPath = normalizeHarnessPath(pathArg, projectRoot);
-			const scoped = await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot);
+			const resolved = resolveHarnessRunWriteTarget(
+				pathArg,
+				runCtx,
+				projectRoot,
+			);
+			const absPath =
+				resolved?.absPath ?? normalizeHarnessPath(pathArg, projectRoot);
+			const scoped =
+				resolved != null ||
+				(await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot));
 			if (!scoped) {
 				return {
 					content: [
 						{
 							type: "text",
-							text: `Path not allowed: ${pathArg}. Must be under .pi/harness/runs/${runCtx.run_id}/ (artifacts/*.yaml, research-brief.yaml, etc.).`,
+							text: `Path not allowed: ${pathArg}. Use a run-relative path like artifacts/decomposition.yaml or research-brief.yaml (active run ${runCtx.run_id} is applied automatically). Full paths under .pi/harness/runs/${runCtx.run_id}/ are also accepted.`,
 						},
 					],
-					details: { path: pathArg },
+					details: { path: pathArg, run_id: runCtx.run_id },
 					isError: true,
 				};
 			}
-			const relForGate = pathArg.replace(/\\/g, "/");
+			const relForGate =
+				resolved?.relUnderRun ??
+				(await relPathUnderActiveRun(absPath, runCtx, projectRoot)) ??
+				pathArg.replace(/\\/g, "/");
 			const subagentOnly = new Set([
 				"artifacts/eval-verdict.yaml",
 				"artifacts/adversary-report.yaml",
@@ -1721,11 +2082,66 @@ function registerHarnessRunContextTool1(
 				doc = parseStructuredDocument(content, pathArg);
 			} catch (err) {
 				const msg = err instanceof Error ? err.message : String(err);
+				const hint =
+					msg.includes("not valid YAML") || msg.includes("JSON parse")
+						? " Pass a fenced ```yaml block, raw YAML object, or JSON object — not prose or a partial fragment."
+						: "";
 				return {
-					content: [{ type: "text", text: msg }],
-					details: { path: pathArg },
+					content: [
+						{
+							type: "text",
+							text: `${relForGate}: ${msg}${hint}`,
+						},
+					],
+					details: { path: relForGate, run_id: runCtx.run_id },
 					isError: true,
 				};
+			}
+			const docRecord = doc as Record<string, unknown>;
+			if (relForGate === TASK_CLARIFICATION_ARTIFACT) {
+				const humanGate = validateTaskClarificationHumanGate(
+					entries,
+					docRecord,
+					{
+						quick:
+							parseArgFlag(
+								getLatestHarnessTurn(entries)?.args ?? "",
+								"--quick",
+							) != null,
+						taskSummary: runCtx.task_summary ?? undefined,
+						allowFollowUpMessage: runCtx.last_outcome === "needs_clarification",
+					},
+				);
+				if (!humanGate.ok) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: humanGate.errors.join("\n"),
+							},
+						],
+						details: { path: pathArg },
+						isError: true,
+					};
+				}
+			}
+			if (relForGate === "artifacts/plan-phase-status.yaml") {
+				const planStatus = String(docRecord.plan_status ?? "").toLowerCase();
+				if (
+					planStatus === "ready" &&
+					!hasPlanUserApproval(entries, { sincePlanCommand: true })
+				) {
+					return {
+						content: [
+							{
+								type: "text",
+								text: "Blocked: plan_status ready requires approve_plan (then create_plan) before marking the plan phase complete.",
+							},
+						],
+						details: { path: pathArg },
+						isError: true,
+					};
+				}
 			}
 			await mkdir(dirname(absPath), { recursive: true });
 			await writeYamlFile(absPath, doc);
@@ -1743,10 +2159,10 @@ function registerHarnessRunContextTool1(
 				content: [
 					{
 						type: "text",
-						text: `Wrote ${pathArg} as canonical YAML.`,
+						text: `Wrote ${relForGate} as canonical YAML.`,
 					},
 				],
-				details: { path: absPath },
+				details: { path: absPath, rel: relForGate, run_id: runCtx.run_id },
 			};
 		},
 	});
@@ -1812,17 +2228,25 @@ function registerHarnessRunContextTool2(
 				};
 			}
 			const projectRoot = process.cwd();
-			const absPath = normalizeHarnessPath(pathArg, projectRoot);
-			const scoped = await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot);
+			const resolved = resolveHarnessRunWriteTarget(
+				pathArg,
+				runCtx,
+				projectRoot,
+			);
+			const absPath =
+				resolved?.absPath ?? normalizeHarnessPath(pathArg, projectRoot);
+			const scoped =
+				resolved != null ||
+				(await isPlanPhaseScopedWrite(absPath, runCtx, projectRoot));
 			if (!scoped) {
 				return {
 					content: [
 						{
 							type: "text",
-							text: `Path not allowed: ${pathArg}.`,
+							text: `Path not allowed: ${pathArg}. Use run-relative paths like artifacts/decomposition.yaml (active run ${runCtx.run_id}).`,
 						},
 					],
-					details: { path: pathArg },
+					details: { path: pathArg, run_id: runCtx.run_id },
 					isError: true,
 				};
 			}
@@ -1833,7 +2257,10 @@ function registerHarnessRunContextTool2(
 				"runs",
 				runCtx.run_id,
 			);
-			const relMerge = pathArg.replace(/\\/g, "/");
+			const relMerge =
+				resolved?.relUnderRun ??
+				(await relPathUnderActiveRun(absPath, runCtx, projectRoot)) ??
+				pathArg.replace(/\\/g, "/");
 			const clarMerge = await assertTaskClarificationReadyForPlanWrite(
 				runRoot,
 				relMerge,
@@ -2044,7 +2471,18 @@ function registerHarnessRunContextTool4(
 			const { validateHarnessArtifactPaths } = await import(
 				"../lib/harness-artifact-gate.js"
 			);
-			const gate = await validateHarnessArtifactPaths(runRoot, paths, specsDir);
+			const turn = getLatestHarnessTurn(entries);
+			const gate = await validateHarnessArtifactPaths(
+				runRoot,
+				paths,
+				specsDir,
+				{
+					entries,
+					quick: turn ? parseArgFlag(turn.args, "--quick") != null : false,
+					taskSummary: runCtx.task_summary ?? undefined,
+					lastOutcome: runCtx.last_outcome ?? undefined,
+				},
+			);
 			if (
 				gate.ok &&
 				paths.some((p) => p.replace(/\\/g, "/") === TASK_CLARIFICATION_ARTIFACT)
@@ -2053,8 +2491,13 @@ function registerHarnessRunContextTool4(
 				const clarified = String(clarDoc?.clarified_task ?? "").trim();
 				if (clarified && runCtx.task_summary !== clarified) {
 					runCtx.task_summary = clarified;
-					persistContext(pi, runCtx);
 				}
+				const synced = await syncPlanLastOutcomeFromTaskClarification(
+					projectRoot,
+					runCtx,
+				);
+				Object.assign(runCtx, synced);
+				persistContext(pi, runCtx);
 			}
 			const text = gate.ok
 				? `All ${gate.present.length} artifact(s) present and valid.`
@@ -2138,6 +2581,8 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	registerPlanApprovalCapture(pi, activeAccess);
 	registerHarnessToolCallGuards(pi, activeAccess);
 	registerHarnessRunStatusCommand(pi, activeAccess);
+
+	registerHarnessClearCommand(pi, activeAccess);
 	registerHarnessNewRunCommand(pi, activeAccess);
 
 	registerHarnessPlanCommitCommand(pi, activeAccess);

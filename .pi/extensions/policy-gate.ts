@@ -24,6 +24,7 @@ import {
 	isPlanPhaseAllowedMutation,
 	isPlanPhaseScopedWrite,
 	normalizeHarnessPath,
+	parseHarnessSlashInput,
 	readPlanPacketFromPath,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
@@ -152,6 +153,9 @@ async function handlePolicyBeforeAgentStart(args: {
 	const bootstrapPrompt = isHarnessBootstrapPrompt(userPrompt);
 	const abortSignal = hasHarnessAbortSignal(userPrompt);
 
+	const parsed = parseHarnessSlashInput(userPrompt);
+	const isHarnessClear = parsed?.command === "harness-clear";
+
 	if (bootstrapPrompt) {
 		state.phase = "execute";
 		state.approvedPlan = true;
@@ -186,11 +190,20 @@ async function handlePolicyBeforeAgentStart(args: {
 				content: [
 					"Harness run aborted safely.",
 					"Mutating tools are now blocked until a new approved plan is attached.",
-					'Next step: /harness-plan "<task>"',
+					'Next step: /harness-plan "<task>" or /harness-auto "<task>"',
 				].join("\n"),
 			},
 			systemPrompt: `${event.systemPrompt}\n\n[PolicyGate]\nAbort lock active. Mutating tools must remain blocked until a new approved plan is attached.`,
 		};
+	}
+
+	if (
+		parsed?.command === "harness-plan" ||
+		parsed?.command === "harness-auto"
+	) {
+		stateRef.current.aborted = false;
+		stateRef.current.abortReason = null;
+		stateRef.current.abortedAt = null;
 	}
 
 	const nextPhase = inferHarnessPhase(entries, userPrompt);
@@ -206,7 +219,7 @@ async function handlePolicyBeforeAgentStart(args: {
 		};
 	}
 
-	if (nextPhase === "plan") {
+	if (nextPhase === "plan" || isHarnessClear) {
 		stateRef.current.approvedPlan = false;
 		stateRef.current.planId = null;
 	}

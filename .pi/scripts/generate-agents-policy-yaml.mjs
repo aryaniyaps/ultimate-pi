@@ -13,6 +13,53 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const AGENTS_DIR = join(ROOT, ".pi", "agents");
 const OUT = join(ROOT, ".pi", "harness", "agents.policy.yaml");
 
+/** Per-agent tool denials layered on kind defaults (ADR 0049). */
+const AGENT_TOOLS_DENY = {
+	"harness/planning/hypothesis-validator": [
+		"bash",
+		"grep",
+		"find",
+		"ls",
+		"ctx_batch_execute",
+		"ctx_execute",
+		"ctx_execute_file",
+		"ctx_search",
+		"ctx_fetch_and_index",
+	],
+	"harness/planning/implementation-researcher": [
+		"bash",
+		"find",
+		"ctx_batch_execute",
+		"ctx_execute",
+		"ctx_execute_file",
+	],
+	"harness/planning/stack-researcher": [
+		"bash",
+		"find",
+		"ctx_batch_execute",
+		"ctx_execute",
+		"ctx_execute_file",
+	],
+	"harness/planning/sprint-contract-auditor": [
+		"bash",
+		"find",
+		"ctx_batch_execute",
+		"ctx_execute",
+		"ctx_execute_file",
+		"ctx_fetch_and_index",
+	],
+	"harness/planning/review-integrator": [
+		"bash",
+		"grep",
+		"find",
+		"ctx_batch_execute",
+		"ctx_execute",
+		"ctx_execute_file",
+		"ctx_search",
+		"ctx_fetch_and_index",
+	],
+};
+
 const SUBMIT_BY_AGENT = {
 	"harness/planning/planning-context": ["submit_planning_context"],
 	"harness/planning/decompose": ["submit_decomposition_brief", "submit_human_required"],
@@ -60,14 +107,31 @@ function kindFor(id) {
 	return "other";
 }
 
+const READ_ONLY_BASE_TOOLS = [
+	"read",
+	"grep",
+	"find",
+	"ls",
+	"bash",
+	"ctx_batch_execute",
+	"ctx_execute",
+	"ctx_execute_file",
+	"ctx_search",
+	"ctx_fetch_and_index",
+];
+
 const KIND_BASE = {
-	planner: ["read", "grep", "find", "ls"],
-	executor: ["read", "write", "edit", "bash", "grep", "find", "ls"],
-	evaluator: ["read", "grep", "find", "ls"],
-	adversary: ["read", "grep", "find", "ls"],
-	tie_breaker: ["read", "grep", "find", "ls"],
-	trace: ["read", "grep", "find", "ls"],
-	incident: ["read", "grep", "find", "ls"],
+	planner: [...READ_ONLY_BASE_TOOLS],
+	executor: [
+		...READ_ONLY_BASE_TOOLS,
+		"write",
+		"edit",
+	],
+	evaluator: [...READ_ONLY_BASE_TOOLS],
+	adversary: [...READ_ONLY_BASE_TOOLS],
+	tie_breaker: [...READ_ONLY_BASE_TOOLS],
+	trace: [...READ_ONLY_BASE_TOOLS],
+	incident: [...READ_ONLY_BASE_TOOLS],
 	other: ["read", "grep", "find", "ls"],
 };
 
@@ -117,6 +181,8 @@ async function main() {
 			(t) => !base.has(t),
 		);
 		const entry = { kind };
+		const toolsDeny = AGENT_TOOLS_DENY[id];
+		if (toolsDeny?.length) entry.tools_deny = toolsDeny;
 		if (toolsAdd.length > 0) entry.tools_add = toolsAdd;
 		if (fm.extensions === false) entry.extensions = false;
 		if (fm.extensions === true) entry.extensions = true;

@@ -12,7 +12,11 @@ import {
 
 const killSwitch = new KillSwitch({ enabled: true });
 
-import { recordHarnessPolicyDeny } from "../lib/agt/kill-switch-state.js";
+import {
+	armHarnessKillSwitch,
+	isHarnessKillSwitchDisarmed,
+	recordHarnessPolicyDeny,
+} from "../lib/agt/kill-switch-state.js";
 
 export function getHarnessKillSwitch(): KillSwitch {
 	return killSwitch;
@@ -34,6 +38,7 @@ export default function agtKillSwitch(pi: ExtensionAPI) {
 		const prompt = userVisiblePromptSlice(event.prompt);
 		if (hasHarnessAbortSignal(prompt)) {
 			const sessionId = ctx.sessionManager.getSessionId();
+			armHarnessKillSwitch(sessionId);
 			await killSwitch.kill(sessionId, {
 				reason: "harness-abort command",
 			});
@@ -43,6 +48,7 @@ export default function agtKillSwitch(pi: ExtensionAPI) {
 
 	pi.on("tool_call", async (_event, ctx) => {
 		const sessionId = ctx.sessionManager.getSessionId();
+		if (isHarnessKillSwitchDisarmed(sessionId)) return undefined;
 		const history = killSwitch.getHistory();
 		const armed = history.some((h) => h.agentId === sessionId);
 		if (armed) {

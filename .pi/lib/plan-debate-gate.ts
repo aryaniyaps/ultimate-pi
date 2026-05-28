@@ -19,6 +19,7 @@ import {
 	laneArtifactPathsForParallelProbesRound,
 	laneArtifactPathsForRound,
 } from "./plan-debate-lanes.js";
+import { getPlanDebateRoundStatus } from "./plan-debate-round-status.js";
 import {
 	getMessengerRoundState,
 	loadMessengerState,
@@ -330,4 +331,90 @@ export function isReviewRoundArtifactPath(relPath: string): boolean {
 		/^artifacts\/review-round-r\d+\.yaml$/i.test(norm) ||
 		norm === CONSOLIDATED_REVIEW_ARTIFACT
 	);
+}
+
+function roundIndexForFocus(
+	focus: PlanDebateFocus,
+	required: readonly PlanDebateFocus[],
+): number {
+	const idx = required.indexOf(focus);
+	return idx >= 0 ? idx + 1 : 1;
+}
+
+/** Actionable recovery steps when approve_plan is blocked by the debate gate. */
+export async function buildPlanDebateGateRecovery(
+	projectRoot: string,
+	runId: string,
+	gate: PlanDebateGateResult,
+): Promise<string> {
+	const runDir = join(projectRoot, ".pi", "harness", "runs", runId);
+	const messenger = await loadMessengerState(runDir);
+	const required: readonly PlanDebateFocus[] =
+		messenger?.required_focuses && messenger.required_focuses.length > 0
+			? messenger.required_focuses
+			: (["spec", "wbs", "schedule", "quality"] as const);
+	const profile =
+		messenger?.debate_profile ?? gate.debate_profile ?? "standard";
+	const mode = messenger?.review_gate_mode ?? "threaded";
+	const coverage = gate.focus_coverage;
+
+	const lines: string[] = [
+		"Review Gate must finish before approve_plan.",
+		"",
+		"Blocking checks:",
+		...gate.errors.map((e) => `- ${e}`),
+		"",
+		`Debate profile: ${profile}, mode: ${mode}, required focuses: ${required.join(", ")}`,
+		"",
+	];
+
+	const needsConsensus = gate.errors.some(
+		(e) => e.includes("consensus") || e.includes(".consensus.json"),
+	);
+	const needsRounds = gate.errors.some(
+		(e) =>
+			e.includes("review_gate_ready") ||
+			e.includes("focus not covered") ||
+			e.includes("missing artifacts/") ||
+			e.includes("round events"),
+	);
+
+	if (needsRounds) {
+		const nextFocus: PlanDebateFocus =
+			(coverage?.missing[0] as PlanDebateFocus | undefined) ??
+			required[0] ??
+			"spec";
+		const roundIndex =
+			mode === "consolidated" ? 1 : roundIndexForFocus(nextFocus, required);
+		const status = await getPlanDebateRoundStatus(runDir, roundIndex, runId, {
+			debate_round_focus: mode === "consolidated" ? "all" : nextFocus,
+		});
+		lines.push(
+			`Next round: ${roundIndex} (focus: ${mode === "consolidated" ? "all" : nextFocus})`,
+		);
+		if (status.missing.length > 0) {
+			lines.push("Missing lane artifacts:");
+			for (const m of status.missing) {
+				lines.push(`- ${m}`);
+			}
+		}
+		if (status.next_tool) {
+			lines.push(`Next tool: ${status.next_tool}`);
+		}
+		lines.push(
+			"Workflow: complete lane subagents (one per batch) → review-integrator → harness_debate_submit_round → harness_debate_focus_coverage.",
+		);
+	}
+
+	if (needsConsensus) {
+		lines.push(
+			"When all required focuses are covered and the last round has review_gate_ready: true, call harness_debate_consensus, then approve_plan again.",
+		);
+	}
+
+	if (gate.warnings.length > 0) {
+		lines.push("", "Warnings:", ...gate.warnings.map((w) => `- ${w}`));
+	}
+
+	return lines.join("\n");
 }

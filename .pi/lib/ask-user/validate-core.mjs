@@ -210,6 +210,18 @@ function isGlimpseAvailable() {
 	}
 }
 
+function isCursorAgentContext() {
+	const v = process.env.CURSOR_AGENT;
+	return v === "1" || v === "true";
+}
+
+function shouldPreferTuiOverGlimpse() {
+	const forced = process.env.HARNESS_ASK_USER_UI?.toLowerCase();
+	if (forced === "glimpse") return false;
+	if (forced === "tui" || forced === "headless") return forced === "tui";
+	return isCursorAgentContext();
+}
+
 /** @param {import('./types.js').ValidatedAskParams} validated @param {boolean} hasUI */
 export function resolvePresenterChoice(validated, hasUI) {
 	if (validated.displayMode === "inline") return "tui";
@@ -218,6 +230,10 @@ export function resolvePresenterChoice(validated, hasUI) {
 	if (forced === "tui") return "tui";
 	if (forced === "glimpse") return "glimpse";
 	if (forced === "headless") return "headless";
+	if (shouldPreferTuiOverGlimpse()) {
+		if (hasUI) return "tui";
+		return "headless";
+	}
 	if (hasUI && isGlimpseAvailable()) return "glimpse";
 	if (hasUI) return "tui";
 	return "headless";

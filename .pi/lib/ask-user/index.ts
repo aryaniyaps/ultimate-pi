@@ -14,11 +14,13 @@ export { formatResultText, toToolDetails } from "./format.js";
 export { applyAskUserToTaskClarification } from "./merge-task-clarification.js";
 export {
 	assertSubagentCannotAskUser,
+	isCursorAgentContext,
 	isHarnessNonInteractive,
 	isPlanApprovalAskUser,
 	nonInteractiveAskUserResult,
 	PLAN_APPROVE_OPTION,
 	PLAN_CANCEL_OPTION,
+	shouldPreferTuiOverGlimpse,
 } from "./policy.js";
 export {
 	glimpseHealthCheck,

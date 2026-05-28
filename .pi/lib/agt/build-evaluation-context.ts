@@ -264,7 +264,9 @@ export async function buildHarnessAgtEvaluationContext(
 		agentKind,
 	});
 
-	const spawnDecision = evaluateSubagentToolCall(input.toolName, agentId);
+	const spawnDecision = evaluateSubagentToolCall(input.toolName, agentId, {
+		isParentOrchestrator,
+	});
 
 	const toolAllowed = allowsAgentTool({
 		packageRoot: input.packageRoot,

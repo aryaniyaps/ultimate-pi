@@ -10,6 +10,7 @@ import { getAgentKind } from "./agents-policy.mjs";
 import { getHarnessPackageRoot } from "./harness-paths.js";
 import { type HarnessPhase, inferHarnessPhase } from "./harness-run-context.js";
 import { validateHarnessSpawnTopology } from "./harness-spawn-topology.js";
+import { shouldBlockSubagentForMissingPlanApproval } from "./plan-human-gates.js";
 
 export interface SubagentTaskRef {
 	agent: string;
@@ -23,6 +24,10 @@ export interface PrecheckResult {
 export interface PrecheckOptions {
 	projectRoot?: string;
 	runId?: string | null;
+	entries?: unknown[];
+	quick?: boolean;
+	taskSummary?: string;
+	lastOutcome?: string | null;
 }
 
 function collectAgents(params: {
@@ -98,9 +103,25 @@ export async function precheckHarnessSubagentSpawn(
 		parallelTaskCount,
 		projectRoot: opts?.projectRoot,
 		runId: opts?.runId,
+		entries: opts?.entries,
+		quick: opts?.quick,
+		taskSummary: opts?.taskSummary,
+		lastOutcome: opts?.lastOutcome,
 	});
 	if (!topology.ok) {
 		return topology;
+	}
+
+	if (phase === "plan" && opts?.projectRoot && opts?.runId && opts?.entries) {
+		const approvalBlock = await shouldBlockSubagentForMissingPlanApproval(
+			opts.projectRoot,
+			opts.runId,
+			opts.entries,
+			phase,
+		);
+		if (approvalBlock.block) {
+			return { ok: false, message: approvalBlock.reason };
+		}
 	}
 
 	const packageRoot = getHarnessPackageRoot(

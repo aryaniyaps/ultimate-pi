@@ -93,6 +93,11 @@ export function applyAskUserToTaskClarification(
 	if (next.status === "draft" || next.status === "needs_user") {
 		next.status = "needs_user";
 	}
+	next.user_engagement = {
+		source: "ask_user",
+		recorded_at: new Date().toISOString(),
+	};
+	next.clarification_rounds = (Number(next.clarification_rounds) || 0) + 1;
 
 	return next;
 }
