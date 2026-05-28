@@ -75,6 +75,8 @@ Ensure `artifacts/ls-lint-signal.yaml` exists (from `/harness-run` or write from
 
 Run project tests if the approved `PlanPacket` or spawn context lists a test command. Capture stdout paths only — do not paste full logs into the next spawn.
 
+Verify the testing obligation itself: the approved `PlanPacket` or spawn context must show planned applicability decisions for unit, integration, and e2e/end-to-end tests, and executor evidence must show applicable tests were implemented or updated and run. If a test level was not applicable, require a clear rationale tied to risk and changed surface; missing planned or executed applicable testing is a benchmark failure.
+
 Write `artifacts/benchmark-log.yaml` via `write_harness_yaml` when any shell step ran:
 
 ```yaml

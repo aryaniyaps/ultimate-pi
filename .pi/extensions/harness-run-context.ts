@@ -74,6 +74,7 @@ import {
 	readReviewOutcomeFromRun,
 	reconcileReviewRouting,
 	reconcileStaleExecuteCompletion,
+	refreshRunContextProgress,
 	relPathUnderActiveRun,
 	resetRunContextForHarnessAuto,
 	resolveArgsForCommand,
@@ -814,6 +815,13 @@ function registerHarnessRunStatusCommand(
 				if (ctx.hasUI) ctx.ui.notify(msg, "warning");
 				return;
 			}
+			ctxState = await refreshRunContextProgress(
+				projectRoot,
+				ctxState,
+				entries,
+			);
+			active.set(ctxState);
+			persistContext(pi, ctxState);
 			let summary: PlanPacketSummary | null = null;
 			for (let i = entries.length - 1; i >= 0; i--) {
 				const entry = entries[i] as SessionEntryLike;
@@ -1253,12 +1261,29 @@ function registerPlanApprovalCapture(
 		if (event.toolName === "ask_user") {
 			const details = event.details as { cancelled?: boolean; input?: unknown };
 			if (details?.cancelled) {
-				const synced = await syncPlanLastOutcomeFromTaskClarification(
+				// Ignore cancels from later planning forks (e.g. debate profile choice):
+				// only treat cancel as Phase-0 clarification failure when clarification
+				// is not already locked ready.
+				const runRoot = join(
 					process.cwd(),
-					runCtx,
+					".pi",
+					"harness",
+					"runs",
+					runCtx.run_id ?? "",
 				);
-				Object.assign(runCtx, synced);
-				persistContext(pi, runCtx);
+				const clarDoc = runCtx.run_id
+					? await readTaskClarificationDoc(runRoot)
+					: null;
+				const clarReady =
+					String(clarDoc?.status ?? "").toLowerCase() === "ready";
+				if (!clarReady) {
+					const synced = await syncPlanLastOutcomeFromTaskClarification(
+						process.cwd(),
+						runCtx,
+					);
+					Object.assign(runCtx, synced);
+					persistContext(pi, runCtx);
+				}
 			} else if (
 				!isPlanApprovalAskUser(
 					(details?.input ?? {}) as {
@@ -1292,6 +1317,36 @@ function registerPlanApprovalCapture(
 			approved_at: approval.approved_at,
 			source: approval.source,
 		});
+	});
+}
+
+function registerExecutorHandoffReconcile(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+): void {
+	pi.on("tool_result", async (event, ctx) => {
+		if (event.isError || event.toolName !== "submit_executor_handoff") return;
+		const entries = getEntries(ctx);
+		const runCtx = getLatestRunContext(entries) ?? active.get();
+		if (!runCtx?.run_id) return;
+		const projectRoot = process.cwd();
+		const refreshed = await refreshRunContextProgress(
+			projectRoot,
+			runCtx,
+			entries,
+		);
+		Object.assign(runCtx, refreshed);
+		active.set(runCtx);
+		persistContext(pi, runCtx);
+		if (refreshed.last_completed_step === "execute") {
+			const notify = `Execute finished (${refreshed.last_outcome ?? "done"}). Next: ${refreshed.next_recommended_command ?? "/harness-review"}`;
+			pi.appendEntry("harness-step-handoff", {
+				next_command: refreshed.next_recommended_command,
+				execution_status: refreshed.last_outcome,
+				phase: refreshed.phase,
+			});
+			if (ctx.hasUI) ctx.ui.notify(notify, "info");
+		}
 	});
 }
 
@@ -1828,7 +1883,7 @@ async function handleAgentEnd(input: {
 		activeCtx.run_id,
 		projectRoot,
 	);
-	if (parsed?.command === "harness-run") {
+	if (parsed?.command === "harness-run" || parsed?.command === "harness-auto") {
 		let execStatus = statuses.executionStatus;
 		if (!execStatus) {
 			const handoff = await readExecutorHandoffFromRun(
@@ -1895,7 +1950,7 @@ async function handleAgentEnd(input: {
 	activeCtx.next_recommended_command = next;
 	activeCtx.updated_at = new Date().toISOString();
 	if (
-		parsed?.command === "harness-run" &&
+		(parsed?.command === "harness-run" || parsed?.command === "harness-auto") &&
 		activeCtx.last_outcome === "completed"
 	) {
 		syncPolicyFromRunContext(input.pi, entries, activeCtx);
@@ -2579,6 +2634,7 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 	});
 
 	registerPlanApprovalCapture(pi, activeAccess);
+	registerExecutorHandoffReconcile(pi, activeAccess);
 	registerHarnessToolCallGuards(pi, activeAccess);
 	registerHarnessRunStatusCommand(pi, activeAccess);
 

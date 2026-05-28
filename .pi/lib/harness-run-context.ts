@@ -2407,6 +2407,44 @@ export async function reconcileStaleExecuteCompletion(
 	return synced;
 }
 
+/** Reconcile disk artifacts and recompute next_recommended_command for status UI. */
+export async function refreshRunContextProgress(
+	projectRoot: string,
+	ctx: HarnessRunContext,
+	entries: unknown[] = [],
+): Promise<HarnessRunContext> {
+	let synced = await reconcileStaleExecuteCompletion(projectRoot, ctx, entries);
+	synced = await reconcileReviewRouting(projectRoot, synced);
+	const statuses = await resolveCompletionStatuses(
+		entries,
+		synced.run_id,
+		projectRoot,
+	);
+	const reviewComplete =
+		synced.last_completed_step === "review" ||
+		synced.last_completed_step === "adversary";
+	const remediationClass = await resolveRemediationClassForRun(
+		synced.run_id,
+		projectRoot,
+	);
+	synced.next_recommended_command = nextStepAfterOutcome({
+		phase: synced.phase,
+		planStatus: synced.plan_ready ? "ready" : statuses.planStatus,
+		lastCompletedStep: synced.last_completed_step,
+		lastOutcome: synced.last_outcome,
+		executionStatus: statuses.executionStatus,
+		evalStatus: statuses.evalStatus,
+		adversaryComplete: statuses.adversaryComplete,
+		aborted: synced.status === "aborted",
+		remediationClass,
+		steerAttempt: synced.steer_attempt ?? 0,
+		steerMaxAttempts: synced.steer_max_attempts ?? steerMaxAttemptsFromEnv(),
+		reviewComplete,
+	});
+	synced.updated_at = nowIso();
+	return synced;
+}
+
 export async function blockingHarnessAutoCommandReason(
 	command: string,
 	activeCtx: HarnessRunContext | null,
