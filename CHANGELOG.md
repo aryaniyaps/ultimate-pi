@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## [v0.22.2] — 2026-05-28
+
+### 🐛 Fixes
+
+- Harden harness plan/run/review/auto pipeline routing: reconcile run context from disk and handoffs, sync review-outcome from eval, fix harness-auto fresh runs (plan path, abort lock, kill-switch disarm), add harness-clear and expanded tests.
+
 ## [v0.22.1] — 2026-05-27
 
 ### 🔧 Chores
