@@ -28,6 +28,33 @@ import {
 const EXPLICIT_ACCEPTANCE_RE =
 	/\b(acceptance|success criteria|definition of done|done when|must (pass|satisfy)|out of scope|in scope)\b/i;
 
+function logPlanHumanGate(payload: {
+	runId: string;
+	hypothesisId: string;
+	location: string;
+	message: string;
+	data: Record<string, unknown>;
+}): void {
+	// #region agent log
+	fetch("http://127.0.0.1:7928/ingest/a5d40896-34cb-4f12-97db-df7ada0b22f0", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-Debug-Session-Id": "f7763e",
+		},
+		body: JSON.stringify({
+			sessionId: "f7763e",
+			runId: payload.runId,
+			hypothesisId: payload.hypothesisId,
+			location: payload.location,
+			message: payload.message,
+			data: payload.data,
+			timestamp: Date.now(),
+		}),
+	}).catch(() => {});
+	// #endregion
+}
+
 type SessionEntryLike = {
 	type?: string;
 	customType?: string;
@@ -190,10 +217,50 @@ export async function resolvePlanHumanGateStatus(
 	const runDir = join(projectRoot, ".pi", "harness", "runs", runId);
 	const clar = await isTaskClarificationReady(runDir);
 	const clarDoc = clar.ok ? await readTaskClarificationDoc(runDir) : null;
+	logPlanHumanGate({
+		runId,
+		hypothesisId: "H3",
+		location: "plan-human-gates.ts:resolvePlanHumanGateStatus:clar",
+		message: "Task clarification readiness evaluated",
+		data: {
+			runDir,
+			clarOk: clar.ok,
+			clarErrors: clar.errors,
+			docStatus: String(clarDoc?.status ?? ""),
+			docEngagementSource:
+				typeof clarDoc?.user_engagement === "object" &&
+				clarDoc?.user_engagement !== null
+					? String(
+							(
+								clarDoc.user_engagement as {
+									source?: string;
+								}
+							).source ?? "",
+						)
+					: "",
+		},
+	});
 	const humanGate = validateTaskClarificationHumanGate(entries, clarDoc, {
 		quick: opts?.quick,
 		taskSummary: opts?.taskSummary,
 		allowFollowUpMessage: opts?.lastOutcome === "needs_clarification",
+	});
+	logPlanHumanGate({
+		runId,
+		hypothesisId: "H1-H2",
+		location: "plan-human-gates.ts:resolvePlanHumanGateStatus:humanGate",
+		message: "Human gate evaluated for phase0 ask_user requirement",
+		data: {
+			humanGateOk: humanGate.ok,
+			humanGateErrors: humanGate.errors,
+			allowFollowUpMessage: opts?.lastOutcome === "needs_clarification",
+			hasTaskClarificationAskUserSincePlanCommand:
+				hasTaskClarificationAskUserSincePlanCommand(entries),
+			hasClarificationFollowUpUserMessage:
+				hasClarificationFollowUpUserMessage(entries),
+			indexOfLastPlanCommand: indexOfLastPlanCommand(entries),
+			entriesLen: entries.length,
+		},
 	});
 	const phase0Ready = clar.ok && humanGate.ok;
 	const phase0NeedsAskUser = clar.ok && !humanGate.ok;
@@ -244,6 +311,21 @@ export async function resolvePlanHumanGateStatus(
 	} else if (approvalRequired && !approvalRecorded) {
 		nextRequiredAction = "approve_plan then create_plan (Phase 6)";
 	}
+	logPlanHumanGate({
+		runId,
+		hypothesisId: "H4",
+		location: "plan-human-gates.ts:resolvePlanHumanGateStatus:result",
+		message: "Resolved plan human gate status",
+		data: {
+			phase0Ready,
+			phase0NeedsAskUser,
+			debateComplete,
+			debateRequired,
+			approvalRequired,
+			approvalRecorded,
+			nextRequiredAction,
+		},
+	});
 
 	return {
 		phase0Ready,

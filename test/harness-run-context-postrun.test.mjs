@@ -24,6 +24,7 @@ import {
 	remediationClassFromEvalVerdict,
 	reconcileReviewRouting,
 	reconcileStaleExecuteCompletion,
+	refreshRunContextProgress,
 	resolveArgsForCommand,
 	resolveHarnessRunPostAgentState,
 	syncPlanLastOutcomeFromTaskClarification,
@@ -327,6 +328,41 @@ describe("reconcileStaleExecuteCompletion", () => {
 		assert.equal(reconciled.last_outcome, "completed");
 		assert.equal(reconciled.phase, "evaluate");
 		assert.equal(reconciled.next_recommended_command, "/harness-review");
+		await rm(root, { recursive: true, force: true });
+	});
+});
+
+describe("refreshRunContextProgress", () => {
+	test("recomputes next command from executor handoff while context lags", async () => {
+		const root = await mkdtemp(join(tmpdir(), "up-refresh-progress-"));
+		const runId = "run-refresh-progress";
+		const runDir = join(root, ".pi", "harness", "runs", runId);
+		await mkdir(join(runDir, "handoff"), { recursive: true });
+		await writeYamlFile(join(runDir, "handoff", "executor-summary.yaml"), {
+			schema_version: "1.0.0",
+			execution_status: "completed",
+		});
+		const ctx = {
+			schema_version: "1.0.0",
+			run_id: runId,
+			pi_session_id: "sess",
+			project_root: root,
+			phase: "plan",
+			plan_id: "p",
+			plan_packet_path: null,
+			plan_ready: true,
+			task_summary: "t",
+			status: "active",
+			last_completed_step: "plan",
+			last_outcome: "ready",
+			next_recommended_command: "/harness-run-status",
+			owner_pi_session_id: "sess",
+			updated_at: "2026-01-01T00:00:00.000Z",
+		};
+		const refreshed = await refreshRunContextProgress(root, ctx, []);
+		assert.equal(refreshed.phase, "evaluate");
+		assert.equal(refreshed.last_completed_step, "execute");
+		assert.equal(refreshed.next_recommended_command, "/harness-review");
 		await rm(root, { recursive: true, force: true });
 	});
 });

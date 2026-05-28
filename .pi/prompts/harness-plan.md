@@ -188,6 +188,8 @@ subagent({ agentScope: "both", agent: "harness/planning/execution-plan-author", 
 
 Merge `execution_plan` into draft `plan-packet.yaml` (`write_harness_yaml`). Save `artifacts/execution-plan-draft.yaml` the same way.
 
+The `execution_plan` must make testing expectations explicit: decide whether unit, integration, and e2e/end-to-end tests are applicable for each changed surface based on risk and implementation scope; add work items/done criteria to create or update applicable tests; list relevant verification commands; and record a short rationale when a test level is not applicable. Do not hard-require all three test levels for every change — make the applicability decision visible.
+
 ## Phase 4c — Deterministic quality gate (hard stop)
 
 **Practice:** Harness engineering — never trust the model for graph validity.

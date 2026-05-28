@@ -52,14 +52,15 @@ Note `violation_count` in run notes (do not block execute on pre-existing violat
 1. Confirm `[HarnessActivePlan]` / extension reports plan ready.
 2. Build `HarnessSpawnContext` with `mode: execute`, `plan_packet_path`, `run_dir`, `acceptance_checks` from plan file.
 3. Include **`critical_path_work_item_ids`** from `execution_plan.schedule_metadata` in spawn task when present — executor should tackle limiting-step items first (Grove).
-4. Spawn (max **1** agent per call):
+4. Include the plan's testing expectations in the spawn task: the executor must implement or update applicable unit, integration, and e2e/end-to-end tests, run the relevant verification commands, and report command evidence or a rationale for any non-applicable test level in `validation_summary`.
+5. Spawn (max **1** agent per call):
 
 ```
 subagent({ agentScope: "both", agent: "harness/running/executor", task: "<HarnessSpawnContext + handoff + critical path hint>" })
 ```
 
-5. Parse subprocess output JSON (`execution_status`, validations, rollback refs) from tool result text.
-6. Parent persists trace/handoff artifacts under run dir if needed; do not self-review.
+6. Parse subprocess output JSON (`execution_status`, validations, rollback refs) from tool result text.
+7. Parent persists trace/handoff artifacts under run dir if needed; do not self-review.
 
 ## Post-work — Structural observation (parent)
 
