@@ -8,6 +8,28 @@
 		"expect": "deny"
 	},
 	{
+		"id": "parent-subagent-spawn-allow",
+		"toolName": "subagent",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"harnessSession": true,
+		"input": {
+			"agent": "harness/planning/decompose",
+			"task": "decompose task"
+		},
+		"expect": "allow"
+	},
+	{
+		"id": "planner-nested-subagent-deny",
+		"toolName": "subagent",
+		"agentId": "harness/planning/decompose",
+		"phase": "plan",
+		"isSubprocess": true,
+		"input": { "agent": "harness/planning/hypothesis", "task": "nested" },
+		"expect": "deny"
+	},
+	{
 		"id": "evaluator-write-deny",
 		"toolName": "write",
 		"agentId": "harness/reviewing/evaluator",
@@ -88,6 +110,42 @@
 		"phase": "execute",
 		"isSubprocess": true,
 		"input": { "command": "python3 .pi/scripts/harness-web.py status" },
+		"expect": "allow"
+	},
+	{
+		"id": "parent-approve-plan-allow",
+		"toolName": "approve_plan",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"harnessSession": true,
+		"expect": "allow"
+	},
+	{
+		"id": "parent-debate-open-allow",
+		"toolName": "harness_debate_open",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"harnessSession": true,
+		"expect": "allow"
+	},
+	{
+		"id": "parent-debate-round-status-allow",
+		"toolName": "harness_debate_round_status",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"harnessSession": true,
+		"expect": "allow"
+	},
+	{
+		"id": "parent-read-plan-allow",
+		"toolName": "read",
+		"agentId": "parent-orchestrator",
+		"phase": "plan",
+		"isSubprocess": false,
+		"harnessSession": true,
 		"expect": "allow"
 	}
 ]

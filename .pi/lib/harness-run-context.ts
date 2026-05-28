@@ -6,7 +6,14 @@
  * - `.pi/harness/active-run.json` (cross-session pointer)
  */
 
-import { mkdir, readFile, realpath, writeFile } from "node:fs/promises";
+import {
+	mkdir,
+	readdir,
+	readFile,
+	realpath,
+	stat,
+	writeFile,
+} from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
 import {
 	isPlanApprovalAskUser,
@@ -14,6 +21,7 @@ import {
 	PLAN_CANCEL_OPTION,
 } from "./ask-user/policy.js";
 import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
+import { readTaskClarificationDoc } from "./plan-task-clarification.js";
 
 export { isPlanApprovalAskUser } from "./ask-user/policy.js";
 
@@ -82,6 +90,19 @@ export interface PlanPacketLike {
 	execution_plan?: unknown;
 }
 
+export interface HarnessClearManifestItem {
+	run_id: string;
+	absolute_path: string;
+	canonical_path: string;
+}
+
+export interface HarnessClearManifest {
+	runs_root: string;
+	protected_run_ids: string[];
+	candidates: ReadonlyArray<HarnessClearManifestItem>;
+	skipped: ReadonlyArray<{ run_id: string; reason: string }>;
+}
+
 interface SessionEntryLike {
 	type?: string;
 	customType?: string;
@@ -109,10 +130,105 @@ const HARNESS_COMMANDS = new Set([
 	"harness-policy-status",
 	"harness-trace-last",
 	"harness-budget-status",
+	"harness-clear",
 ]);
 
 export function harnessRunsRoot(projectRoot: string): string {
 	return join(projectRoot, ".pi", "harness", "runs");
+}
+
+export async function buildHarnessClearManifest(
+	projectRoot: string,
+	protectedRunIds: Iterable<string> = [],
+): Promise<HarnessClearManifest> {
+	const runsRoot = resolve(harnessRunsRoot(projectRoot));
+	const protectedSet = new Set(
+		[...protectedRunIds]
+			.filter(
+				(id): id is string => typeof id === "string" && id.trim().length > 0,
+			)
+			.map((id) => id.trim()),
+	);
+	const protectedIds = [...protectedSet].sort();
+	let runsReal = runsRoot;
+	try {
+		runsReal = await realpath(runsRoot);
+	} catch {
+		return {
+			runs_root: runsRoot,
+			protected_run_ids: protectedIds,
+			candidates: Object.freeze([]),
+			skipped: Object.freeze([]),
+		};
+	}
+	let entries: Array<{
+		name: string;
+		isDirectory(): boolean;
+		isSymbolicLink(): boolean;
+	}>;
+	try {
+		entries = await readdir(runsRoot, {
+			withFileTypes: true,
+			encoding: "utf8",
+		});
+	} catch {
+		return {
+			runs_root: runsReal,
+			protected_run_ids: protectedIds,
+			candidates: Object.freeze([]),
+			skipped: Object.freeze([]),
+		};
+	}
+	const candidates: HarnessClearManifestItem[] = [];
+	const skipped: Array<{ run_id: string; reason: string }> = [];
+	for (const entry of entries) {
+		if (!entry.isDirectory() && !entry.isSymbolicLink()) continue;
+		const runId = entry.name;
+		if (protectedSet.has(runId)) {
+			skipped.push({ run_id: runId, reason: "protected" });
+			continue;
+		}
+		const absPath = join(runsRoot, runId);
+		let canonicalPath: string;
+		try {
+			canonicalPath = await realpath(absPath);
+		} catch {
+			skipped.push({ run_id: runId, reason: "unresolvable" });
+			continue;
+		}
+		const rel = relative(runsReal, canonicalPath);
+		if (!rel || rel.startsWith("..") || isAbsolute(rel)) {
+			skipped.push({ run_id: runId, reason: "out_of_root" });
+			continue;
+		}
+		if (rel !== runId) {
+			skipped.push({ run_id: runId, reason: "non_canonical_child" });
+			continue;
+		}
+		try {
+			const info = await stat(canonicalPath);
+			if (!info.isDirectory()) {
+				skipped.push({ run_id: runId, reason: "not_directory" });
+				continue;
+			}
+		} catch {
+			skipped.push({ run_id: runId, reason: "missing" });
+			continue;
+		}
+		candidates.push({
+			run_id: runId,
+			absolute_path: absPath,
+			canonical_path: canonicalPath,
+		});
+	}
+	candidates.sort((a, b) => a.run_id.localeCompare(b.run_id));
+	skipped.sort((a, b) => a.run_id.localeCompare(b.run_id));
+	return {
+		runs_root: runsReal,
+		protected_run_ids: protectedIds,
+		candidates: Object.freeze(candidates.map((item) => Object.freeze(item))),
+		skipped: Object.freeze(skipped.map((item) => Object.freeze(item))),
+	};
 }
 
 export function activeRunPointerPath(projectRoot: string): string {
@@ -158,14 +274,28 @@ const PLAN_RUN_SCOPED_ROOT_FILES = new Set([
 	PLAN_REVIEW_BASENAME,
 ]);
 
-/** Parent orchestrator artifacts writable during evaluate/adversary (ADR 0044). */
+/**
+ * Parent orchestrator artifacts writable during evaluate/adversary (ADR 0044).
+ * Keep in sync with harness-review.md / harness-steer.md parent write_harness_yaml paths.
+ */
 export const EVALUATE_PHASE_ORCHESTRATOR_ARTIFACTS = new Set([
 	"benchmark-log.yaml",
 	"review-outcome.yaml",
 	"repair-brief.yaml",
 	"steer-state.yaml",
 	"eval-benchmark.yaml",
+	"sentrux-signal.yaml",
+	"ls-lint-signal.yaml",
+	"sentrux-repair-plan.yaml",
 ]);
+
+/** Run-relative path like `artifacts/benchmark-log.yaml` (no run_id prefix). */
+export function isEvaluatePhaseOrchestratorArtifactRel(rel: string): boolean {
+	const norm = rel.replace(/\\/g, "/");
+	const parts = norm.split("/");
+	if (parts.length !== 2 || parts[0] !== "artifacts") return false;
+	return EVALUATE_PHASE_ORCHESTRATOR_ARTIFACTS.has(parts[1]);
+}
 
 export const DEFAULT_STEER_MAX_ATTEMPTS = 3;
 
@@ -215,6 +345,7 @@ export const HARNESS_COMMAND_PHASE: Record<string, HarnessPhase> = {
 	"harness-use-run": "plan",
 	"harness-policy-status": "merge",
 	"harness-budget-status": "plan",
+	"harness-clear": "plan",
 	"harness-setup": "execute",
 };
 
@@ -233,6 +364,66 @@ export function normalizeHarnessPath(
 	if (!trimmed) return resolve(projectRoot);
 	if (isAbsolute(trimmed)) return resolve(trimmed);
 	return resolve(projectRoot, trimmed);
+}
+
+/** Run-scoped artifact path without `.pi/harness/runs/<run_id>/` prefix (agent-friendly). */
+export function isBareHarnessRunArtifactPath(rel: string): boolean {
+	const norm = rel.replace(/\\/g, "/").replace(/^\.\//, "");
+	if (!norm || norm.startsWith("..") || isAbsolute(norm)) return false;
+	if (norm.startsWith(".pi/harness/runs/")) return false;
+	const parts = norm.split("/");
+	if (parts.length === 1 && PLAN_RUN_SCOPED_ROOT_FILES.has(parts[0])) {
+		return true;
+	}
+	if (parts.length === 2 && parts[0] === "artifacts") {
+		const file = parts[1];
+		return file.endsWith(".yaml") || file.endsWith(".yml");
+	}
+	if (
+		parts.length === 3 &&
+		parts[0] === "artifacts" &&
+		parts[1] === "context-bundles"
+	) {
+		const file = parts[2];
+		return file.endsWith(".yaml") || file.endsWith(".yml");
+	}
+	return false;
+}
+
+/**
+ * Resolve a harness write path to an absolute file and run-relative gate path.
+ * Accepts `artifacts/foo.yaml`, `research-brief.yaml`, full `.pi/harness/runs/<id>/…`, or `<id>/artifacts/…`.
+ */
+export function resolveHarnessRunWriteTarget(
+	pathArg: string,
+	runCtx: HarnessRunContext,
+	projectRoot: string,
+): { absPath: string; relUnderRun: string } | null {
+	const trimmed = pathArg.trim().replace(/\\/g, "/");
+	if (!trimmed || !runCtx.run_id) return null;
+
+	const runPrefix = `.pi/harness/runs/${runCtx.run_id}/`;
+	let relUnderRun: string | null = null;
+
+	if (trimmed.startsWith(runPrefix)) {
+		relUnderRun = trimmed.slice(runPrefix.length);
+	} else if (trimmed.startsWith(`${runCtx.run_id}/`)) {
+		relUnderRun = trimmed.slice(`${runCtx.run_id}/`.length);
+	} else if (isBareHarnessRunArtifactPath(trimmed)) {
+		relUnderRun = trimmed.replace(/^\.\//, "");
+	}
+
+	if (!relUnderRun) return null;
+
+	const scopedCheck = `${runCtx.run_id}/${relUnderRun}`;
+	if (!isPlanRunScopedRelativePath(scopedCheck)) return null;
+
+	const absPath = join(
+		harnessRunsRoot(projectRoot),
+		runCtx.run_id,
+		relUnderRun,
+	);
+	return { absPath, relUnderRun };
 }
 
 export function isCanonicalPlanPacketPath(
@@ -276,11 +467,33 @@ export function isPlanRunScopedRelativePath(rel: string): boolean {
 	return false;
 }
 
+/** Scoped path under `.pi/harness/runs/<run_id>/` (includes run_id prefix). */
 export function isEvaluatePhaseOrchestratorArtifact(rel: string): boolean {
 	if (rel.startsWith("..") || isAbsolute(rel)) return false;
 	const parts = rel.split(/[/\\]/);
 	if (parts.length !== 3 || parts[1] !== "artifacts") return false;
 	return EVALUATE_PHASE_ORCHESTRATOR_ARTIFACTS.has(parts[2]);
+}
+
+/** Strip `<run_id>/` from a path relative to `.pi/harness/runs/`. */
+export function stripRunIdFromHarnessScopedRelative(
+	rel: string,
+	runId: string,
+): string {
+	const norm = rel.replace(/\\/g, "/");
+	const prefix = `${runId}/`;
+	return norm.startsWith(prefix) ? norm.slice(prefix.length) : norm;
+}
+
+/** Path under the run directory (e.g. `artifacts/foo.yaml`), for gates and artifact keys. */
+export async function relPathUnderActiveRun(
+	absPath: string,
+	runCtx: HarnessRunContext,
+	projectRoot: string,
+): Promise<string | null> {
+	const rel = await planRunScopedRelative(absPath, runCtx, projectRoot);
+	if (!rel) return null;
+	return stripRunIdFromHarnessScopedRelative(rel, runCtx.run_id);
 }
 
 async function planRunScopedRelative(
@@ -508,9 +721,6 @@ export function hasPlanUserApproval(
 	entries: unknown[],
 	opts?: { planId?: string | null; sincePlanCommand?: boolean },
 ): boolean {
-	if (process.env.HARNESS_PLAN_NONINTERACTIVE === "1") {
-		return true;
-	}
 	const since = opts?.sincePlanCommand
 		? Math.max(0, indexOfLastPlanCommand(entries))
 		: 0;
@@ -529,6 +739,10 @@ export function isHarnessAutoSession(entries: unknown[]): boolean {
 		const entry = entries[i] as SessionEntryLike & {
 			message?: { role?: string; content?: string };
 		};
+		if (entry.type === "custom" && entry.customType === "harness-turn") {
+			const cmd = (entry.data as { command?: string })?.command;
+			if (cmd === "harness-auto") return true;
+		}
 		if (entry.type !== "message" || entry.message?.role !== "user") continue;
 		const text =
 			typeof entry.message.content === "string"
@@ -554,13 +768,7 @@ export async function isPlanPhaseAllowedMutation(
 	},
 ): Promise<PlanPhaseMutationDecision> {
 	if (!MUTATING_FILE_TOOLS.has(toolName)) {
-		if (phase === "execute" || phase === "merge") {
-			return { allowed: true };
-		}
-		return {
-			allowed: false,
-			reason: `policy-gate: ${toolName} blocked in phase '${phase}'.`,
-		};
+		return { allowed: true };
 	}
 
 	if (
@@ -607,7 +815,13 @@ export async function isPlanPhaseAllowedMutation(
 		}
 		if (phase === "evaluate" || phase === "adversary") {
 			const rel = await planRunScopedRelative(target, runCtx, projectRoot);
-			if (rel && isEvaluatePhaseOrchestratorArtifact(rel)) {
+			const relForGate = rel
+				? stripRunIdFromHarnessScopedRelative(rel, runCtx.run_id)
+				: null;
+			if (
+				(rel && isEvaluatePhaseOrchestratorArtifact(rel)) ||
+				(relForGate && isEvaluatePhaseOrchestratorArtifactRel(relForGate))
+			) {
 				return { allowed: true, isScopedPlanWrite: true };
 			}
 		}
@@ -995,6 +1209,137 @@ export async function readPlanPacketFromPath(
 	}
 }
 
+/**
+ * When plan-packet.yaml is missing (revision reset or pre-packet phase), derive
+ * last_outcome from task-clarification instead of treating the run as invalid.
+ */
+const PLAN_REVIEW_COMMITTED_RE = /\*\*Status:\*\*\s*committed/i;
+
+/** True when plan-review.md on disk shows a committed plan (post create_plan). */
+export async function isPlanCommittedOnDisk(
+	projectRoot: string,
+	runId: string,
+): Promise<boolean> {
+	try {
+		const raw = await readFile(
+			canonicalPlanReviewPath(runId, projectRoot),
+			"utf-8",
+		);
+		return PLAN_REVIEW_COMMITTED_RE.test(raw);
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Align plan_ready / last_outcome with on-disk plan packet + plan-review.md
+ * (survives -p sessions where approve_plan is not in the transcript).
+ */
+export async function syncPlanReadyFromDisk(
+	projectRoot: string,
+	ctx: HarnessRunContext,
+	entries?: unknown[],
+): Promise<HarnessRunContext> {
+	const planPath =
+		ctx.plan_packet_path ?? canonicalPlanPath(ctx.run_id, projectRoot);
+	const packet = await readPlanPacketFromPath(planPath);
+	if (!packet) {
+		return syncPlanLastOutcomeFromTaskClarification(projectRoot, ctx);
+	}
+	const validation = validatePlanPacket(packet);
+	if (!validation.valid) {
+		const synced = await syncPlanLastOutcomeFromTaskClarification(projectRoot, {
+			...ctx,
+			plan_packet_path: planPath,
+		});
+		return {
+			...synced,
+			plan_ready: false,
+			last_outcome: "needs_clarification",
+		};
+	}
+
+	const committed = await isPlanCommittedOnDisk(projectRoot, ctx.run_id);
+	const approved =
+		committed ||
+		(entries
+			? hasPlanUserApproval(entries, {
+					sincePlanCommand: true,
+					planId: packet.plan_id ?? null,
+				})
+			: false);
+
+	const updated: HarnessRunContext = {
+		...ctx,
+		plan_packet_path: planPath,
+		plan_id: packet.plan_id ?? ctx.plan_id,
+		updated_at: nowIso(),
+	};
+
+	if (approved) {
+		updated.plan_ready = true;
+		const preservePostPlanProgress =
+			ctx.last_completed_step === "execute" ||
+			ctx.last_completed_step === "steer" ||
+			ctx.last_completed_step === "review" ||
+			ctx.last_completed_step === "adversary";
+		if (!preservePostPlanProgress) {
+			updated.last_completed_step = "plan";
+			updated.last_outcome = "ready";
+			updated.next_recommended_command = "/harness-run";
+			if (
+				updated.phase !== "execute" &&
+				updated.phase !== "evaluate" &&
+				updated.phase !== "adversary"
+			) {
+				updated.phase = "plan";
+			}
+		}
+		return updated;
+	}
+
+	updated.plan_ready = false;
+	if (updated.last_outcome !== "needs_clarification") {
+		updated.last_outcome = "pending_approval";
+	}
+	updated.next_recommended_command = nextStepAfterOutcome({
+		phase: updated.phase,
+		planStatus: null,
+		lastOutcome: updated.last_outcome,
+		lastCompletedStep: updated.last_completed_step,
+	});
+	return updated;
+}
+
+export async function syncPlanLastOutcomeFromTaskClarification(
+	projectRoot: string,
+	ctx: HarnessRunContext,
+): Promise<HarnessRunContext> {
+	const runDir = join(harnessRunsRoot(projectRoot), ctx.run_id);
+	const doc = await readTaskClarificationDoc(runDir);
+	if (!doc) return ctx;
+	const status = String(doc.status ?? "").toLowerCase();
+	const updated: HarnessRunContext = { ...ctx, updated_at: nowIso() };
+	if (status === "ready") {
+		if (updated.last_outcome === "needs_clarification") {
+			updated.last_outcome = null;
+		}
+	} else if (
+		status === "needs_clarification" ||
+		status === "needs_user" ||
+		status === "draft"
+	) {
+		updated.last_outcome = "needs_clarification";
+	}
+	updated.next_recommended_command = nextStepAfterOutcome({
+		phase: updated.phase,
+		planStatus: status === "ready" ? null : status,
+		lastOutcome: updated.last_outcome,
+		lastCompletedStep: updated.last_completed_step,
+	});
+	return updated;
+}
+
 export function validatePlanPacket(packet: PlanPacketLike | null): {
 	valid: boolean;
 	errors: string[];
@@ -1361,7 +1706,8 @@ export function resolveArgsForCommand(
 	ctx: HarnessRunContext | null,
 ): { runId: string | null; planPath: string | null; overrideRun: boolean } {
 	let runId = ctx?.run_id ?? null;
-	let planPath = ctx?.plan_packet_path ?? null;
+	/** Only honor explicit `--plan`; never inherit stale session plan paths onto fresh runs. */
+	let planPath: string | null = null;
 	let overrideRun = false;
 
 	const explicitRun = parseArgFlag(args, "--run");
@@ -1417,6 +1763,45 @@ export function getRunIdFromSession(
 	return null;
 }
 
+export function harnessAutoTasksDiffer(
+	ctx: HarnessRunContext,
+	newTask: string,
+): boolean {
+	const prior = (ctx.task_summary ?? "").trim().toLowerCase();
+	const next = newTask.trim().toLowerCase();
+	return prior.length > 0 && next.length > 0 && prior !== next;
+}
+
+/** Full auto pipeline needs a clean run once execute/review has started. */
+export function shouldReuseHarnessRunIdForAuto(
+	ctx: HarnessRunContext,
+): boolean {
+	if (ctx.status === "aborted") return true;
+	const step = ctx.last_completed_step;
+	if (!step || step === "plan") return true;
+	return false;
+}
+
+/** Reset in-run state when restarting /harness-auto on the same run directory. */
+export function resetRunContextForHarnessAuto(
+	ctx: HarnessRunContext,
+): HarnessRunContext {
+	return {
+		...ctx,
+		phase: "plan",
+		plan_ready: false,
+		plan_id: null,
+		plan_packet_path: canonicalPlanPath(ctx.run_id, ctx.project_root),
+		status: "active",
+		last_completed_step: null,
+		last_outcome: null,
+		next_recommended_command: null,
+		steer_attempt: 0,
+		steer_approved: false,
+		updated_at: nowIso(),
+	};
+}
+
 export function shouldReuseHarnessRunId(
 	prompt: string,
 	ctx: HarnessRunContext | null,
@@ -1425,7 +1810,13 @@ export function shouldReuseHarnessRunId(
 	if (!command) return false;
 	if (command === "harness-new-run") return false;
 	if (!ctx) return false;
-	if (command === "harness-plan" || command === "harness-auto") {
+	if (command === "harness-auto") {
+		return (
+			(ctx.status === "active" || ctx.status === "aborted") &&
+			shouldReuseHarnessRunIdForAuto(ctx)
+		);
+	}
+	if (command === "harness-plan") {
 		return ctx.status === "active" || ctx.status === "aborted";
 	}
 	if (ctx.status === "active") return true;
@@ -1647,6 +2038,179 @@ export async function readReviewOutcomeFromRun(
 	}
 }
 
+/** Infer remediation when parent skipped Phase 6 but eval-verdict exists on disk. */
+export function remediationClassFromEvalVerdict(
+	verdict: EvalVerdictDisk | null,
+): RemediationClass | null {
+	if (!verdict) return null;
+	const status = (verdict.status ?? "").toLowerCase();
+	if (status === "pass") return "pass";
+	const action = (verdict.recommended_action ?? "").toLowerCase();
+	if (
+		action === "replan" ||
+		action.includes("revise") ||
+		action.includes("plan")
+	) {
+		return "plan_gap";
+	}
+	if (action === "rollback" || action.includes("rollback")) {
+		return "rollback";
+	}
+	if (
+		action === "steer" ||
+		action === "repair" ||
+		action.includes("implement")
+	) {
+		return "implementation_gap";
+	}
+	const failed = (verdict as EvalVerdictDisk & { failed_checks?: string[] })
+		.failed_checks;
+	const joined = Array.isArray(failed) ? failed.join(" ").toLowerCase() : "";
+	if (
+		joined.includes("scope_minimization") ||
+		joined.includes("scope_drift") ||
+		joined.includes("replan")
+	) {
+		return "plan_gap";
+	}
+	if (status === "fail") return "inconclusive";
+	return null;
+}
+
+export function recommendedNextForRemediation(
+	remediation: RemediationClass,
+): string {
+	switch (remediation) {
+		case "pass":
+			return "/harness-policy-status";
+		case "implementation_gap":
+			return "/harness-steer";
+		case "plan_gap":
+			return "/harness-plan (mode: revise)";
+		case "rollback":
+			return "/harness-incident";
+		default:
+			return "/harness-review";
+	}
+}
+
+export async function resolveRemediationClassForRun(
+	runId: string,
+	projectRoot: string,
+): Promise<RemediationClass | null> {
+	const review = await readReviewOutcomeFromRun(runId, projectRoot);
+	if (review?.remediation_class) {
+		return review.remediation_class as RemediationClass;
+	}
+	const evalV = await readEvalVerdictFromRun(runId, projectRoot);
+	return remediationClassFromEvalVerdict(evalV);
+}
+
+export async function ensureReviewOutcomeFromEval(
+	runId: string,
+	projectRoot: string,
+): Promise<ReviewOutcomeLike | null> {
+	const existing = await readReviewOutcomeFromRun(runId, projectRoot);
+	if (existing?.remediation_class) return existing;
+
+	const evalV = await readEvalVerdictFromRun(runId, projectRoot);
+	if (!evalV?.status) return null;
+
+	const remediation = remediationClassFromEvalVerdict(evalV) ?? "inconclusive";
+	const evalStatus = (evalV.status ?? "").toLowerCase();
+	const status =
+		evalStatus === "pass"
+			? "pass"
+			: evalStatus === "fail"
+				? "fail"
+				: "inconclusive";
+
+	const outcome: ReviewOutcomeLike & {
+		run_id: string;
+		recommended_next: string;
+		source_artifacts: Record<string, string>;
+		review_tier: string;
+	} = {
+		schema_version: "1.0.0",
+		run_id: runId,
+		status,
+		remediation_class: remediation,
+		recommended_next: recommendedNextForRemediation(remediation),
+		source_artifacts: { "eval-verdict": "artifacts/eval-verdict.yaml" },
+		review_tier: "synthesized",
+	};
+
+	const outPath = join(
+		harnessRunsRoot(projectRoot),
+		runId,
+		"artifacts",
+		"review-outcome.yaml",
+	);
+	await writeYamlFile(outPath, outcome);
+
+	const { ensureRepairBriefOnDisk } = await import("./harness-repair-brief.js");
+	await ensureRepairBriefOnDisk({
+		runId,
+		projectRoot,
+		steerAttempt: 0,
+	});
+
+	return outcome;
+}
+
+/** Align next_recommended_command with on-disk review/eval routing after /harness-review. */
+export async function reconcileReviewRouting(
+	projectRoot: string,
+	ctx: HarnessRunContext,
+): Promise<HarnessRunContext> {
+	const evalV = await readEvalVerdictFromRun(ctx.run_id, projectRoot);
+	const reviewStep =
+		ctx.last_completed_step === "review" ||
+		ctx.last_completed_step === "adversary" ||
+		Boolean(evalV?.status);
+	if (!reviewStep) return ctx;
+
+	let working = { ...ctx };
+	if (
+		evalV?.status &&
+		working.last_completed_step === "execute" &&
+		String(working.last_outcome ?? "").toLowerCase() === "completed"
+	) {
+		working = {
+			...working,
+			last_completed_step: "review",
+			last_outcome: evalV.status,
+			phase: "evaluate",
+		};
+	}
+
+	await ensureReviewOutcomeFromEval(working.run_id, projectRoot);
+
+	const remediation = await resolveRemediationClassForRun(
+		working.run_id,
+		projectRoot,
+	);
+	if (!remediation) return working;
+
+	const next = nextStepAfterOutcome({
+		phase: working.phase,
+		lastCompletedStep: working.last_completed_step,
+		lastOutcome: working.last_outcome,
+		evalStatus: working.last_outcome,
+		remediationClass: remediation,
+		steerAttempt: working.steer_attempt ?? 0,
+		steerMaxAttempts: working.steer_max_attempts ?? steerMaxAttemptsFromEnv(),
+		reviewComplete: true,
+		aborted: working.status === "aborted",
+	});
+
+	return {
+		...working,
+		next_recommended_command: next,
+		updated_at: nowIso(),
+	};
+}
+
 function nextStepForEvaluateLikePhase(input: {
 	adversaryComplete?: boolean;
 	remediation: string;
@@ -1668,7 +2232,16 @@ function nextStepForEvaluateLikePhase(input: {
 		return "/harness-plan (mode: revise) or /harness-abort";
 	}
 	if (input.evalStatus === "fail") {
-		if (input.steerAttempt < input.steerMax) return "/harness-steer";
+		if (input.remediation === "plan_gap") {
+			return "/harness-plan (mode: revise)";
+		}
+		if (
+			input.remediation === "implementation_gap" ||
+			input.remediation === "inconclusive"
+		) {
+			if (input.steerAttempt < input.steerMax) return "/harness-steer";
+			return "/harness-plan (mode: revise) or /harness-abort";
+		}
 		return "/harness-plan (mode: revise) or /harness-incident";
 	}
 	if (input.adversaryComplete) return "/harness-policy-status";
@@ -1698,9 +2271,13 @@ export function nextStepAfterOutcome(input: {
 		return "Reply with answers or run /harness-plan with updates";
 	}
 
+	const lastOutcome = (input.lastOutcome ?? "").toLowerCase();
+	if (input.phase === "plan" && lastOutcome === "pending_approval") {
+		return "Continue /harness-plan: finish Review Gate (harness_debate_round_status → debate lanes → harness_debate_consensus), then approve_plan";
+	}
+
 	const lastStep = (input.lastCompletedStep ?? "").toLowerCase();
 	const exec = (input.executionStatus ?? "").toLowerCase();
-	const lastOutcome = (input.lastOutcome ?? "").toLowerCase();
 	const evalSt = (input.evalStatus ?? "").toLowerCase();
 	const remediation = (input.remediationClass ?? "").toLowerCase();
 	const steerAttempt = input.steerAttempt ?? 0;
@@ -1752,6 +2329,216 @@ export function nextStepAfterOutcome(input: {
 }
 
 /** Read executor handoff artifact written by harness/running/executor submit pipeline. */
+/** After /harness-run agent turn — do not mark completed without executor evidence. */
+export function resolveHarnessRunPostAgentState(
+	execStatus: string | null,
+	planReady: boolean,
+): Pick<
+	HarnessRunContext,
+	"last_completed_step" | "last_outcome" | "phase" | "next_recommended_command"
+> {
+	if (!execStatus) {
+		return {
+			last_completed_step: "plan",
+			last_outcome: planReady ? "ready" : null,
+			phase: "plan",
+			next_recommended_command: "/harness-run",
+		};
+	}
+	const normalized = execStatus.toLowerCase();
+	const completed = normalized === "completed";
+	return {
+		last_completed_step: "execute",
+		last_outcome: execStatus,
+		phase: completed ? "evaluate" : "execute",
+		next_recommended_command: completed ? "/harness-review" : "/harness-run",
+	};
+}
+
+function executeCompletionMatchesHandoff(
+	ctx: HarnessRunContext,
+	executionStatus: string,
+): boolean {
+	if (ctx.last_completed_step !== "execute") return false;
+	const norm = executionStatus.toLowerCase();
+	const outcome = String(ctx.last_outcome ?? "").toLowerCase();
+	if (norm === "completed") return outcome === "completed";
+	return outcome === norm;
+}
+
+/** Sync plan_ready + executor handoff vs session/disk run-context (bidirectional). */
+export async function reconcileStaleExecuteCompletion(
+	projectRoot: string,
+	ctx: HarnessRunContext,
+	entries?: unknown[],
+): Promise<HarnessRunContext> {
+	let synced = await syncPlanReadyFromDisk(projectRoot, ctx, entries);
+
+	const falselyCompleted =
+		synced.last_completed_step === "execute" &&
+		String(synced.last_outcome ?? "").toLowerCase() === "completed";
+
+	const handoff = await readExecutorHandoffFromRun(synced.run_id, projectRoot);
+
+	if (falselyCompleted && !handoff?.execution_status) {
+		return {
+			...synced,
+			...resolveHarnessRunPostAgentState(null, synced.plan_ready),
+		};
+	}
+
+	const postExecuteProgress =
+		synced.last_completed_step === "review" ||
+		synced.last_completed_step === "adversary" ||
+		synced.last_completed_step === "steer";
+
+	if (
+		handoff?.execution_status &&
+		!postExecuteProgress &&
+		!executeCompletionMatchesHandoff(synced, handoff.execution_status)
+	) {
+		const runPost = resolveHarnessRunPostAgentState(
+			handoff.execution_status,
+			synced.plan_ready,
+		);
+		synced = { ...synced, ...runPost };
+	}
+
+	return synced;
+}
+
+export async function blockingHarnessAutoCommandReason(
+	command: string,
+	activeCtx: HarnessRunContext | null,
+	args: string,
+	userPrompt: string,
+): Promise<string | null> {
+	if (command !== "harness-auto") return null;
+	const task = extractTaskSummaryFromHarnessInput(args, userPrompt);
+	if (!task) {
+		return 'Usage: /harness-auto "<task>" [--quick] [--risk low|med|high]';
+	}
+	if (
+		activeCtx?.status === "active" &&
+		activeCtx.owner_pi_session_id &&
+		activeCtx.task_summary &&
+		harnessAutoTasksDiffer(activeCtx, task)
+	) {
+		return "Active harness run is for a different task. Run /harness-abort or /harness-new-run before /harness-auto with a new task.";
+	}
+	return null;
+}
+
+function extractTaskSummaryFromHarnessInput(
+	args: string,
+	prompt?: string,
+): string | null {
+	const fromArgs = args.match(/"([^"]+)"/);
+	if (fromArgs?.[1]) return fromArgs[1];
+	if (args.trim() && !args.trim().startsWith("--")) {
+		return args.trim().slice(0, 200);
+	}
+	if (prompt) {
+		const quoted = prompt.match(/"([^"]+)"/);
+		if (quoted?.[1]) return quoted[1];
+	}
+	return null;
+}
+
+export async function blockingRunCommandReason(
+	command: string,
+	activeCtx: HarnessRunContext,
+	projectRoot: string,
+	entries?: unknown[],
+): Promise<string | null> {
+	if (command !== "harness-run") return null;
+	if (entries && isHarnessAutoSession(entries)) return null;
+	if (!activeCtx.plan_ready) return "Plan not ready. Run /harness-plan first.";
+	const handoff = await readExecutorHandoffFromRun(
+		activeCtx.run_id,
+		projectRoot,
+	);
+	const executeDone =
+		activeCtx.last_completed_step === "execute" &&
+		String(activeCtx.last_outcome ?? "").toLowerCase() === "completed";
+	if (executeDone || handoff?.execution_status?.toLowerCase() === "completed") {
+		if (handoff?.execution_status === "completed" || executeDone) {
+			return "Execute already completed for this run. Next: /harness-review (same session), or /harness-abort to replan.";
+		}
+	}
+	return null;
+}
+
+export async function blockingReviewCommandReason(
+	command: string,
+	activeCtx: HarnessRunContext,
+	projectRoot: string,
+): Promise<string | null> {
+	if (!["harness-review", "harness-eval", "harness-critic"].includes(command)) {
+		return null;
+	}
+	const handoff = await readExecutorHandoffFromRun(
+		activeCtx.run_id,
+		projectRoot,
+	);
+	const execOutcome = String(activeCtx.last_outcome ?? "").toLowerCase();
+	const executeFinished =
+		activeCtx.last_completed_step === "execute" &&
+		(execOutcome === "completed" ||
+			execOutcome === "scope_drift" ||
+			execOutcome === "blocked");
+	const handoffStarted = Boolean(handoff?.execution_status);
+	if (!executeFinished && !handoffStarted) {
+		return "Execute not finished. Run /harness-run first.";
+	}
+	return null;
+}
+
+export async function blockingSteerCommandReason(
+	command: string,
+	activeCtx: HarnessRunContext,
+	projectRoot: string,
+): Promise<string | null> {
+	if (command !== "harness-steer") return null;
+
+	await ensureReviewOutcomeFromEval(activeCtx.run_id, projectRoot);
+
+	const remediation = await resolveRemediationClassForRun(
+		activeCtx.run_id,
+		projectRoot,
+	);
+	const evalV = await readEvalVerdictFromRun(activeCtx.run_id, projectRoot);
+
+	if (!remediation && !evalV?.status) {
+		return "Run /harness-review first (no eval-verdict or review-outcome on disk).";
+	}
+	if (remediation !== "implementation_gap") {
+		const next =
+			remediation != null
+				? recommendedNextForRemediation(remediation)
+				: "/harness-plan (mode: revise)";
+		return `Steer applies only for implementation_gap (resolved: ${remediation ?? "unknown"}). Next: ${next}`;
+	}
+
+	const briefPath = join(
+		harnessRunsRoot(projectRoot),
+		activeCtx.run_id,
+		"artifacts",
+		"repair-brief.yaml",
+	);
+	try {
+		await readYamlFile(briefPath, "repair-brief");
+	} catch {
+		return "Run /harness-review first (artifacts/repair-brief.yaml missing).";
+	}
+
+	const max = activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv();
+	if ((activeCtx.steer_attempt ?? 0) >= max) {
+		return `Steer attempt cap reached (${max}). Use /harness-plan (mode: revise) or /harness-abort.`;
+	}
+	return null;
+}
+
 export async function readExecutorHandoffFromRun(
 	runId: string,
 	projectRoot: string,

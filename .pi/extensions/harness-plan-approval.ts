@@ -192,11 +192,19 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 			if (runCtx?.run_id) {
 				const gate = await validatePlanDebateGate(projectRoot, runCtx.run_id);
 				if (!gate.ok) {
+					const { buildPlanDebateGateRecovery } = await import(
+						"../lib/plan-debate-gate.js"
+					);
+					const recovery = await buildPlanDebateGateRecovery(
+						projectRoot,
+						runCtx.run_id,
+						gate,
+					);
 					return {
 						content: [
 							{
 								type: "text",
-								text: `approve_plan blocked — plan debate gate incomplete:\n- ${gate.errors.join("\n- ")}`,
+								text: `approve_plan blocked — plan debate gate incomplete:\n\n${recovery}`,
 							},
 						],
 						details: {

@@ -146,7 +146,12 @@ export function registerHarnessSubagentSubmitTools(
 						details: result,
 					};
 				}
-				const lines = [`ok: wrote ${result.artifact_path}`];
+				const lines = result.idempotent
+					? [
+							`ok: idempotent — ${result.artifact_path} already valid with the same content`,
+							"Do NOT call this submit tool again; end the turn.",
+						]
+					: [`ok: wrote ${result.artifact_path}`];
 				if (result.lane_result?.messenger_posted) {
 					lines.push("messenger updated");
 				}

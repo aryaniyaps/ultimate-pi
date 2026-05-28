@@ -14,6 +14,9 @@ const BUILTIN_DENY_TOOLS = new Set([
 	"blackboard",
 ]);
 
+/** Debate inspectors may only run ast-grep via bash (no repo-wide shell exploration). */
+const DEBATE_SG_BASH_ALLOW = /^\s*sg\s+(-p|--pattern)\s+/;
+
 const PLANNING_BASH_DENY_PATTERNS = [
 	/\bgraphify\s+update\b/i,
 	/\bgraphify\s+extract\b/i,
@@ -28,6 +31,32 @@ const PLANNING_BASH_DENY_PATTERNS = [
 const PLANNING_ARTIFACT_JSON_WRITE = /artifacts\/[^\s'"`;]+\.json\b/i;
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
+
+/** Blind R1: hypothesis-validator may only read task + hypothesis brief. */
+const AGENT_READ_PATH_ALLOW = {
+	"harness/planning/hypothesis-validator": [
+		"artifacts/task-clarification.yaml",
+		"artifacts/hypothesis.yaml",
+	],
+};
+
+function normalizeReadToolPath(toolInput) {
+	const raw = String(
+		toolInput.path ?? toolInput.file_path ?? toolInput.filePath ?? "",
+	).replace(/\\/g, "/");
+	if (!raw.trim()) return "";
+	const idx = raw.indexOf("artifacts/");
+	if (idx >= 0) return raw.slice(idx);
+	return raw.replace(/^\.\//, "");
+}
+
+function deniesAgentReadPath(agentId, toolInput) {
+	const allowed = AGENT_READ_PATH_ALLOW[agentId];
+	if (!allowed) return false;
+	const rel = normalizeReadToolPath(toolInput);
+	if (!rel) return true;
+	return !allowed.includes(rel);
+}
 
 const cache = new Map();
 
@@ -334,6 +363,10 @@ export function allowsAgentTool(input) {
 
 	if (MUTATING_TOOLS.has(toolName) && spec.readOnly) return false;
 
+	if (toolName === "read" && deniesAgentReadPath(agentId, toolInput)) {
+		return false;
+	}
+
 	if (toolName === "ctx_batch_execute" && spec.readOnly) {
 		if (deniesReadOnlyBatchExecute(toolInput)) return false;
 	}
@@ -343,7 +376,15 @@ export function allowsAgentTool(input) {
 	}
 
 	if (toolName === "bash" && spec.readOnly) {
-		if (deniesReadOnlyBash(agentId, toolInput)) return false;
+		if (
+			agentId === "harness/planning/plan-evaluator" ||
+			agentId === "harness/planning/plan-adversary"
+		) {
+			const command = String(toolInput.command ?? "");
+			if (!command || !DEBATE_SG_BASH_ALLOW.test(command)) return false;
+		} else if (deniesReadOnlyBash(agentId, toolInput)) {
+			return false;
+		}
 	}
 
 	return true;

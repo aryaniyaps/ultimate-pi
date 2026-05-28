@@ -2,7 +2,8 @@
  * YAML read/write for harness plan artifacts (no JSON plan fallbacks).
  */
 
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { dirname } from "node:path";
 import { parse, stringify } from "yaml";
 
 const CODE_FENCE_RE = /^```(?:ya?ml|json)?\s*\n?([\s\S]*?)```\s*$/im;
@@ -72,8 +73,15 @@ export async function writeYamlFile(
 ): Promise<void> {
 	const tmp = `${path}.tmp`;
 	const content = `${stringify(data, { indent: 2 })}\n`;
-	await writeFile(tmp, content, "utf-8");
-	await rename(tmp, path);
+	const parent = dirname(path);
+	await mkdir(parent, { recursive: true });
+	try {
+		await writeFile(tmp, content, "utf-8");
+		await rename(tmp, path);
+	} catch {
+		await mkdir(parent, { recursive: true });
+		await writeFile(path, content, "utf-8");
+	}
 }
 
 export function stringifyYaml(data: unknown): string {

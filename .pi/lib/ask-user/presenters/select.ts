@@ -1,3 +1,7 @@
+import {
+	isHeadlessAskUserContext,
+	shouldPreferTuiOverGlimpse,
+} from "../policy.js";
 import type { DialogResult, UiBackend, ValidatedAskParams } from "../types.js";
 import { isGlimpseAvailable, runGlimpsePresenter } from "./glimpse.js";
 import { runHeadlessPresenter } from "./headless.js";
@@ -10,12 +14,18 @@ export function resolvePresenterChoice(
 	validated: ValidatedAskParams,
 	hasUI: boolean,
 ): PresenterChoice {
+	if (isHeadlessAskUserContext()) return "headless";
 	if (validated.displayMode === "inline") return "tui";
 
 	const forced = process.env.HARNESS_ASK_USER_UI?.toLowerCase();
 	if (forced === "tui") return "tui";
 	if (forced === "glimpse") return "glimpse";
 	if (forced === "headless") return "headless";
+
+	if (shouldPreferTuiOverGlimpse()) {
+		if (hasUI) return "tui";
+		return "headless";
+	}
 
 	if (hasUI && isGlimpseAvailable()) return "glimpse";
 	if (hasUI) return "tui";
@@ -44,13 +54,12 @@ export async function presentAskUser(
 	validated: ValidatedAskParams,
 	ctx: PresenterContext,
 ): Promise<DialogResult> {
-	let choice = resolvePresenterChoice(validated, ctx.hasUI);
+	const choice = resolvePresenterChoice(validated, ctx.hasUI);
 
 	if (choice === "glimpse") {
 		try {
 			return await runPresenter("glimpse", validated, ctx);
 		} catch {
-			choice = "tui";
 			const outcome = await runPresenter("tui", validated, ctx);
 			return { ...outcome, ui_degraded: true };
 		}

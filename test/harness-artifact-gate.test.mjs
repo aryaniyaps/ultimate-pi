@@ -146,6 +146,42 @@ coverage:
 	assert.equal(gate.ok, true);
 });
 
+test("validates debate round hypothesis-validation artifact schema", async () => {
+	const root = join(tmpdir(), `harness-artifact-gate-${randomUUID()}`);
+	await mkdir(join(root, "artifacts"), { recursive: true });
+	const doc = `schema_version: "1.0.0"
+dimensions:
+  novelty:
+    score: 70
+    rationale: Adequate novelty for the task.
+  coherence:
+    score: 75
+    rationale: Coherent with stated task.
+  testability:
+    score: 72
+    rationale: Falsifiable within one sprint.
+  impact:
+    score: 68
+    rationale: Meaningful user impact.
+relevance:
+  passes: true
+  rationale: Hypothesis addresses the user task.
+human_summary: Hypothesis is falsifiable and proportional.
+`;
+	await writeFile(
+		join(root, "artifacts", "hypothesis-validation-r1.yaml"),
+		doc,
+		"utf-8",
+	);
+	const gate = await validateHarnessArtifactFile(
+		root,
+		"artifacts/hypothesis-validation-r1.yaml",
+		specsDir,
+		{ skipPrerequisites: true },
+	);
+	assert.equal(gate.ok, true, gate.errors.join("; "));
+});
+
 test("task-clarification gate rejects unresolved questions when ready", async () => {
 	const root = join(tmpdir(), `harness-artifact-gate-${randomUUID()}`);
 	await mkdir(join(root, "artifacts"), { recursive: true });

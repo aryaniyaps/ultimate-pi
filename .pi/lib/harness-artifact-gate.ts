@@ -7,10 +7,18 @@ import { access, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { validateAgainstHarnessSchema } from "./harness-schema-validate.js";
+import { validateTaskClarificationHumanGate } from "./plan-human-gates.js";
 import {
 	TASK_CLARIFICATION_ARTIFACT,
 	validateTaskClarificationDoc,
 } from "./plan-task-clarification.js";
+
+export interface ArtifactGateContext {
+	entries?: unknown[];
+	quick?: boolean;
+	taskSummary?: string;
+	lastOutcome?: string | null;
+}
 
 export interface ArtifactGateResult {
 	ok: boolean;
@@ -25,10 +33,49 @@ const ARTIFACT_SCHEMA: Record<string, string> = {
 	"artifacts/stack.yaml": "plan-stack-brief.schema.json",
 	"artifacts/task-clarification.yaml": "plan-task-clarification.schema.json",
 	"artifacts/planning-context.yaml": "plan-planning-context.schema.json",
+	"artifacts/execution-plan-draft.yaml":
+		"plan-execution-plan-brief.schema.json",
 	"artifacts/eval-verdict.yaml": "eval-verdict.schema.json",
 	"artifacts/adversary-report.yaml": "adversary-report.schema.json",
 	"artifacts/sentrux-repair-plan.yaml": "sentrux-repair-plan.schema.json",
+	"artifacts/review-round-consolidated.yaml":
+		"plan-review-round-draft.schema.json",
 };
+
+/** Round-indexed debate artifacts (submit_* output). */
+const ROUND_ARTIFACT_SCHEMA: Array<{ pattern: RegExp; schemaFile: string }> = [
+	{
+		pattern: /^artifacts\/hypothesis-validation-r\d+\.yaml$/,
+		schemaFile: "plan-hypothesis-eval.schema.json",
+	},
+	{
+		pattern: /^artifacts\/validation-turn-r\d+\.yaml$/,
+		schemaFile: "plan-validation-turn.schema.json",
+	},
+	{
+		pattern: /^artifacts\/adversary-brief-r\d+\.yaml$/,
+		schemaFile: "plan-adversary-brief.schema.json",
+	},
+	{
+		pattern: /^artifacts\/sprint-audit-r\d+\.yaml$/,
+		schemaFile: "plan-sprint-audit-turn.schema.json",
+	},
+	{
+		pattern: /^artifacts\/review-round-r\d+\.yaml$/,
+		schemaFile: "plan-review-round-draft.schema.json",
+	},
+];
+
+export function resolveArtifactSchemaFile(
+	normalizedPath: string,
+): string | undefined {
+	const exact = ARTIFACT_SCHEMA[normalizedPath];
+	if (exact) return exact;
+	for (const entry of ROUND_ARTIFACT_SCHEMA) {
+		if (entry.pattern.test(normalizedPath)) return entry.schemaFile;
+	}
+	return undefined;
+}
 
 const PREREQUISITE_ORDER: Record<string, string[]> = {
 	"artifacts/planning-context.yaml": [TASK_CLARIFICATION_ARTIFACT],
@@ -40,6 +87,12 @@ const PREREQUISITE_ORDER: Record<string, string[]> = {
 	"artifacts/stack.yaml": [
 		"artifacts/decomposition.yaml",
 		"artifacts/hypothesis.yaml",
+	],
+	"artifacts/execution-plan-draft.yaml": [
+		"artifacts/decomposition.yaml",
+		"artifacts/hypothesis.yaml",
+		"artifacts/implementation-research.yaml",
+		"artifacts/stack.yaml",
 	],
 };
 
@@ -121,6 +174,7 @@ export async function validateHarnessArtifactFile(
 	runRoot: string,
 	relPath: string,
 	specsDir: string,
+	gateCtx?: ArtifactGateContext & { skipPrerequisites?: boolean },
 ): Promise<ArtifactGateResult> {
 	const normalized = relPath.replace(/\\/g, "/");
 	const abs = join(runRoot, normalized);
@@ -152,7 +206,7 @@ export async function validateHarnessArtifactFile(
 		);
 	}
 
-	const schemaFile = ARTIFACT_SCHEMA[normalized];
+	const schemaFile = resolveArtifactSchemaFile(normalized);
 	if (doc && schemaFile) {
 		const validation = await validateAgainstHarnessSchema(
 			specsDir,
@@ -171,16 +225,30 @@ export async function validateHarnessArtifactFile(
 		if (!clar.ok) {
 			errors.push(...clar.errors.map((e) => `${normalized}: ${e}`));
 		}
+		const human = validateTaskClarificationHumanGate(
+			gateCtx?.entries ?? [],
+			doc,
+			{
+				quick: gateCtx?.quick,
+				taskSummary: gateCtx?.taskSummary,
+				allowFollowUpMessage: gateCtx?.lastOutcome === "needs_clarification",
+			},
+		);
+		if (!human.ok) {
+			errors.push(...human.errors.map((e) => `${normalized}: ${e}`));
+		}
 	}
 
 	if (doc) {
 		errors.push(...(await validatePlanningContextArtifact(normalized, doc)));
 	}
 
-	const prereqs = PREREQUISITE_ORDER[normalized] ?? [];
-	errors.push(
-		...(await validateArtifactPrerequisites(runRoot, normalized, prereqs)),
-	);
+	if (!gateCtx?.skipPrerequisites) {
+		const prereqs = PREREQUISITE_ORDER[normalized] ?? [];
+		errors.push(
+			...(await validateArtifactPrerequisites(runRoot, normalized, prereqs)),
+		);
+	}
 
 	return { ok: errors.length === 0, errors };
 }
@@ -189,6 +257,7 @@ export async function validateHarnessArtifactPaths(
 	runRoot: string,
 	paths: string[],
 	specsDir: string,
+	gateCtx?: ArtifactGateContext,
 ): Promise<{
 	ok: boolean;
 	present: string[];
@@ -205,6 +274,7 @@ export async function validateHarnessArtifactPaths(
 			runRoot,
 			normalized,
 			specsDir,
+			gateCtx,
 		);
 		if (gate.errors.some((e) => e.startsWith("missing file"))) {
 			missing.push(normalized);

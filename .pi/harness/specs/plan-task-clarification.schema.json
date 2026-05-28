@@ -24,7 +24,7 @@
 		"schema_version": { "type": "string", "const": "1.0.0" },
 		"status": {
 			"type": "string",
-			"enum": ["draft", "needs_user", "ready"]
+			"enum": ["draft", "needs_user", "needs_clarification", "ready"]
 		},
 		"source_task": { "type": "string", "minLength": 1 },
 		"clarified_task": { "type": "string", "minLength": 1 },
@@ -83,6 +83,15 @@
 				"summary": { "type": "string" }
 			},
 			"additionalProperties": true
+		},
+		"user_engagement": {
+			"type": "object",
+			"properties": {
+				"source": { "type": "string", "minLength": 1 },
+				"recorded_at": { "type": "string" }
+			},
+			"required": ["source"],
+			"additionalProperties": false
 		}
 	}
 }

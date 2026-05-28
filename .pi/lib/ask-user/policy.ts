@@ -56,8 +56,31 @@ export function isPlanApprovalAskUser(input: {
 export function isHarnessNonInteractive(): boolean {
 	return (
 		process.env.HARNESS_NON_INTERACTIVE === "1" ||
+		process.env.HARNESS_PLAN_NONINTERACTIVE === "1" ||
+		process.argv.some((a) => a === "-p" || a === "--print") ||
 		process.argv.some((a) => a.includes("non-interactive"))
 	);
+}
+
+/** Prefer headless ask_user UI (print mode, CI, or non-TTY stdin). */
+export function isHeadlessAskUserContext(): boolean {
+	return isHarnessNonInteractive() || !process.stdin.isTTY;
+}
+
+/** Cursor Composer / agent runs set CURSOR_AGENT=1; Glimpse WebView often returns null there. */
+export function isCursorAgentContext(): boolean {
+	const v = process.env.CURSOR_AGENT;
+	return v === "1" || v === "true";
+}
+
+/**
+ * Prefer terminal TUI over Glimpse when auto-routing (unless HARNESS_ASK_USER_UI=glimpse).
+ */
+export function shouldPreferTuiOverGlimpse(): boolean {
+	const forced = process.env.HARNESS_ASK_USER_UI?.toLowerCase();
+	if (forced === "glimpse") return false;
+	if (forced === "tui" || forced === "headless") return forced === "tui";
+	return isCursorAgentContext();
 }
 
 export function assertSubagentCannotAskUser(agentType: string | undefined): {

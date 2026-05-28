@@ -23,10 +23,19 @@ export interface ToolCallDecision {
 	newArgs?: Record<string, unknown>;
 }
 
+export interface EvaluateSubagentToolCallOptions {
+	/** Parent harness session — may spawn subagents; spawn policy applies only in subprocesses. */
+	isParentOrchestrator?: boolean;
+}
+
 export function evaluateSubagentToolCall(
 	toolName: string,
 	agentType?: string,
+	opts?: EvaluateSubagentToolCallOptions,
 ): ToolCallDecision {
+	if (opts?.isParentOrchestrator) {
+		return { action: "allow" };
+	}
 	if (SUBAGENT_BLOCKED_TOOLS.has(toolName)) {
 		return {
 			action: "block",

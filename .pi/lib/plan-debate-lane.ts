@@ -48,12 +48,14 @@ export async function applyDebateLaneFromDoc(opts: {
 	lane: DebateLaneKind;
 	doc: Record<string, unknown>;
 	roundIndex?: number;
+	skipArtifactWrite?: boolean;
 }): Promise<ApplyDebateLaneResult> {
 	return applyDebateLane({
 		runDir: opts.runDir,
 		lane: opts.lane,
 		content: JSON.stringify(opts.doc),
 		roundIndex: opts.roundIndex,
+		skipArtifactWrite: opts.skipArtifactWrite,
 	});
 }
 
@@ -95,6 +97,8 @@ export async function applyDebateLane(opts: {
 	lane: DebateLaneKind;
 	content: string;
 	roundIndex?: number;
+	/** When true, artifact YAML was already written (e.g. submit pipeline); only messenger side effects run. */
+	skipArtifactWrite?: boolean;
 }): Promise<ApplyDebateLaneResult> {
 	const errors: string[] = [];
 	let doc: Record<string, unknown>;
@@ -121,8 +125,10 @@ export async function applyDebateLane(opts: {
 			: (opts.roundIndex ?? 1);
 	const relPath = laneArtifactPath(opts.lane, roundIndex);
 	const absPath = join(opts.runDir, relPath);
-	await mkdir(dirname(absPath), { recursive: true });
-	await writeYamlFile(absPath, doc);
+	if (!opts.skipArtifactWrite) {
+		await mkdir(dirname(absPath), { recursive: true });
+		await writeYamlFile(absPath, doc);
+	}
 
 	let messengerPosted = false;
 	let nextStep: string | undefined;

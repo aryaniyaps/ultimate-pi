@@ -3,8 +3,12 @@
  */
 
 import { join } from "node:path";
-import { harnessRunsRoot } from "./harness-run-context.js";
-import { readYamlFile } from "./harness-yaml.js";
+import {
+	harnessRunsRoot,
+	type RemediationClass,
+	remediationClassFromEvalVerdict,
+} from "./harness-run-context.js";
+import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
 
 const REPAIR_BRIEF_SCHEMA = "1.0.0";
 
@@ -72,8 +76,15 @@ export async function synthesizeRepairBrief(
 
 	const remediation =
 		(typeof review?.remediation_class === "string" &&
-			review.remediation_class) ||
-		"implementation_gap";
+			(review.remediation_class as RemediationClass)) ||
+		remediationClassFromEvalVerdict(
+			evalDoc as {
+				status?: string;
+				recommended_action?: string;
+				failed_checks?: string[];
+			},
+		) ||
+		"inconclusive";
 
 	const sourceArtifacts = buildSourceArtifacts(input, planRel, {
 		evalDoc,
@@ -130,6 +141,21 @@ export async function synthesizeRepairBrief(
 		brief.priority_lake_ids = [...new Set(priorityLakeIds)];
 	}
 	return brief;
+}
+
+export async function ensureRepairBriefOnDisk(
+	input: SynthesizeRepairBriefInput,
+): Promise<boolean> {
+	const runRoot = join(harnessRunsRoot(input.projectRoot), input.runId);
+	const rel = "artifacts/repair-brief.yaml";
+	try {
+		await readYamlFile(join(runRoot, rel), "repair-brief");
+		return false;
+	} catch {
+		const brief = await synthesizeRepairBrief(input);
+		await writeYamlFile(join(runRoot, rel), brief);
+		return true;
+	}
 }
 
 function buildSourceArtifacts(

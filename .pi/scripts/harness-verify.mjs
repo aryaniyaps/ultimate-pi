@@ -519,6 +519,32 @@ async function checkSentruxGate() {
 	ok("sentrux check passed");
 }
 
+async function verifyHarnessSchemaCompilation() {
+	const script = join(ROOT, ".pi", "scripts", "harness-schema-compile-verify.mjs");
+	if (!(await fileExists(script))) {
+		fail("missing harness-schema-compile-verify.mjs");
+	}
+	const { code, out } = await new Promise((resolve) => {
+		const child = spawn("npx", ["-y", "tsx", script], {
+			cwd: ROOT,
+			stdio: ["ignore", "pipe", "pipe"],
+			shell: true,
+		});
+		let buf = "";
+		child.stdout?.on("data", (d) => {
+			buf += d.toString();
+		});
+		child.stderr?.on("data", (d) => {
+			buf += d.toString();
+		});
+		child.on("close", (c) => resolve({ code: c ?? 1, out: buf }));
+	});
+	if (code !== 0) {
+		fail(out.trim() || "harness schema compile verify failed");
+	}
+	ok(out.trim() || "harness schemas compile (cross-file $ref)");
+}
+
 async function verifySchemaAdrAndExtensions() {
 	for (const name of REQUIRED_SCHEMAS) {
 		const path = join(SPECS, name);
@@ -526,6 +552,7 @@ async function verifySchemaAdrAndExtensions() {
 		JSON.parse(await readFile(path, "utf-8"));
 		ok(`schema ${name}`);
 	}
+	await verifyHarnessSchemaCompilation();
 	for (const name of REQUIRED_ADRS) {
 		const path = join(ADRS, name);
 		if (!(await fileExists(path))) fail(`missing ADR ${name}`);

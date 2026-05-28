@@ -76,6 +76,8 @@ If `/harness-review` returns `implementation_gap`, run:
 | `/harness-review [--run <id>] [--quick] [--readonly] [--trace <ref>]` | Post-run verification gate: deterministic checks, benchmark evaluator, policy verdict, adversary, optional tie-breaker. |
 | `/harness-steer [--attempt N]` | Post-review repair pass for `implementation_gap`; executor reads `repair-brief.yaml`, then you re-run `/harness-review`. |
 | `/harness-abort [reason]` | Safely aborts the active run, clears plan readiness, and re-locks mutation until a fresh plan is approved. |
+
+| `/harness-clear` | Deletes only historical `.pi/harness/runs/<run_id>/` directories after mandatory confirmation; active run is preserved and non-affirmative/outage confirmation paths are no-op. |
 | `/harness-trace [--run <id>] [--phase plan\|execute\|evaluate\|adversary\|merge]` | Summarizes run traces and artifact handoffs for replay/forensics. |
 | `/harness-incident --trigger <reason> [--run <id>] [--severity low\|med\|high\|critical]` | Records incident, rollback, and override trail for harness failures. |
 | `/harness-sentrux-steward [--run <id>]` | Ad-hoc architectural intent review for Sentrux manifest/rule alignment. |
@@ -127,6 +129,8 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 | No approved plan | Run `/harness-plan "<task>"`, then `/harness-run`. |
 | Need to inspect handoff | Run `/harness-trace` or inspect `.pi/harness/runs/<run_id>/`. |
 | Need to restart safely | Run `/harness-abort [reason]`, then create a fresh plan. |
+
+| Need to prune old run history safely | Run `/harness-clear`; only historical run directories are eligible and confirmation failure/cancel deletes nothing. |
 | Review says `implementation_gap` | Run `/harness-steer`, then `/harness-review`. |
 | Review says `plan_gap` | Revise with `/harness-plan "<updated task>"`. |
 | Sentrux missing | Install/configure Sentrux or keep it skipped; harness verification still reports the status. |

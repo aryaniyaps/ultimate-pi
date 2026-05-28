@@ -92,6 +92,57 @@ test("executor allows write", () => {
 	assert.equal(write.action, "allow");
 });
 
+test("hypothesis-validator cannot use bash or repo search tools", () => {
+	const bash = evaluateHarnessSubagentToolCall(
+		"bash",
+		{ command: "graphify query 'foo'" },
+		"harness/planning/hypothesis-validator",
+	);
+	assert.equal(bash.action, "block");
+	const grep = evaluateHarnessSubagentToolCall(
+		"grep",
+		{ pattern: "foo" },
+		"harness/planning/hypothesis-validator",
+	);
+	assert.equal(grep.action, "block");
+	const read = evaluateHarnessSubagentToolCall(
+		"read",
+		{ path: "artifacts/hypothesis.yaml" },
+		"harness/planning/hypothesis-validator",
+	);
+	assert.equal(read.action, "allow");
+	const readDecomp = evaluateHarnessSubagentToolCall(
+		"read",
+		{ path: "artifacts/decomposition.yaml" },
+		"harness/planning/hypothesis-validator",
+	);
+	assert.equal(readDecomp.action, "block");
+});
+
+test("plan-evaluator allows sg bash only", () => {
+	const sg = evaluateHarnessSubagentToolCall(
+		"bash",
+		{ command: "sg -p 'function $NAME' .pi/lib" },
+		"harness/planning/plan-evaluator",
+	);
+	assert.equal(sg.action, "allow");
+	const graphify = evaluateHarnessSubagentToolCall(
+		"bash",
+		{ command: "graphify update ." },
+		"harness/planning/plan-evaluator",
+	);
+	assert.equal(graphify.action, "block");
+});
+
+test("implementation-researcher cannot use bash", () => {
+	const bash = evaluateHarnessSubagentToolCall(
+		"bash",
+		{ command: "npm test" },
+		"harness/planning/implementation-researcher",
+	);
+	assert.equal(bash.action, "block");
+});
+
 test("planning decompose and hypothesis-validator classified as planner read-only", () => {
 	assert.equal(
 		getAgentKind(packageRoot, projectRoot, "harness/planning/decompose"),
@@ -171,6 +222,29 @@ test("harness-plan prompt references planning context and Darwin pipeline agents
 	assert.match(planPrompt, /create_plan/);
 	assert.doesNotMatch(planPrompt, /harness\/planner/);
 	assert.doesNotMatch(planPrompt, /harness\/planning\/planner/);
+});
+
+test("parent orchestrator allows subagent and plan gates via spawn policy", () => {
+	const spawn = evaluateSubagentToolCall("subagent", "parent-orchestrator", {
+		isParentOrchestrator: true,
+	});
+	assert.equal(spawn.action, "allow");
+	const ask = evaluateSubagentToolCall("ask_user", "parent-orchestrator", {
+		isParentOrchestrator: true,
+	});
+	assert.equal(ask.action, "allow");
+	const approve = evaluateSubagentToolCall("approve_plan", "parent-orchestrator", {
+		isParentOrchestrator: true,
+	});
+	assert.equal(approve.action, "allow");
+});
+
+test("harness subprocess blocks nested subagent tool", () => {
+	const nested = evaluateSubagentToolCall(
+		"subagent",
+		"harness/planning/decompose",
+	);
+	assert.equal(nested.action, "block");
 });
 
 test("planning-context blocks ask_user via spawn policy", () => {

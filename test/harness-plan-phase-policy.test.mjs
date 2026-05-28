@@ -10,8 +10,10 @@ import {
 	isCanonicalPlanPacketPath,
 	isPlanPhaseAllowedMutation,
 	isPlanPhaseScopedWrite,
+	isBareHarnessRunArtifactPath,
 	normalizeHarnessPath,
 	parseAskUserApprovalFromMessage,
+	resolveHarnessRunWriteTarget,
 	validatePlanOverridePath,
 } from "../.pi/lib/harness-run-context.ts";
 import { capsForDebate } from "../.pi/lib/debate-bus-core.ts";
@@ -214,4 +216,37 @@ test("isPlanPhaseScopedWrite rejects symlink escape", async () => {
 		return;
 	}
 	assert.equal(await isPlanPhaseScopedWrite(linkPath, ctx, root), false);
+});
+
+test("isBareHarnessRunArtifactPath accepts agent-short paths", () => {
+	assert.equal(isBareHarnessRunArtifactPath("artifacts/decomposition.yaml"), true);
+	assert.equal(isBareHarnessRunArtifactPath("research-brief.yaml"), true);
+	assert.equal(isBareHarnessRunArtifactPath("src/foo.ts"), false);
+	assert.equal(
+		isBareHarnessRunArtifactPath(
+			".pi/harness/runs/run-1/artifacts/decomposition.yaml",
+		),
+		false,
+	);
+});
+
+test("resolveHarnessRunWriteTarget maps artifacts/*.yaml under active run", async () => {
+	const root = await mkdtemp(join(tmpdir(), "harness-plan-resolve-"));
+	const runId = "019e6965-3419-736e-a54f-88e3c1c7fef3-1779884835192";
+	const ctx = runCtx(runId, root);
+	const target = resolveHarnessRunWriteTarget(
+		"artifacts/task-clarification.yaml",
+		ctx,
+		root,
+	);
+	assert.ok(target);
+	assert.equal(target.relUnderRun, "artifacts/task-clarification.yaml");
+	assert.equal(
+		target.absPath,
+		join(root, ".pi/harness/runs", runId, "artifacts/task-clarification.yaml"),
+	);
+	assert.equal(
+		await isPlanPhaseScopedWrite(target.absPath, ctx, root),
+		true,
+	);
 });
