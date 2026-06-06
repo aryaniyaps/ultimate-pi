@@ -121,6 +121,16 @@ function validateParallelBatch(
 		return "At most one planning-context subagent per parallel batch.";
 	}
 
+	const reviewEvaluator = "harness/reviewing/evaluator";
+	const reviewAdversary = "harness/reviewing/adversary";
+	const reviewParallelPair =
+		process.env.HARNESS_REVIEW_PARALLEL === "1" &&
+		names.includes(reviewEvaluator) &&
+		names.includes(reviewAdversary) &&
+		names.filter((n) => n === reviewEvaluator || n === reviewAdversary)
+			.length === 2 &&
+		names.length === 2;
+
 	const otherHarness = names.filter(
 		(n) =>
 			n.startsWith("harness/") &&
@@ -128,7 +138,8 @@ function validateParallelBatch(
 			!PARALLEL_RESEARCH_AGENTS.has(n) &&
 			!DEBATE_LANE_AGENTS.has(n) &&
 			n !== DECOMPOSE_AGENT &&
-			n !== HYPOTHESIS_AGENT,
+			n !== HYPOTHESIS_AGENT &&
+			!(reviewParallelPair && (n === reviewEvaluator || n === reviewAdversary)),
 	);
 	if (
 		(recon > 0 && (research > 0 || otherHarness.length > 0)) ||
@@ -142,6 +153,9 @@ function validateParallelBatch(
 	}
 	if (research > 2) {
 		return "At most 2 research lanes (implementation-researcher, stack-researcher) per parallel batch.";
+	}
+	if (reviewParallelPair) {
+		return null;
 	}
 	return null;
 }

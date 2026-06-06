@@ -26,6 +26,11 @@ import { runAskUser } from "../lib/ask-user/index.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import {
+	buildPhaseCompletedPayload,
+	phaseTerminalArtifact,
+} from "../lib/harness-phase-telemetry.js";
+import { captureHarnessEvent } from "../lib/harness-posthog.js";
+import {
 	blockingHarnessAutoCommandReason,
 	blockingReviewCommandReason,
 	blockingRunCommandReason,
@@ -115,6 +120,7 @@ import {
 	TASK_CLARIFICATION_ARTIFACT,
 } from "../lib/plan-task-clarification.js";
 
+// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 interface SessionEntryLike {
@@ -2554,6 +2560,44 @@ function registerHarnessRunContextTool4(
 				Object.assign(runCtx, synced);
 				persistContext(pi, runCtx);
 			}
+			if (gate.ok) {
+				const sessionId = ctx.sessionManager.getSessionId();
+				const completedPhases = new Set<string>();
+				for (const rawPath of paths) {
+					const norm = rawPath.replace(/\\/g, "/");
+					const phase = phaseTerminalArtifact(norm);
+					if (!phase || completedPhases.has(phase)) continue;
+					const payload = buildPhaseCompletedPayload(runCtx.run_id, phase);
+					if (payload) {
+						completedPhases.add(phase);
+						captureHarnessEvent(sessionId, "harness_phase_completed", {
+							...payload,
+							harness_plan_id: runCtx.plan_id ?? "plan-unknown",
+							pi_session_id: sessionId,
+						});
+						pi.appendEntry("harness-phase-completed", payload);
+					}
+				}
+				if (
+					paths.some(
+						(p) => p.replace(/\\/g, "/") === "artifacts/review-outcome.yaml",
+					)
+				) {
+					captureHarnessEvent(sessionId, "harness_run_completed", {
+						harness_run_id: runCtx.run_id,
+						run_id: runCtx.run_id,
+						harness_plan_id: runCtx.plan_id ?? "plan-unknown",
+						harness_phase: "evaluate",
+						pi_session_id: sessionId,
+						source: "review-outcome_gate",
+						duration_ms: 0,
+						tool_span_count: 0,
+						input_tokens: 0,
+						output_tokens: 0,
+					});
+				}
+			}
+
 			const text = gate.ok
 				? `All ${gate.present.length} artifact(s) present and valid.`
 				: [

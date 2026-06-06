@@ -14,6 +14,7 @@ import { shouldBlockSubagentForMissingPlanApproval } from "./plan-human-gates.js
 
 export interface SubagentTaskRef {
 	agent: string;
+	task?: string;
 }
 
 export interface PrecheckResult {
@@ -28,6 +29,29 @@ export interface PrecheckOptions {
 	quick?: boolean;
 	taskSummary?: string;
 	lastOutcome?: string | null;
+}
+
+function parseSteerAttemptFromTasks(params: {
+	agent?: string;
+	task?: string;
+	tasks?: SubagentTaskRef[];
+	chain?: SubagentTaskRef[];
+}): number {
+	const allTaskText = [
+		...(params.tasks?.map((t) => t.task ?? "") ?? []),
+		...(params.chain?.map((c) => c.task ?? "") ?? []),
+		params.task ?? "",
+	].join("\n");
+	const m = /"steer_attempt"\s*:\s*(\d+)/.exec(allTaskText);
+	if (m) return Number.parseInt(m[1] ?? "0", 10) || 0;
+	const m2 = /steer_attempt[=:](\d+)/i.exec(allTaskText);
+	if (m2) return Number.parseInt(m2[1] ?? "0", 10) || 0;
+	return 0;
+}
+
+function priorBlockMergeInContext(opts?: PrecheckOptions): boolean {
+	const outcome = String(opts?.lastOutcome ?? "").toLowerCase();
+	return outcome.includes("block_merge") || outcome.includes("block");
 }
 
 function collectAgents(params: {
@@ -80,10 +104,26 @@ export async function precheckHarnessSubagentSpawn(
 	}
 
 	const parallelEvalAdversary =
+		process.env.HARNESS_REVIEW_PARALLEL === "1" &&
 		(params.tasks?.length ?? 0) === 2 &&
 		params.tasks?.some((t) => t.agent === "harness/reviewing/evaluator") &&
 		params.tasks?.some((t) => t.agent === "harness/reviewing/adversary") &&
+		names.length === 2 &&
 		phase === "evaluate";
+
+	const steerAttempt = parseSteerAttemptFromTasks(params);
+	if (
+		steerAttempt >= 2 &&
+		names.includes("harness/reviewing/adversary") &&
+		!priorBlockMergeInContext(opts)
+	) {
+		return {
+			ok: false,
+			message:
+				`Lite review (steer attempt ${steerAttempt}): skip adversary unless prior block_merge. ` +
+				`Run benchmark + verdict evaluator only.`,
+		};
+	}
 
 	if (
 		(params.tasks?.length ?? 0) > 1 &&

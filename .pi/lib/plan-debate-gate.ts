@@ -21,6 +21,10 @@ import {
 } from "./plan-debate-lanes.js";
 import { getPlanDebateRoundStatus } from "./plan-debate-round-status.js";
 import {
+	checkDebateWallClock,
+	debateWallClockRecoveryHint,
+} from "./plan-debate-wall-clock.js";
+import {
 	getMessengerRoundState,
 	loadMessengerState,
 	messengerRoundDebateReady,
@@ -253,8 +257,8 @@ export async function validatePlanDebateGate(
 						debate_global_cap: caps.debate_global_cap,
 						rationale: [],
 					};
-	const consolidated = isConsolidatedReviewStrategy(reviewStrategy);
-	const parallelProbes = isParallelProbesReviewStrategy(reviewStrategy);
+	const _consolidated = isConsolidatedReviewStrategy(reviewStrategy);
+	const _parallelProbes = isParallelProbesReviewStrategy(reviewStrategy);
 	const coverage = await getPlanFocusCoverage(runDir, { requiredFocuses });
 	const dialogueOpts = {
 		max_exchanges_per_round: caps.max_exchanges_per_round,
@@ -298,6 +302,23 @@ export async function validatePlanDebateGate(
 		);
 	} else if (messenger.debate_id !== debateId) {
 		errors.push(`messenger debate_id ${messenger.debate_id} !== ${debateId}`);
+	} else {
+		const wall = checkDebateWallClock({
+			opened_at: messenger.opened_at,
+			debate_profile: debateProfile as DebateEligibilityResult["profile"],
+		});
+		if (wall.exceeded) {
+			const hint = debateWallClockRecoveryHint(wall);
+			if (wall.non_interactive) {
+				warnings.push(
+					`debate wall-clock exceeded (${Math.round(wall.elapsed_ms / 1000)}s > ${Math.round(wall.limit_ms / 1000)}s) — ${hint}`,
+				);
+			} else {
+				errors.push(
+					`debate wall-clock exceeded (${Math.round(wall.elapsed_ms / 1000)}s) — ${hint}`,
+				);
+			}
+		}
 	}
 
 	const busChecks = await collectBusAndConsensusIssues({

@@ -12,6 +12,7 @@ import {
 } from "../lib/ask-user/schema.js";
 import type { AskUserParams } from "../lib/ask-user/types.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
+import { setHarnessWaitingForUser } from "../lib/harness-subagent-progress.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -28,11 +29,19 @@ export default function harnessAskUser(pi: ExtensionAPI) {
 		parameters: AskUserParamsSchema,
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
-			const result = await runAskUser(params as AskUserParams, {
-				ui: ctx.ui,
-				hasUI: ctx.hasUI,
-				sessionName: undefined,
-			});
+			setHarnessWaitingForUser("ask_user");
+			pi.events.emit("harness-waiting-for-user", { gate: "ask_user" });
+			let result: Awaited<ReturnType<typeof runAskUser>>;
+			try {
+				result = await runAskUser(params as AskUserParams, {
+					ui: ctx.ui,
+					hasUI: ctx.hasUI,
+					sessionName: undefined,
+				});
+			} finally {
+				setHarnessWaitingForUser(null);
+				pi.events.emit("harness-waiting-for-user", { gate: null });
+			}
 
 			if ("error" in result) {
 				return {

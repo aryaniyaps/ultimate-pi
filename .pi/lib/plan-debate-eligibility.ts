@@ -218,11 +218,13 @@ export function harnessPlanDebateEligibility(
 		!dagPatched &&
 		input.dag_pass !== false &&
 		openQs.length === 0 &&
-		stackHasClearPrimary(stack)
+		stackHasClearPrimary(stack) &&
+		impl != null &&
+		stack != null
 	) {
 		profile = "fast";
 		rationale.push(
-			"fast: medium risk with clear stack and no open questions; use consolidated review with escalation on blockers",
+			"fast: medium risk with Phase 3.5 research artifacts, clear stack, and no open questions",
 		);
 	} else if (
 		risk === "low" &&

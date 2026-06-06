@@ -26,7 +26,7 @@
 		},
 		"gate_status": {
 			"type": "string",
-			"enum": ["pass", "degraded", "skipped", "not_installed"]
+			"enum": ["pass", "degraded", "skipped", "not_installed", "timeout"]
 		},
 		"quality_signal_summary": {
 			"type": "string"

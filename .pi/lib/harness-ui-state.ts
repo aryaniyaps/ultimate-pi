@@ -5,6 +5,7 @@ import {
 	getLatestRunContext,
 	nextStepAfterOutcome,
 } from "./harness-run-context.js";
+import { buildHarnessProgressStatusLine } from "./harness-subagent-progress.js";
 
 export type HarnessPhase =
 	| "plan"
@@ -485,6 +486,10 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 	}
 	if (state.policyDecision === "block") {
 		return { text: "Blocked — fix issues first", severity: "error" };
+	}
+	const progressLine = buildHarnessProgressStatusLine();
+	if (progressLine) {
+		return { text: progressLine, severity: "accent" };
 	}
 	if (
 		state.policyDecision === "human_required" ||

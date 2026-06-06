@@ -227,6 +227,7 @@ export default function traceRecorder(pi: ExtensionAPI) {
 			plan_id: activeRun.planId,
 			phase: activeRun.phase,
 			started_at: startedAt,
+			phase_started_at: startedAt,
 		});
 
 		const runCtx = getLatestRunContext(entries);

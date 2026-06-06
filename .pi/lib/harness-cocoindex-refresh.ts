@@ -4,17 +4,91 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const DEFAULT_TIMEOUT_MS = 120_000;
+const MARKER_REL = join(".cocoindex_code", ".harness-last-index.json");
 
-export function refreshHarnessCocoindexIndex(cwd: string): string | undefined {
+interface IndexMarker {
+	indexed_at_ms: number;
+	git_head: string | null;
+	porcelain_empty: boolean;
+}
+
+function readMarker(cwd: string): IndexMarker | null {
+	const path = join(cwd, MARKER_REL);
+	try {
+		return JSON.parse(readFileSync(path, "utf8")) as IndexMarker;
+	} catch {
+		return null;
+	}
+}
+
+function writeMarker(cwd: string, marker: IndexMarker): void {
+	const path = join(cwd, MARKER_REL);
+	writeFileSync(path, `${JSON.stringify(marker, null, 2)}\n`, "utf8");
+}
+
+function gitHead(cwd: string): string | null {
+	const r = spawnSync("git", ["rev-parse", "HEAD"], {
+		cwd,
+		encoding: "utf8",
+		stdio: "pipe",
+	});
+	if (r.status !== 0) return null;
+	return (r.stdout ?? "").trim() || null;
+}
+
+function gitPorcelainEmpty(cwd: string): boolean {
+	const r = spawnSync("git", ["status", "--porcelain"], {
+		cwd,
+		encoding: "utf8",
+		stdio: "pipe",
+	});
+	if (r.status !== 0) return false;
+	return !(r.stdout ?? "").trim();
+}
+
+function shouldSkipIndex(cwd: string, forceExecuteRefresh: boolean): boolean {
+	if (forceExecuteRefresh) return false;
+	if (process.env.HARNESS_COCOINDEX_REFRESH === "0") return true;
+
+	const debounceMs = Number(
+		process.env.HARNESS_COCOINDEX_REFRESH_DEBOUNCE_MS ?? 300_000,
+	);
+	if (!Number.isFinite(debounceMs) || debounceMs <= 0) return false;
+
+	const marker = readMarker(cwd);
+	if (!marker) return false;
+
+	const age = Date.now() - marker.indexed_at_ms;
+	if (age >= debounceMs) return false;
+
+	const head = gitHead(cwd);
+	const porcelainEmpty = gitPorcelainEmpty(cwd);
+	if (!porcelainEmpty) return false;
+	if (head && marker.git_head && head !== marker.git_head) return false;
+
+	console.error(
+		`harness-cocoindex: skip ccc index (debounced ${Math.round(age / 1000)}s ago, git clean)`,
+	);
+	return true;
+}
+
+export function refreshHarnessCocoindexIndex(
+	cwd: string,
+	opts?: { forceExecuteRefresh?: boolean },
+): string | undefined {
 	if (process.env.HARNESS_COCOINDEX_REFRESH === "0") {
 		return undefined;
 	}
 	const settingsPath = join(cwd, ".cocoindex_code", "settings.yml");
 	if (!existsSync(settingsPath)) {
+		return undefined;
+	}
+
+	if (shouldSkipIndex(cwd, opts?.forceExecuteRefresh === true)) {
 		return undefined;
 	}
 
@@ -44,6 +118,12 @@ export function refreshHarnessCocoindexIndex(cwd: string): string | undefined {
 		}
 		return `${msg} — continuing`;
 	}
+
+	writeMarker(cwd, {
+		indexed_at_ms: Date.now(),
+		git_head: gitHead(cwd),
+		porcelain_empty: gitPorcelainEmpty(cwd),
+	});
 
 	return undefined;
 }

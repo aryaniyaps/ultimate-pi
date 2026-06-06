@@ -20,6 +20,10 @@ import {
 } from "./agt/delegation.js";
 import { spawnCircuitOpen } from "./agt/sre-hooks.js";
 import { refreshHarnessCocoindexIndex } from "./harness-cocoindex-refresh.js";
+import {
+	incrementHarnessPhaseSubagentCount,
+	recordHarnessPhaseStart,
+} from "./harness-phase-telemetry.js";
 import { captureHarnessEvent } from "./harness-posthog.js";
 import {
 	getLatestRunContext,
@@ -34,6 +38,7 @@ import {
 	recordSpawnStart,
 } from "./harness-spawn-budget.js";
 import { parseSpawnContextFromTask } from "./harness-spawn-parse.js";
+import { recordDuplicateSpawnBlock } from "./harness-spawn-stall-detector.js";
 import {
 	isUsableApiKey,
 	resolveConcreteSubagentModel,
@@ -42,6 +47,14 @@ import {
 	inferPhaseForPrecheck,
 	precheckHarnessSubagentSpawn,
 } from "./harness-subagent-precheck.js";
+import {
+	buildHarnessProgressStatusLine,
+	clearHarnessSubagentProgress,
+	setHarnessSubagentProgress,
+	startHarnessSubagentHeartbeat,
+	stopHarnessSubagentHeartbeat,
+} from "./harness-subagent-progress.js";
+import { resolveHarnessSubagentTimeoutForAgents } from "./harness-subagent-timeout.js";
 import {
 	getRememberedSessionWebArtifactDir,
 	resolveWebArtifactScope,
@@ -59,6 +72,8 @@ type PendingSpawnTelemetry = {
 	spawn_group_id: string;
 };
 let pendingSpawnTelemetry: PendingSpawnTelemetry | null = null;
+let bridgePi: ExtensionAPI | null = null;
+let executeIndexRefreshPending = true;
 
 function subagentGovernanceExtensionPath(packageRoot: string): string {
 	return join(packageRoot, ".pi", "extensions", "subagent-governance.ts");
@@ -195,6 +210,12 @@ export function createHarnessSubagentsExtension(
 		defaultConfirmProjectAgents: false,
 		truncateDetails: true,
 		resolveSpawnAuth: resolveHarnessSpawnAuth,
+		resolveDefaultTimeoutMs: (params, _agents, ctx) => {
+			const agentIds = collectHarnessAgentIds(params);
+			if (agentIds.length === 0) return undefined;
+			const phase = inferPhaseForPrecheck(ctx.sessionManager.getEntries());
+			return resolveHarnessSubagentTimeoutForAgents(phase, agentIds);
+		},
 		beforeExecute: async (params, agents, ctx) => {
 			lastSessionId = ctx.sessionManager.getSessionId();
 			const { harnessCount } = countHarnessAgentsInRequest(
@@ -222,10 +243,26 @@ export function createHarnessSubagentsExtension(
 					},
 				);
 				if (!pre.ok) {
+					if (pre.message?.includes("Duplicate spawn blocked")) {
+						await recordDuplicateSpawnBlock({
+							message: pre.message,
+							projectRoot: ctx.cwd,
+							runId: runCtx?.run_id ?? null,
+							phase,
+							sessionId: lastSessionId,
+						});
+					}
 					return { ok: false, message: pre.message };
 				}
 				if (phase === "plan" || phase === "execute") {
-					const refreshMsg = refreshHarnessCocoindexIndex(ctx.cwd);
+					const forceExecuteRefresh =
+						phase === "execute" && executeIndexRefreshPending;
+					if (forceExecuteRefresh) {
+						executeIndexRefreshPending = false;
+					}
+					const refreshMsg = refreshHarnessCocoindexIndex(ctx.cwd, {
+						forceExecuteRefresh,
+					});
 					if (refreshMsg?.includes("continuing")) {
 						// warn-only path; do not block spawn
 					} else if (refreshMsg) {
@@ -250,6 +287,26 @@ export function createHarnessSubagentsExtension(
 		onSpawnStart: (harnessCount) => {
 			if (harnessCount <= 0) return;
 			recordSpawnStart(spawnBudget, harnessCount);
+			const phase = pendingSpawnTelemetry?.harness_phase ?? "plan";
+			const runId = pendingSpawnTelemetry?.run_id ?? lastSessionId;
+			const agentIds = pendingSpawnTelemetry?.agent_ids ?? [];
+			recordHarnessPhaseStart(runId, phase);
+			incrementHarnessPhaseSubagentCount(runId, phase, harnessCount);
+			setHarnessSubagentProgress({
+				agentIds,
+				phase,
+			});
+			captureHarnessEvent(lastSessionId, "harness_subagent_setup", {
+				harness_run_id: runId,
+				run_id: runId,
+				harness_phase: phase,
+				agent_ids: agentIds,
+				agent_count: agentIds.length,
+			});
+			startHarnessSubagentHeartbeat((line) => {
+				console.error(`harness-progress: ${line}`);
+				bridgePi?.events.emit("harness-progress:updated", { line });
+			});
 			captureHarnessEvent(lastSessionId, "harness_subagent_spawned", {
 				active_after: spawnBudget.active,
 				spawn_count: harnessCount,
@@ -269,27 +326,54 @@ export function createHarnessSubagentsExtension(
 			if (harnessCount <= 0) return;
 			recordSpawnEnd(spawnBudget, harnessCount);
 		},
-		onCompleted: ({ agents, mode, durationMs }) => {
+		onCompleted: ({ agents, mode, durationMs, timedOut, stop_reason }) => {
+			stopHarnessSubagentHeartbeat();
+			const statusLine = buildHarnessProgressStatusLine();
+			if (statusLine) {
+				console.error(`harness-progress: ${statusLine} (done)`);
+			}
+			clearHarnessSubagentProgress();
+			bridgePi?.events.emit("harness-progress:updated", { line: null });
+
 			if (agents.length === 0) return;
-			captureHarnessEvent(lastSessionId, "harness_subagent_completed", {
+			const runId = pendingSpawnTelemetry?.run_id ?? lastSessionId;
+			const phase = pendingSpawnTelemetry?.harness_phase ?? "plan";
+			const base = {
 				mode,
 				duration_ms: durationMs,
 				agent_count: agents.length,
 				agent_ids: agents,
 				harness_run_id: pendingSpawnTelemetry?.harness_run_id ?? lastSessionId,
-				run_id: pendingSpawnTelemetry?.run_id ?? lastSessionId,
+				run_id: runId,
 				harness_plan_id:
 					pendingSpawnTelemetry?.harness_plan_id ?? "plan-unknown",
-				harness_phase: pendingSpawnTelemetry?.harness_phase ?? "plan",
+				harness_phase: phase,
 				spawn_group_id:
 					pendingSpawnTelemetry?.spawn_group_id ??
 					nextSpawnGroupId(lastSessionId),
+				stop_reason: stop_reason ?? (timedOut ? "timeout" : "complete"),
+			};
+			captureHarnessEvent(lastSessionId, "harness_subagent_result_wait", {
+				...base,
+				wait_ms: durationMs,
 			});
+			if (timedOut) {
+				captureHarnessEvent(lastSessionId, "harness_subagent_timeout", {
+					...base,
+					incomplete_artifact_paths: agents.map((a) => `subagent:${a}:timeout`),
+					escalation: "human_required",
+				});
+			}
+			captureHarnessEvent(lastSessionId, "harness_subagent_completed", base);
 			pendingSpawnTelemetry = null;
 		},
 	};
 
 	return (pi: ExtensionAPI) => {
+		bridgePi = pi;
 		createSubagentsExtension(pi, options);
+		pi.events.on("harness-run-context:updated", () => {
+			executeIndexRefreshPending = true;
+		});
 	};
 }

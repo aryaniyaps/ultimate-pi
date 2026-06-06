@@ -69,10 +69,18 @@ export interface HarnessSubagentsOptions {
 	) => Promise<SpawnAuthForward | undefined>;
 	onSpawnStart?: (harnessAgentCount: number) => void;
 	onSpawnEnd?: (harnessAgentCount: number) => void;
+	/** Phase-aware default when tool params omit timeoutMs (harness bridge). */
+	resolveDefaultTimeoutMs?: (
+		params: Record<string, unknown>,
+		agents: AgentConfig[],
+		ctx: ExtensionContext,
+	) => number | undefined;
 	onCompleted?: (details: {
 		agents: string[];
 		mode: string;
 		durationMs: number;
+		timedOut?: boolean;
+		stop_reason?: "timeout" | "complete" | "aborted";
 	}) => void;
 	truncateDetails?: boolean;
 }
@@ -1387,7 +1395,13 @@ export function createSubagentsExtension(
 			const agentScope: AgentScope = params.agentScope ?? defaultScope;
 			const discovery = discoverAgents(ctx.cwd, agentScope, packageRoot);
 			const agents = discovery.agents;
-			const defaultTimeoutMs = params.timeoutMs ?? ENV_TIMEOUT_MS;
+			const resolvedDefault = options.resolveDefaultTimeoutMs?.(
+				params as Record<string, unknown>,
+				agents,
+				ctx,
+			);
+			const defaultTimeoutMs =
+				params.timeoutMs ?? resolvedDefault ?? ENV_TIMEOUT_MS;
 			const effectiveConfirmProjectAgents =
 				params.confirmProjectAgents ?? defaultConfirm;
 			const harnessAgents = collectHarnessAgents(params);
@@ -1430,6 +1444,7 @@ export function createSubagentsExtension(
 			}
 
 			options.onSpawnStart?.(harnessAgents.length);
+			let spawnTimedOut = false;
 			try {
 				const mode = modeInfo(params);
 				if (mode.modeCount !== 1 || (params.aggregator && !mode.hasTasks)) {
@@ -1475,15 +1490,25 @@ export function createSubagentsExtension(
 					};
 				}
 
-				if (mode.hasChain) return executeChainMode(execCtx);
-				if (mode.hasTasks) return executeParallelMode(execCtx);
-				if (mode.hasSingle) return executeSingleMode(execCtx);
-
-				const available = agents.map((a) => `${a.name} (${a.source})`).join(", ") || "none";
-				return {
-					content: [{ type: "text" as const, text: `Invalid parameters. Available agents: ${available}` }],
-					details: makeDetails("single")([]),
-				};
+				let toolResult: Awaited<
+					ReturnType<typeof executeSingleMode>
+				>;
+				if (mode.hasChain) toolResult = await executeChainMode(execCtx);
+				else if (mode.hasTasks) toolResult = await executeParallelMode(execCtx);
+				else if (mode.hasSingle) toolResult = await executeSingleMode(execCtx);
+				else {
+					const available = agents.map((a) => `${a.name} (${a.source})`).join(", ") || "none";
+					return {
+						content: [{ type: "text" as const, text: `Invalid parameters. Available agents: ${available}` }],
+						details: makeDetails("single")([]),
+					};
+				}
+				const allResults = [
+					...(toolResult.details?.results ?? []),
+					...(toolResult.details?.aggregator ? [toolResult.details.aggregator] : []),
+				];
+				spawnTimedOut = allResults.some((r) => r.timedOut === true);
+				return toolResult;
 			} finally {
 				options.onSpawnEnd?.(harnessAgents.length);
 				const mode = params.chain?.length
@@ -1495,6 +1520,12 @@ export function createSubagentsExtension(
 					agents: harnessAgents,
 					mode,
 					durationMs: Date.now() - startedAt,
+					timedOut: spawnTimedOut,
+					stop_reason: spawnTimedOut
+						? "timeout"
+						: signal?.aborted
+							? "aborted"
+							: "complete",
 				});
 			}
 		},

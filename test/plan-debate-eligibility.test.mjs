@@ -13,7 +13,17 @@ import { tmpdir } from "node:os";
 test("eligibility defaults to standard when ambiguous", () => {
 	const r = harnessPlanDebateEligibility({ risk_level: "med" });
 	assert.equal(r.profile, "standard");
+	assert.match(r.rationale.join(" "), /default profile: standard/);
 	assert.deepEqual(r.required_focuses, ["spec", "wbs", "schedule", "quality"]);
+});
+
+test("eligibility standard for med without research artifacts on disk inputs", () => {
+	const r = harnessPlanDebateEligibility({
+		risk_level: "med",
+		stack_brief: { recommended_primary: "node" },
+		implementation_brief: null,
+	});
+	assert.equal(r.profile, "standard");
 });
 
 test("eligibility fast for med with clear stack and no open questions", () => {
