@@ -3,6 +3,12 @@
 All notable changes to this project are documented in this file.
 
 
+## [v0.24.0] — 2026-06-06
+
+### ✨ Features
+
+- Cut harness workflow latency with phase-aware subagent timeouts, debate wall-clock caps, ccc index debounce, optional parallel review spawns, progress UI with stall detection, and PostHog phase telemetry.
+
 ## [v0.23.0] — 2026-05-28
 
 ### ✨ Features
