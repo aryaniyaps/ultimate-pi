@@ -120,12 +120,28 @@ async function main() {
 		return;
 	}
 
+	function parseSentruxTimeoutMs() {
+		const raw = process.env.HARNESS_SENTRUX_TIMEOUT_MS;
+		if (raw?.trim()) {
+			const parsed = Number.parseInt(raw, 10);
+			if (Number.isFinite(parsed) && parsed > 0) return parsed;
+		}
+		return 300_000;
+	}
+
+	const timeoutMs = parseSentruxTimeoutMs();
+	let timedOut = false;
 	const child = spawn("sentrux", normalizeSentruxArgs(sentruxArgs, projectRoot), {
 		cwd: projectRoot,
 		stdio: "inherit",
 		env: process.env,
 	});
+	const timer = setTimeout(() => {
+		timedOut = true;
+		child.kill("SIGTERM");
+	}, timeoutMs);
 	child.on("error", (err) => {
+		clearTimeout(timer);
 		if (err?.code === "ENOENT") {
 			console.error("harness-sentrux-cli: sentrux not installed");
 			process.exit(127);
@@ -133,7 +149,16 @@ async function main() {
 		console.error(`harness-sentrux-cli: ${err.message}`);
 		process.exit(1);
 	});
-	child.on("close", (code) => process.exit(code ?? 1));
+	child.on("close", (code) => {
+		clearTimeout(timer);
+		if (timedOut) {
+			console.error(
+				`harness-sentrux-cli: timed out after ${timeoutMs}ms (HARNESS_SENTRUX_TIMEOUT_MS)`,
+			);
+			process.exit(124);
+		}
+		process.exit(code ?? 1);
+	});
 }
 
 main().catch((err) => {

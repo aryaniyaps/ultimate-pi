@@ -53,6 +53,7 @@ const FLUSH_MAP: Record<string, HarnessPostHogEventName> = {
 	"harness-eval-verdict": "harness_eval_verdict",
 	"harness-sentrux-signal": "harness_sentrux_signal",
 	"harness-observation": "harness_observation",
+	"harness-phase-completed": "harness_phase_completed",
 };
 
 function hashEntry(customType: string, data: unknown): string {

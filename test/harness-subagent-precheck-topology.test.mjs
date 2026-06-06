@@ -42,6 +42,18 @@ test("rejects decompose and hypothesis in same parallel batch", async () => {
 	assert.match(result.message ?? "", /decompose and hypothesis/i);
 });
 
+test("allows parallel review evaluator and adversary when HARNESS_REVIEW_PARALLEL=1", async () => {
+	const prev = process.env.HARNESS_REVIEW_PARALLEL;
+	process.env.HARNESS_REVIEW_PARALLEL = "1";
+	const result = await validateHarnessSpawnTopology(
+		["harness/reviewing/evaluator", "harness/reviewing/adversary"],
+		"evaluate",
+		{ parallelTaskCount: 2 },
+	);
+	process.env.HARNESS_REVIEW_PARALLEL = prev;
+	assert.equal(result.ok, true);
+});
+
 test("allows parallel plan-evaluator and plan-adversary for parallel_probes", async () => {
 	const result = await validateHarnessSpawnTopology(
 		[

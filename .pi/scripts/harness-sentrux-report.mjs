@@ -31,7 +31,17 @@ function usage() {
 	process.exit(2);
 }
 
+function parseSentruxTimeoutMs() {
+	const raw = process.env.HARNESS_SENTRUX_TIMEOUT_MS;
+	if (raw?.trim()) {
+		const parsed = Number.parseInt(raw, 10);
+		if (Number.isFinite(parsed) && parsed > 0) return parsed;
+	}
+	return 300_000;
+}
+
 function runSentrux(args, projectRoot) {
+	const timeoutMs = parseSentruxTimeoutMs();
 	return new Promise((resolve, reject) => {
 		const child = spawn("sentrux", args, {
 			cwd: projectRoot,
@@ -39,6 +49,11 @@ function runSentrux(args, projectRoot) {
 		});
 		let stdout = "";
 		let stderr = "";
+		let timedOut = false;
+		const timer = setTimeout(() => {
+			timedOut = true;
+			child.kill("SIGTERM");
+		}, timeoutMs);
 		child.stdout?.on("data", (c) => {
 			stdout += c.toString();
 		});
@@ -46,6 +61,7 @@ function runSentrux(args, projectRoot) {
 			stderr += c.toString();
 		});
 		child.on("error", (err) => {
+			clearTimeout(timer);
 			if (err?.code === "ENOENT") {
 				reject(
 					Object.assign(new Error("sentrux not installed"), { code: 127 }),
@@ -55,7 +71,13 @@ function runSentrux(args, projectRoot) {
 			reject(err);
 		});
 		child.on("close", (code) => {
-			resolve({ code: code ?? 1, stdout, stderr });
+			clearTimeout(timer);
+			resolve({
+				code: timedOut ? 124 : (code ?? 1),
+				stdout,
+				stderr,
+				timedOut,
+			});
 		});
 	});
 }
@@ -104,11 +126,13 @@ function buildSignal(runId, report) {
 		run_id: runId || "unknown",
 		check_pass: check.check_pass,
 		gate_status:
-			gate.status === "degraded"
-				? "degraded"
-				: gate.status === "pass"
-					? "pass"
-					: "skipped",
+			gate.status === "timeout"
+				? "timeout"
+				: gate.status === "degraded"
+					? "degraded"
+					: gate.status === "pass"
+						? "pass"
+						: "skipped",
 		quality_signal_summary: summaryParts.join(" | ") || undefined,
 		recorded_at: report.captured_at,
 		phase: "review",
@@ -130,6 +154,7 @@ async function captureReport(projectRoot) {
 
 	const checkRun = await runSentrux(["check", projectRoot], projectRoot);
 	const gateRun = await runSentrux(["gate", projectRoot], projectRoot);
+	const timedOut = Boolean(checkRun.timedOut || gateRun.timedOut);
 
 	const checkFiltered = filterSentruxOutputLines(
 		`${checkRun.stdout}\n${checkRun.stderr}`,
@@ -160,6 +185,15 @@ async function captureReport(projectRoot) {
 
 	if (checkRun.code === 127) throw Object.assign(new Error("sentrux not installed"), { code: 127 });
 
+	if (timedOut) {
+		check.check_pass = false;
+		gate.status = "timeout";
+		gate.degraded_reasons = [
+			...(gate.degraded_reasons ?? []),
+			`sentrux CLI exceeded HARNESS_SENTRUX_TIMEOUT_MS (${parseSentruxTimeoutMs()}ms)`,
+		];
+	}
+
 	return {
 		schema_version: "1.0.0",
 		captured_at,
@@ -170,6 +204,7 @@ async function captureReport(projectRoot) {
 		check,
 		gate,
 		exit_codes: { check: checkRun.code, gate: gateRun.code },
+		timed_out: timedOut || undefined,
 	};
 }
 

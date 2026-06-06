@@ -13,6 +13,7 @@ import {
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
 } from "../lib/harness-run-context.js";
+import { setHarnessWaitingForUser } from "../lib/harness-subagent-progress.js";
 import {
 	CREATE_PLAN_GUIDELINES,
 	CREATE_PLAN_SNIPPET,
@@ -246,11 +247,17 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				},
 			});
 
-			const outcome: PlanApprovalDialogResult = await runPlanApprovalDialog(
-				ctx.ui,
-				validated,
-				{ hasUI: ctx.hasUI },
-			);
+			setHarnessWaitingForUser("approve_plan");
+			pi.events.emit("harness-waiting-for-user", { gate: "approve_plan" });
+			let outcome: PlanApprovalDialogResult;
+			try {
+				outcome = await runPlanApprovalDialog(ctx.ui, validated, {
+					hasUI: ctx.hasUI,
+				});
+			} finally {
+				setHarnessWaitingForUser(null);
+				pi.events.emit("harness-waiting-for-user", { gate: null });
+			}
 
 			const details = toApprovePlanToolDetails(
 				validated,

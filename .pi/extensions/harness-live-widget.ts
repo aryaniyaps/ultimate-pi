@@ -311,6 +311,14 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 		if (mountCtx) scheduleRefresh(mountCtx);
 	});
 
+	pi.events.on("harness-progress:updated", () => {
+		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+
+	pi.events.on("harness-waiting-for-user", () => {
+		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+
 	pi.events.on("harness-cross-session-resume", (payload: unknown) => {
 		const data =
 			payload && typeof payload === "object"

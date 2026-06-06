@@ -21,10 +21,12 @@ Read **harness-orchestration** and **harness-review** skills before spawning.
 ## Performance rules
 
 1. Use `subagent` with `agentScope: "both"`.
-2. Run benchmark and verdict evaluator passes **sequentially** (verdict depends on benchmark gate).
-3. Adversary runs only after benchmark + policy verdict pass.
-4. Do **not** set `timeoutMs` unless the user requests a cap.
-5. Compact task text: embed `HarnessSpawnContext={"run_id":"…","run_dir":"…","plan_packet_path":"…",…}` — `run_id` is required.
+2. Run benchmark and verdict evaluator passes **sequentially** (verdict depends on benchmark gate). **Never** parallelize benchmark ∥ verdict.
+3. When `HARNESS_REVIEW_PARALLEL=1` and benchmark passed, you may spawn **verdict evaluator ∥ adversary** in one `tasks` batch (two agents only). Default is serial (`HARNESS_REVIEW_PARALLEL=0`).
+4. Adversary runs only after benchmark passes; skip adversary when benchmark failed or `--quick`.
+5. Steer attempts **2+**: lite review (benchmark + verdict only) unless prior `block_merge` — do not spawn adversary.
+6. Do **not** set `timeoutMs` unless the user requests a cap (harness applies phase-aware defaults).
+7. Compact task text: embed `HarnessSpawnContext={"run_id":"…","run_dir":"…","plan_packet_path":"…",…}` — `run_id` is required.
 
 ## Step 0 — Parse `$ARGUMENTS`
 
@@ -135,11 +137,27 @@ harness_artifact_ready({ paths: ["artifacts/eval-verdict.yaml"] })
 
 **Do not stop** after benchmark fail — continue to verdict (and adversary per tier) so `review-outcome.yaml` can route steer vs replan.
 
-## Phase 3 — Policy / quality audit (verdict evaluator)
+## Phase 3–4 — Verdict + adversary (serial or parallel)
 
 **Practice:** Inspection after measurement — separate measurer from policy judgment.
 
-Always run after benchmark (even when benchmark failed).
+Always run verdict after benchmark (even when benchmark failed).
+
+**Serial (default):** spawn verdict evaluator, gate `eval-verdict.yaml`, then spawn adversary (unless `--quick` or steer attempt ≥ 2 without prior `block_merge`).
+
+**Parallel (opt-in):** when `HARNESS_REVIEW_PARALLEL=1`, benchmark passed, not `--quick`, and steer attempt &lt; 2 (or prior `block_merge`):
+
+```
+subagent({
+  agentScope: "both",
+  tasks: [
+    { agent: "harness/reviewing/evaluator", task: "<HarnessSpawnContext mode verdict + …>" },
+    { agent: "harness/reviewing/adversary", task: "<HarnessSpawnContext mode adversary + …>" }
+  ]
+})
+```
+
+**Serial fallback:**
 
 ```
 subagent({
@@ -151,13 +169,9 @@ subagent({
 
 Subagent updates **`artifacts/eval-verdict.yaml`** via `submit_eval_verdict` (include policy fields / failed checks).
 
-Gate again with `harness_artifact_ready`.
+Gate with `harness_artifact_ready({ paths: ["artifacts/eval-verdict.yaml"] })`.
 
-## Phase 4 — Independent red team (adversary)
-
-**Practice:** Generator–evaluator separation; adversary stays distinct from the measurer.
-
-Skip when `--quick`. **Tiered steer:** full adversary on initial run + steer attempt 1; lite review (no adversary) on steer attempts 2+ unless prior `block_merge`.
+**Adversary** (Phase 4): skip when `--quick`. **Tiered steer:** full adversary on initial run + steer attempt 1; lite review on steer attempts 2+ unless prior `block_merge`.
 
 ```
 subagent({

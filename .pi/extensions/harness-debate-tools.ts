@@ -5,6 +5,7 @@
 import { mkdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { isHarnessNonInteractive } from "../lib/ask-user/policy.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import {
 	captureHarnessEvent,
@@ -50,7 +51,12 @@ import {
 	validateIntegratorDraft,
 	withReviewRoundYamlWrite,
 } from "../lib/harness-debate-workflow-deps.js";
+import {
+	checkDebateWallClock,
+	debateWallClockRecoveryHint,
+} from "../lib/plan-debate-wall-clock.js";
 
+// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 function getRunId(ctx: {
@@ -444,6 +450,24 @@ function registerHarnessDebateHandler6(pi: ExtensionAPI) {
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const runId = getRunId(ctx);
 			const projectRoot = process.cwd();
+			const rd = runDir(projectRoot, runId);
+			const messenger = await loadMessengerState(rd);
+			const wall = checkDebateWallClock({
+				opened_at: messenger?.opened_at,
+				debate_profile: messenger?.debate_profile,
+			});
+			if (wall.exceeded && !isHarnessNonInteractive()) {
+				return {
+					content: [
+						{
+							type: "text",
+							text: debateWallClockRecoveryHint(wall),
+						},
+					],
+					details: { wall_clock: wall },
+					isError: true,
+				};
+			}
 			const roundIndex = Number(
 				(params as { round_index: number }).round_index,
 			);
@@ -452,7 +476,6 @@ function registerHarnessDebateHandler6(pi: ExtensionAPI) {
 			draft.round_index = roundIndex;
 			if (!draft.schema_version) draft.schema_version = "1.0.0";
 			const debateId = planDebateIdForRun(runId);
-			const rd = runDir(projectRoot, runId);
 			const integratorBody =
 				(typeof draft.round_summary === "string" && draft.round_summary) ||
 				"Review integrator synthesis for this round.";
@@ -571,9 +594,17 @@ function registerHarnessDebateHandler7(pi: ExtensionAPI) {
 		}),
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const runId = getRunId(ctx);
+			const projectRoot = process.cwd();
+			const messenger = await loadMessengerState(runDir(projectRoot, runId));
+			const wall = checkDebateWallClock({
+				opened_at: messenger?.opened_at,
+				debate_profile: messenger?.debate_profile,
+			});
 			const rationale =
 				String((params as { rationale?: string }).rationale ?? "").trim() ||
-				"Plan Review Gate consensus after focus coverage and messenger-backed rounds.";
+				(wall.exceeded && isHarnessNonInteractive()
+					? "Debate truncated at wall-clock cap (non-interactive conditional_pass)."
+					: "Plan Review Gate consensus after focus coverage and messenger-backed rounds.");
 			const decision = await finalizeDebateConsensus(
 				rationale,
 				debateHooks(pi),
