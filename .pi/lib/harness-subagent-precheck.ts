@@ -7,6 +7,7 @@ import {
 	agentAllowsMutatingTools,
 } from "../../vendor/pi-subagents/src/agents.js";
 import { getAgentKind } from "./agents-policy.mjs";
+import { liteReviewMaySkipAdversary } from "./harness-lite-review-precheck.js";
 import { getHarnessPackageRoot } from "./harness-paths.js";
 import { isHarnessReviewParallelEnabled } from "./harness-review-parallel.js";
 import { type HarnessPhase, inferHarnessPhase } from "./harness-run-context.js";
@@ -50,10 +51,10 @@ function parseSteerAttemptFromTasks(params: {
 	return 0;
 }
 
-function priorBlockMergeInContext(opts?: PrecheckOptions): boolean {
-	const outcome = String(opts?.lastOutcome ?? "").toLowerCase();
-	return outcome.includes("block_merge") || outcome.includes("block");
-}
+export {
+	liteReviewMaySkipAdversary,
+	priorBlockMergeFromDisk,
+} from "./harness-lite-review-precheck.js";
 
 function collectAgents(params: {
 	agent?: string;
@@ -116,12 +117,12 @@ export async function precheckHarnessSubagentSpawn(
 	if (
 		steerAttempt >= 2 &&
 		names.includes("harness/reviewing/adversary") &&
-		!priorBlockMergeInContext(opts)
+		(await liteReviewMaySkipAdversary(opts))
 	) {
 		return {
 			ok: false,
 			message:
-				`Lite review (steer attempt ${steerAttempt}): skip adversary unless prior block_merge. ` +
+				`Lite review (steer attempt ${steerAttempt}): skip adversary unless prior block_merge or adversary_repro fail. ` +
 				`Run benchmark + verdict evaluator only.`,
 		};
 	}

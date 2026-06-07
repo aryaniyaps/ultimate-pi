@@ -25,6 +25,7 @@ import {
 	isPlanPhaseScopedWrite,
 	normalizeHarnessPath,
 	parseHarnessSlashInput,
+	policyStateFromDiskIfNeeded,
 	readPlanPacketFromPath,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
@@ -213,7 +214,13 @@ async function handlePolicyBeforeAgentStart(args: {
 
 	const nextPhase = inferHarnessPhase(entries, userPrompt);
 	const planSignal = hasApprovedPlanSignal(userPrompt, entries);
-	const transitionBlock = getPolicyTransitionBlock(userPrompt, entries);
+	const diskPolicy = await policyStateFromDiskIfNeeded(entries, process.cwd());
+	const transitionBlock = getPolicyTransitionBlock(
+		userPrompt,
+		entries,
+		getLatestRunContext(entries),
+		diskPolicy,
+	);
 	if (transitionBlock.blocked) {
 		return {
 			message: {

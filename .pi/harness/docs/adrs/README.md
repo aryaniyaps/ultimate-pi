@@ -43,6 +43,8 @@ Team-shared ADRs for the ultimate-pi harness live under `.pi/harness/docs/adrs/`
 | [0053](0053-plan-task-clarification-gate.md) | Plan-phase task clarification gate | Accepted |
 | [0054](0054-harness-native-ask-user.md) | Harness-native ask_user + Glimpse presenters | Accepted |
 | [0055](0055-auto-commit-coauthor-lifecycle.md) | Auto-commit co-author + message format lifecycle | Accepted |
+| [0056](0056-agent-native-speed-wiring.md) | Agent-native speed wiring | Accepted |
+| [0057](0057-fast-steer-completion.md) | Fast steer completion (split verdict, hygiene, burst) | Accepted |
 
 ## Practice map
 

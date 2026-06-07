@@ -45,6 +45,19 @@ node "$UP_PKG/.pi/scripts/harness-ls-lint-cli.mjs" --json
 
 Note `violation_count` in run notes (do not block execute on pre-existing violations unless chair policy says otherwise).
 
+## Pre-work — Git feature branch (parent)
+
+When `.pi/auto-commit.json` has `branch.strategy: auto-feature-branch`, ensure a non-protected working branch before the executor mutates files:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-git-branch.mjs" \
+  --run-id "<run_id>" \
+  --run-dir "<run_dir>" \
+  --project-root "<project_root>"
+```
+
+On protected branches (`main`, `master`, `release/*` by default), this creates or checks out `harness/<run-id-slug>`. Result is recorded in `artifacts/git-workflow.yaml`. Commits after review must use **harness-git-commit** (never raw `git commit`).
+
 ## Orchestration — Single jelled implementer
 
 **Practice:** Peopleware — one accountable team owns delivery; generator–evaluator separation (executor does not self-certify).

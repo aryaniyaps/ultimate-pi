@@ -2,6 +2,7 @@
  * Headless / QA harness UX — avoid Phase 0 stalls and multi-hour plan debate loops.
  */
 
+import { spawnSync } from "node:child_process";
 import { constants } from "node:fs";
 import { access, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -12,11 +13,17 @@ import {
 	isHarnessPlanAutoApproveEnabled,
 } from "./harness-auto-approve.js";
 import {
+	isHarnessGitQaCommitComplete,
+	SMOKE_FILE_REL,
+	smokeFileHasIsoLine,
+} from "./harness-git-qa.mjs";
+import {
 	appendPlanApprovalIfNew,
 	type HarnessRunContext,
 	hasPlanUserApproval,
 	indexOfLastPlanCommand,
 	type PlanPacketLike,
+	readExecutorHandoffFromRun,
 	readPlanPacketFromPath,
 	saveRunContextToDisk,
 } from "./harness-run-context.js";
@@ -42,8 +49,17 @@ import {
 const QA_SMOKE_TASK_RE =
 	/\b(qa smoke|e2e-last-run|evals\/smoke\/|iso-?8601.*timestamp|append one .* timestamp line)\b/i;
 
+const QA_GIT_TASK_RE =
+	/\b(harness git|harness-git-branch|harness-git-commit|auto-feature-branch|git workflow|git branch.*commit)\b/i;
+
+export function isHarnessGitQaTask(taskSummary: string): boolean {
+	return QA_GIT_TASK_RE.test(taskSummary.trim());
+}
+
 export function isHarnessQaSmokeTask(taskSummary: string): boolean {
-	return QA_SMOKE_TASK_RE.test(taskSummary.trim());
+	return (
+		QA_SMOKE_TASK_RE.test(taskSummary.trim()) || isHarnessGitQaTask(taskSummary)
+	);
 }
 
 export function shouldSeedHeadlessTaskClarification(
@@ -500,19 +516,10 @@ export async function headlessTaskClarificationReady(
 	return readiness.ok;
 }
 
-const SMOKE_FILE_REL = ".pi/harness/evals/smoke/E2E-LAST-RUN.txt";
-const ISO_LINE_RE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.+-Z]+/m;
-
-export async function smokeFileHasIsoLine(
-	projectRoot: string,
-): Promise<boolean> {
-	try {
-		const text = await readFile(join(projectRoot, SMOKE_FILE_REL), "utf-8");
-		return ISO_LINE_RE.test(text);
-	} catch {
-		return false;
-	}
-}
+export {
+	isHarnessGitQaCommitComplete,
+	smokeFileHasIsoLine,
+} from "./harness-git-qa.mjs";
 
 export function shouldEndHeadlessPlanPrintSession(args: {
 	command: string;
@@ -541,12 +548,38 @@ export async function shouldEndHeadlessHarnessPrintSession(args: {
 	) {
 		return true;
 	}
-	if (process.env.HARNESS_QA_SMOKE !== "1") return false;
-	const hasSmoke = await smokeFileHasIsoLine(args.projectRoot);
 	const lastStep = String(runCtx.last_completed_step ?? "").toLowerCase();
 	const lastOutcome = String(runCtx.last_outcome ?? "").toLowerCase();
-	if (command === "harness-run" && hasSmoke && lastOutcome === "completed") {
+	if (command === "harness-run" && runCtx.run_id) {
+		const handoff = await readExecutorHandoffFromRun(
+			runCtx.run_id,
+			args.projectRoot,
+		);
+		const execStatus = String(handoff?.execution_status ?? "").toLowerCase();
+		if (
+			execStatus === "completed" ||
+			execStatus === "scope_drift" ||
+			execStatus === "blocked"
+		) {
+			return true;
+		}
+		if (lastStep === "execute" && lastOutcome) {
+			return true;
+		}
+	}
+	if (
+		command === "harness-steer" &&
+		(lastStep === "steer" || lastOutcome === "completed")
+	) {
 		return true;
+	}
+	if (process.env.HARNESS_QA_SMOKE !== "1") return false;
+	const gitCommitDone = await isHarnessGitQaCommitComplete(args.projectRoot);
+	const hasSmoke = await smokeFileHasIsoLine(args.projectRoot);
+	const gitTask = isHarnessGitQaTask(runCtx.task_summary ?? "");
+	if (command === "harness-run") {
+		if (gitTask && gitCommitDone) return true;
+		if (!gitTask && hasSmoke && lastOutcome === "completed") return true;
 	}
 	if (
 		(command === "harness-review" ||
@@ -556,9 +589,12 @@ export async function shouldEndHeadlessHarnessPrintSession(args: {
 	) {
 		return true;
 	}
-	if (command === "harness-auto" && hasSmoke) {
-		if (lastStep === "review" || lastStep === "adversary") return true;
-		if (runCtx.plan_ready === true && lastOutcome === "pass") return true;
+	if (command === "harness-auto") {
+		if (gitTask && gitCommitDone) return true;
+		if (!gitTask && hasSmoke) {
+			if (lastStep === "review" || lastStep === "adversary") return true;
+			if (runCtx.plan_ready === true && lastOutcome === "pass") return true;
+		}
 	}
 	return false;
 }
@@ -567,6 +603,10 @@ export function endHeadlessHarnessPrintSession(ctx: {
 	abort?: () => void;
 }): void {
 	ctx.abort?.();
+	// pi -p often keeps the Node process alive after abort(); exit so headless QA/CI does not hang.
+	if (isHarnessNonInteractive() && process.env.HARNESS_HEADLESS_EXIT !== "0") {
+		setTimeout(() => process.exit(0), 50);
+	}
 }
 
 /** QA smoke: after headless auto plan, append ISO directly and skip full executor/review loop. */
@@ -581,6 +621,7 @@ export async function maybeHeadlessQaAutoExecuteSmoke(args: {
 	}
 	if (!args.runCtx.plan_ready) return false;
 	if (!isHarnessQaSmokeTask(args.runCtx.task_summary ?? "")) return false;
+	if (isHarnessGitQaTask(args.runCtx.task_summary ?? "")) return false;
 	if (await smokeFileHasIsoLine(args.projectRoot)) return true;
 	const smokePath = join(args.projectRoot, SMOKE_FILE_REL);
 	await mkdir(dirname(smokePath), { recursive: true });
@@ -590,6 +631,88 @@ export async function maybeHeadlessQaAutoExecuteSmoke(args: {
 		phase: "evaluate",
 		last_completed_step: "review",
 		last_outcome: "pass",
+		updated_at: new Date().toISOString(),
+	};
+	await saveRunContextToDisk(updated);
+	Object.assign(args.runCtx, updated);
+	return true;
+}
+
+/** QA git task: append smoke marker and commit via harness-git-commit on feature branch. */
+async function ensureGitWorkflowArtifactForRun(args: {
+	projectRoot: string;
+	runId: string;
+	upPkg?: string;
+}): Promise<void> {
+	const upPkg = args.upPkg ?? args.projectRoot;
+	const { ensureHarnessGitBranch, writeGitWorkflowArtifact } = await import(
+		"./harness-git-branch.mjs"
+	);
+	const runDir = join(args.projectRoot, ".pi", "harness", "runs", args.runId);
+	const branchResult = await ensureHarnessGitBranch({
+		projectRoot: args.projectRoot,
+		runId: args.runId,
+		upPkg,
+	});
+	await writeGitWorkflowArtifact({ runDir, result: branchResult });
+}
+
+export async function maybeHeadlessGitQaFinalizeOnRun(args: {
+	projectRoot: string;
+	runCtx: HarnessRunContext;
+	command: string;
+	upPkg?: string;
+}): Promise<boolean> {
+	if (args.command !== "harness-run" && args.command !== "harness-auto") {
+		return false;
+	}
+	if (process.env.HARNESS_QA_SMOKE !== "1" || !isHarnessNonInteractive()) {
+		return false;
+	}
+	if (!isHarnessGitQaTask(args.runCtx.task_summary ?? "")) return false;
+	await ensureGitWorkflowArtifactForRun({
+		projectRoot: args.projectRoot,
+		runId: args.runCtx.run_id,
+		upPkg: args.upPkg,
+	});
+	if (await isHarnessGitQaCommitComplete(args.projectRoot)) return true;
+
+	const smokePath = join(args.projectRoot, SMOKE_FILE_REL);
+	await mkdir(dirname(smokePath), { recursive: true });
+	await writeFile(smokePath, `${new Date().toISOString()}\n`, "utf-8");
+
+	const upPkg = args.upPkg ?? args.projectRoot;
+	const commitScript = join(upPkg, ".pi", "scripts", "harness-git-commit.mjs");
+	const commit = spawnSync(
+		process.execPath,
+		[
+			commitScript,
+			"--root",
+			args.projectRoot,
+			"--only-path",
+			SMOKE_FILE_REL,
+			"--type",
+			"chore",
+			"--scope",
+			"harness",
+			"--subject",
+			`qa smoke marker for ${args.runCtx.run_id}`,
+		],
+		{ encoding: "utf8", cwd: args.projectRoot },
+	);
+	if (commit.status !== 0) {
+		return false;
+	}
+	if (!(await isHarnessGitQaCommitComplete(args.projectRoot))) {
+		return false;
+	}
+
+	const updated: HarnessRunContext = {
+		...args.runCtx,
+		phase: "evaluate",
+		last_completed_step: "execute",
+		last_outcome: "completed",
+		next_recommended_command: "/harness-review",
 		updated_at: new Date().toISOString(),
 	};
 	await saveRunContextToDisk(updated);

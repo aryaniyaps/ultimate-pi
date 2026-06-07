@@ -2,7 +2,7 @@
 
 Source of truth linking harness phases to proven practices (graphify corpus), agents/scripts, spawn topology, and **agent translation** (ADR 0042). Orchestrators and agents should cite this doc when unsure why a lane exists.
 
-See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchestration.md), [ADR 0041](adrs/0041-intelligent-planning-reconnaissance.md), [ADR 0042](adrs/0042-agent-native-orchestration.md), [ADR 0043](adrs/0043-path-first-harness-tools.md), [ADR 0044](adrs/0044-harness-steer-loop.md), [`raw/modules/structured-planning.md`](../../../raw/modules/structured-planning.md).
+See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchestration.md), [ADR 0041](adrs/0041-intelligent-planning-reconnaissance.md), [ADR 0042](adrs/0042-agent-native-orchestration.md), [ADR 0043](adrs/0043-path-first-harness-tools.md), [ADR 0044](adrs/0044-harness-steer-loop.md), [ADR 0057](adrs/0057-fast-steer-completion.md), [`raw/modules/structured-planning.md`](../../../raw/modules/structured-planning.md).
 
 ## Agent translation (human practice → agent design)
 
@@ -93,24 +93,26 @@ See also: [ADRs](adrs/README.md), [ADR 0040](adrs/0040-practice-grounded-orchest
 
 | Phase | Practice | Agent translation | Actor |
 |-------|----------|-------------------|-------|
-| 1 | Automated QC + fitness | Deterministic first | Parent scripts |
+| 1 | Automated QC + fitness | Deterministic first + `harness-review-preflight.mjs` gate | Parent scripts |
 | 1b | Structural repair plan | OSS diagnostics → actions | `sentrux-repair-advisor` |
 | 2 | Measure vs plan | Benchmark on disk | `evaluator` benchmark |
 | 3 | Policy audit | Verdict (no fail-fast skip) | `evaluator` verdict |
 | 4 | Red team | Tiered: full attempt 1, lite 2+ steer | `adversary` |
 | 5 | Outcome + repair brief | Machine routing | Parent + `review-outcome.yaml`, `repair-brief.yaml` |
 | 6 | Steer gate | One `ask_user` | harness-decisions |
-| 7 | Steer / revise | `implementation_gap` → `/harness-steer`; `plan_gap` → plan revise | ADR 0044 |
+| 7 | Steer / revise | `implementation_gap` → `/harness-steer` or `--burst`; `plan_gap` → plan revise | ADR 0044, 0057 |
 
-`--quick` = deterministic + benchmark + verdict (no adversary). Steer attempts 2+ default to lite review unless `block_merge`.
+`--quick` = deterministic + benchmark + verdict (no adversary). Steer attempts 2+ default to lite review unless `block_merge` on disk or repro pack failed.
 
-## `/harness-steer` — Repair sub-cycle (ADR 0044)
+## `/harness-steer` — Repair sub-cycle (ADR 0044, 0057)
 
 | Step | Practice | Actor |
 |------|----------|-------|
-| 0 | Read review + repair briefs | Parent |
+| 0 | Read review + repair briefs + steer-state | Parent |
+| 0b | Hygiene fast-path (`gap_kind: hygiene`) | `harness-steer-hygiene.mjs` |
+| 0c | Burst preflight (`--burst`) | `harness-inline-repair.mjs` |
 | 1 | Policy phase → `execute` | Parent |
-| 2 | Repair scope | `harness/running/executor` `mode: repair` |
+| 2 | Repair scope | `harness/running/executor` `mode: repair` (skip when hygiene-only) |
 | 3 | Re-verify | `/harness-review` |
 
 ## Anti-patterns

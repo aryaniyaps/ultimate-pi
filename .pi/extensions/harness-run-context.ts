@@ -25,19 +25,28 @@ import {
 import { runAskUser } from "../lib/ask-user/index.js";
 import { isHarnessNonInteractive } from "../lib/ask-user/policy.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
+import {
+	executePostWorkEnabled,
+	formatExecutorHandoffBrief,
+	runExecutePostWork,
+} from "../lib/harness-execute-postwork.js";
+import {
+	ensureHarnessGitBranch,
+	writeGitWorkflowArtifact,
+} from "../lib/harness-git-branch.mjs";
 import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import {
 	buildPhaseCompletedPayload,
 	phaseTerminalArtifact,
 } from "../lib/harness-phase-telemetry.js";
 import { captureHarnessEvent } from "../lib/harness-posthog.js";
+import { steerBurstAllowed } from "../lib/harness-remediation.js";
 import {
 	blockingHarnessAutoCommandReason,
 	blockingReviewCommandReason,
 	blockingRunCommandReason,
 	blockingSteerCommandReason,
 	buildHarnessClearManifest,
-	canonicalPlanPath,
 	claimRunOwnership,
 	createFreshRunContext,
 	criticalPathWorkItemIdsFromPlanPacket,
@@ -57,16 +66,19 @@ import {
 	type HarnessRunContext,
 	type HarnessTurnEntry,
 	harnessAutoTasksDiffer,
+	hasConfirmedClearAfterLatestRunContext,
 	hasHarnessAbortSignal,
 	hasPlanUserApproval,
 	indexOfLastPlanCommand,
 	inferHarnessPhase,
+	invalidateEvalVerdictAfterRepair,
 	isAmendPlanAllowed,
 	isHarnessBootstrapPrompt,
 	isNewTaskPlanBlocked,
 	isPlanApprovalAskUser,
 	isPlanPhaseScopedWrite,
 	isStaleActiveRunPointer,
+	isSteerBurstArgs,
 	loadProjectActiveRun,
 	loadRunContextFromDisk,
 	nextStepAfterOutcome,
@@ -78,8 +90,11 @@ import {
 	parseHarnessUseRunArgs,
 	parsePlanApprovalFromMessage,
 	planPacketSummary,
+	readAdversaryReportFromRun,
+	readEvalVerdictFromRun,
 	readExecutorHandoffFromRun,
 	readPlanPacketFromPath,
+	readRepairBriefFromRun,
 	readReviewOutcomeFromRun,
 	reconcileReviewRouting,
 	reconcileStaleExecuteCompletion,
@@ -92,6 +107,7 @@ import {
 	resolveHarnessRunPostAgentState,
 	resolveHarnessRunWriteTarget,
 	resolveRemediationClassForRun,
+	resolveSteerEntryEffects,
 	saveProjectActiveRun,
 	saveRunContextToDisk,
 	sessionHasResumePromptForRun,
@@ -100,6 +116,7 @@ import {
 	steerMaxAttemptsFromEnv,
 	syncPlanLastOutcomeFromTaskClarification,
 	syncPlanReadyFromDisk,
+	updateSteerStateOnEntry,
 	userVisiblePromptSlice,
 	validatePlanOverridePath,
 	validatePlanPacket,
@@ -117,6 +134,7 @@ import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js
 import {
 	endHeadlessHarnessPrintSession,
 	maybeForceHeadlessPlanProgress,
+	maybeHeadlessGitQaFinalizeOnRun,
 	maybeHeadlessQaAutoExecuteSmoke,
 	seedHeadlessTaskClarificationIfNeeded,
 	shouldEndHeadlessHarnessPrintSession,
@@ -411,7 +429,7 @@ function hydrateFromSession(entries: unknown[]): HarnessRunContext | null {
 }
 
 async function hydrateFromDisk(
-	sessionId: string,
+	_sessionId: string,
 	projectRoot: string,
 	entries: unknown[],
 ): Promise<HarnessRunContext | null> {
@@ -419,37 +437,19 @@ async function hydrateFromDisk(
 	if (fromSession) {
 		return reconcileStaleExecuteCompletion(projectRoot, fromSession, entries);
 	}
+	if (hasConfirmedClearAfterLatestRunContext(entries)) return null;
 
 	const pointer = await loadProjectActiveRun(projectRoot);
 	if (!pointer || isStaleActiveRunPointer(pointer, projectRoot)) return null;
 
 	const disk = await loadRunContextFromDisk(pointer.run_id, projectRoot);
-	if (disk) {
-		const clar = await syncPlanLastOutcomeFromTaskClarification(
-			projectRoot,
-			disk,
-		);
-		const planSynced = await syncPlanReadyFromDisk(projectRoot, clar, entries);
-		return reconcileStaleExecuteCompletion(projectRoot, planSynced, entries);
-	}
-
-	return {
-		schema_version: "1.0.0",
-		run_id: pointer.run_id,
-		pi_session_id: sessionId,
-		project_root: projectRoot,
-		phase: pointer.phase,
-		plan_id: pointer.plan_id,
-		plan_packet_path: canonicalPlanPath(pointer.run_id, projectRoot),
-		plan_ready: pointer.plan_ready,
-		task_summary: null,
-		status: "active",
-		last_completed_step: null,
-		last_outcome: null,
-		next_recommended_command: null,
-		owner_pi_session_id: pointer.owner_pi_session_id,
-		updated_at: pointer.updated_at,
-	};
+	if (!disk) return null;
+	const clar = await syncPlanLastOutcomeFromTaskClarification(
+		projectRoot,
+		disk,
+	);
+	const planSynced = await syncPlanReadyFromDisk(projectRoot, clar, entries);
+	return reconcileStaleExecuteCompletion(projectRoot, planSynced, entries);
 }
 
 function needsClarificationFollowUp(ctx: HarnessRunContext | null): boolean {
@@ -467,9 +467,15 @@ async function offerCrossSessionResume(
 	},
 ): Promise<void> {
 	const projectRoot = process.cwd();
-	const entries = getEntries(ctx);
-	const info = await evaluateCrossSessionResume(projectRoot, entries);
-	if (!info || sessionHasResumePromptForRun(entries, info.runId)) return;
+	const info = await evaluateCrossSessionResume(projectRoot, getEntries(ctx));
+	if (!info) return;
+	const entriesAfter = getEntries(ctx);
+	if (
+		sessionHasResumePromptForRun(entriesAfter, info.runId) ||
+		!(await evaluateCrossSessionResume(projectRoot, entriesAfter))
+	) {
+		return;
+	}
 
 	const content = formatCrossSessionResumeMessage(info);
 	pi.appendEntry("harness-session-resume-prompt", {
@@ -901,7 +907,11 @@ function registerHarnessRunStatusCommand(
 			const sessionId = ctx.sessionManager.getSessionId();
 			const projectRoot = process.cwd();
 			const entries = getEntries(ctx);
-			let ctxState = getLatestRunContext(entries) ?? active.get();
+			if (hasConfirmedClearAfterLatestRunContext(entries)) active.set(null);
+
+			let ctxState =
+				getLatestRunContext(entries) ??
+				(hasConfirmedClearAfterLatestRunContext(entries) ? null : active.get());
 			if (!ctxState)
 				ctxState = await hydrateFromDisk(sessionId, projectRoot, entries);
 			if (!ctxState) {
@@ -1412,33 +1422,111 @@ function registerHeadlessPlanProgressWatcher(
 	});
 }
 
+const EXECUTOR_AGENT_ID = "harness/running/executor";
+
+function subagentResultsFromDetails(
+	details: unknown,
+): Array<{ agent?: string }> {
+	const d = details as { results?: Array<{ agent?: string }> };
+	return d?.results ?? [];
+}
+
+async function reconcileExecutorHandoffFromParent(input: {
+	pi: ExtensionAPI;
+	ctx: {
+		hasUI: boolean;
+		ui: { notify(message: string, type?: "info" | "warning" | "error"): void };
+		sessionManager: { getEntries(): unknown[] };
+		abort?: () => void;
+	};
+	active: ActiveContextAccess;
+	runPostWork?: boolean;
+}): Promise<void> {
+	const entries = getEntries(input.ctx);
+	const runCtx = getLatestRunContext(entries) ?? input.active.get();
+	if (!runCtx?.run_id) return;
+	const projectRoot = process.cwd();
+	if (input.runPostWork && executePostWorkEnabled()) {
+		const post = await runExecutePostWork({
+			projectRoot,
+			runId: runCtx.run_id,
+			moduleUrl: MODULE_URL,
+		});
+		if (post.notes.length > 0) {
+			input.pi.appendEntry("harness-execute-postwork", {
+				run_id: runCtx.run_id,
+				...post,
+				recorded_at: nowIso(),
+			});
+		}
+	}
+	const refreshed = await refreshRunContextProgress(
+		projectRoot,
+		runCtx,
+		entries,
+	);
+	Object.assign(runCtx, refreshed);
+	input.active.set(runCtx);
+	persistContext(input.pi, runCtx);
+	if (refreshed.last_completed_step !== "execute") return;
+
+	const handoff = await readExecutorHandoffFromRun(runCtx.run_id, projectRoot);
+	const notify = `Execute finished (${refreshed.last_outcome ?? "done"}). Next: ${refreshed.next_recommended_command ?? "/harness-review"}`;
+	input.pi.appendEntry("harness-step-handoff", {
+		next_command: refreshed.next_recommended_command,
+		execution_status: refreshed.last_outcome,
+		phase: refreshed.phase,
+		source: "executor_reconcile",
+	});
+	if (!isHarnessNonInteractive()) {
+		input.pi.appendEntry("harness-executor-handoff-brief", {
+			run_id: runCtx.run_id,
+			brief: formatExecutorHandoffBrief(handoff),
+			recorded_at: nowIso(),
+		});
+	}
+	if (input.ctx.hasUI) input.ctx.ui.notify(notify, "info");
+
+	const parsed = latestParsedHarnessCommand(entries);
+	if (
+		isHarnessNonInteractive() &&
+		parsed?.command === "harness-run" &&
+		(await shouldEndHeadlessHarnessPrintSession({
+			command: parsed.command,
+			runCtx,
+			projectRoot,
+		}))
+	) {
+		endHeadlessHarnessPrintSession(input.ctx);
+	}
+}
+
 function registerExecutorHandoffReconcile(
 	pi: ExtensionAPI,
 	active: ActiveContextAccess,
 ): void {
 	pi.on("tool_result", async (event, ctx) => {
-		if (event.isError || event.toolName !== "submit_executor_handoff") return;
-		const entries = getEntries(ctx);
-		const runCtx = getLatestRunContext(entries) ?? active.get();
-		if (!runCtx?.run_id) return;
-		const projectRoot = process.cwd();
-		const refreshed = await refreshRunContextProgress(
-			projectRoot,
-			runCtx,
-			entries,
-		);
-		Object.assign(runCtx, refreshed);
-		active.set(runCtx);
-		persistContext(pi, runCtx);
-		if (refreshed.last_completed_step === "execute") {
-			const notify = `Execute finished (${refreshed.last_outcome ?? "done"}). Next: ${refreshed.next_recommended_command ?? "/harness-review"}`;
-			pi.appendEntry("harness-step-handoff", {
-				next_command: refreshed.next_recommended_command,
-				execution_status: refreshed.last_outcome,
-				phase: refreshed.phase,
+		if (event.isError) return;
+		if (event.toolName === "submit_executor_handoff") {
+			await reconcileExecutorHandoffFromParent({
+				pi,
+				ctx,
+				active,
+				runPostWork: false,
 			});
-			if (ctx.hasUI) ctx.ui.notify(notify, "info");
+			return;
 		}
+		if (event.toolName !== "subagent") return;
+		const hasExecutor = subagentResultsFromDetails(event.details).some(
+			(r) => r.agent === EXECUTOR_AGENT_ID,
+		);
+		if (!hasExecutor) return;
+		await reconcileExecutorHandoffFromParent({
+			pi,
+			ctx,
+			active,
+			runPostWork: true,
+		});
 	});
 }
 
@@ -1716,7 +1804,11 @@ async function handlePreResolvedHarnessCommand(args: {
 		!isHarnessBootstrapPrompt(userPrompt) &&
 		!hasHarnessAbortSignal(userPrompt)
 	) {
-		const policyBlock = getPolicyTransitionBlock(userPrompt, entries);
+		const policyBlock = getPolicyTransitionBlock(
+			userPrompt,
+			entries,
+			activeCtx,
+		);
 		if (policyBlock.blocked) {
 			return {
 				activeCtx,
@@ -1823,6 +1915,8 @@ async function handleBeforeAgentStart(input: {
 	const sessionId = input.ctx.sessionManager.getSessionId();
 	const projectRoot = process.cwd();
 	const entries = getEntries(input.ctx);
+	if (hasConfirmedClearAfterLatestRunContext(entries)) input.active.set(null);
+
 	const userPrompt = userVisiblePromptSlice(input.event.prompt);
 	const turn = getLatestHarnessTurn(entries);
 	const parsed = turn
@@ -1961,6 +2055,30 @@ async function handleBeforeAgentStart(input: {
 		entries,
 	);
 	if (runBlockReason) return blockRunContextMessage(runBlockReason);
+	if (
+		(command === "harness-run" || command === "harness-auto") &&
+		activeCtx.plan_ready
+	) {
+		const runDir = join(
+			projectRoot,
+			".pi",
+			"harness",
+			"runs",
+			activeCtx.run_id,
+		);
+		try {
+			const branchResult = await ensureHarnessGitBranch({
+				projectRoot,
+				runId: activeCtx.run_id,
+				upPkg: getHarnessPackageRoot(MODULE_URL),
+			});
+			await writeGitWorkflowArtifact({ runDir, result: branchResult });
+		} catch (err) {
+			console.warn(
+				`[harness-run-context] git branch ensure failed: ${err instanceof Error ? err.message : err}`,
+			);
+		}
+	}
 	const reviewBlockReason = await blockingReviewCommandReason(
 		command,
 		activeCtx,
@@ -1973,6 +2091,54 @@ async function handleBeforeAgentStart(input: {
 		projectRoot,
 	);
 	if (steerBlockReason) return blockRunContextMessage(steerBlockReason);
+	if (command === "harness-steer") {
+		const steerEffects = await resolveSteerEntryEffects(
+			activeCtx.run_id,
+			projectRoot,
+			args,
+		);
+		activeCtx.steer_max_attempts =
+			activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv();
+		activeCtx = await updateSteerStateOnEntry(
+			activeCtx.run_id,
+			projectRoot,
+			steerEffects,
+			activeCtx,
+		);
+		activeCtx.phase = "execute";
+		if (steerEffects.markBurstUsed) {
+			activeCtx.inline_repair_attempted = true;
+		}
+		input.active.set(activeCtx);
+		persistContext(input.pi, activeCtx);
+		syncPolicyFromRunContext(input.pi, entries, activeCtx);
+		if (process.env.HARNESS_QA_SMOKE === "1" && steerEffects.skipExecutor) {
+			const runDir = join(
+				projectRoot,
+				".pi",
+				"harness",
+				"runs",
+				activeCtx.run_id,
+			);
+			try {
+				const { runHarnessSteerHygiene } = await import(
+					"../scripts/harness-steer-hygiene.mjs"
+				);
+				await runHarnessSteerHygiene({ runDir, projectRoot });
+				activeCtx.last_completed_step = "steer";
+				activeCtx.last_outcome = "completed";
+				activeCtx.next_recommended_command = "/harness-review";
+				activeCtx.phase = "evaluate";
+				input.active.set(activeCtx);
+				persistContext(input.pi, activeCtx);
+				syncPolicyFromRunContext(input.pi, entries, activeCtx);
+			} catch (err) {
+				console.warn(
+					`[harness-run-context] QA steer hygiene failed: ${err instanceof Error ? err.message : err}`,
+				);
+			}
+		}
+	}
 	const { planSummary, planPacketForSpawn } =
 		await readPlanSpawnState(activeCtx);
 	const { activePlanBlock, planMode, contextSpawnOpts } =
@@ -2035,8 +2201,35 @@ async function handleBeforeAgentStart(input: {
 		gateBlock = formatPlanHumanGateBlock(gateStatus);
 	}
 	const gateSuffix = gateBlock ? `\n\n${gateBlock}` : "";
+	let commandBlock = "";
+	if (command === "harness-review") {
+		const runDir = join(
+			projectRoot,
+			".pi",
+			"harness",
+			"runs",
+			activeCtx.run_id,
+		);
+		commandBlock = `\n\n## Review Phase 1 preflight (required before evaluators)\nRun deterministic shell in this session, then hard-gate:\n\`\`\`bash\nnode "$UP_PKG/.pi/scripts/harness-verify.mjs"\nnode "$UP_PKG/.pi/scripts/harness-review-preflight.mjs" --run-dir "${runDir}" --steer-attempt ${activeCtx.steer_attempt ?? 0}\n\`\`\`\nInclude \`steer_attempt\` on \`artifacts/benchmark-log.yaml\`. After steer repair, run \`harness-adversary-repro-pack.mjs\` before lite-review adversary skip.\nDo **not** embed executor repair in this session — use \`/harness-steer\` or \`/harness-steer --burst\`.`;
+	}
+	if (command === "harness-steer") {
+		const brief = await readRepairBriefFromRun(activeCtx.run_id, projectRoot);
+		const runDir = join(
+			projectRoot,
+			".pi",
+			"harness",
+			"runs",
+			activeCtx.run_id,
+		);
+		if (brief?.gap_kind === "hygiene") {
+			commandBlock = `\n\n## Hygiene steer\n\`gap_kind: hygiene\` — run hygiene script **before** spawning executor:\n\`\`\`bash\nnode "$UP_PKG/.pi/scripts/harness-steer-hygiene.mjs" --run-dir "${runDir}" --project-root "${projectRoot}"\n\`\`\`\nDo **not** spawn \`harness/running/executor\` for hygiene-only gaps. Then \`/harness-review\`.`;
+		}
+		if (isSteerBurstArgs(args)) {
+			commandBlock += `\n\n## Burst steer\nPreflight:\n\`\`\`bash\nnode "$UP_PKG/.pi/scripts/harness-inline-repair.mjs" --run-dir "${runDir}"\n\`\`\`\nRequires eval pass + adversary \`block_merge\` on disk and \`HARNESS_STEER_BURST=1\`.`;
+		}
+	}
 	return {
-		systemPrompt: `${input.event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}${gateSuffix}`,
+		systemPrompt: `${input.event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}${gateSuffix}${commandBlock}`,
 	};
 }
 
@@ -2259,6 +2452,12 @@ async function handleAgentEnd(input: {
 				runCtx: activeCtx,
 				command: parsed.command,
 			});
+			await maybeHeadlessGitQaFinalizeOnRun({
+				projectRoot,
+				runCtx: activeCtx,
+				command: parsed.command,
+				upPkg: getHarnessPackageRoot(MODULE_URL),
+			});
 			persistContext(input.pi, activeCtx);
 			if (
 				await shouldEndHeadlessHarnessPrintSession({
@@ -2290,13 +2489,24 @@ async function handleAgentEnd(input: {
 			activeCtx.plan_ready,
 		);
 		Object.assign(activeCtx, runPost);
+		if (
+			parsed?.command === "harness-run" ||
+			parsed?.command === "harness-auto"
+		) {
+			await maybeHeadlessGitQaFinalizeOnRun({
+				projectRoot,
+				runCtx: activeCtx,
+				command: parsed.command,
+				upPkg: getHarnessPackageRoot(MODULE_URL),
+			});
+		}
 	}
 	if (parsed?.command === "harness-steer") {
 		activeCtx.last_completed_step = "steer";
-		activeCtx.steer_attempt = (activeCtx.steer_attempt ?? 0) + 1;
 		activeCtx.steer_max_attempts =
 			activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv();
 		activeCtx.phase = "execute";
+		await invalidateEvalVerdictAfterRepair(activeCtx.run_id, projectRoot);
 		syncPolicyFromRunContext(input.pi, entries, activeCtx);
 	}
 	if (
@@ -2323,6 +2533,19 @@ async function handleAgentEnd(input: {
 		activeCtx.run_id,
 		projectRoot,
 	);
+	const adversaryReport = await readAdversaryReportFromRun(
+		activeCtx.run_id,
+		projectRoot,
+	);
+	const evalVerdict = await readEvalVerdictFromRun(
+		activeCtx.run_id,
+		projectRoot,
+	);
+	const burstAllowed = steerBurstAllowed(
+		evalVerdict,
+		adversaryReport,
+		activeCtx.inline_repair_attempted,
+	);
 	const reviewComplete =
 		activeCtx.last_completed_step === "review" ||
 		activeCtx.last_completed_step === "adversary";
@@ -2339,6 +2562,7 @@ async function handleAgentEnd(input: {
 		steerAttempt: activeCtx.steer_attempt ?? 0,
 		steerMaxAttempts: activeCtx.steer_max_attempts ?? steerMaxAttemptsFromEnv(),
 		reviewComplete,
+		burstAllowed,
 	});
 	activeCtx.next_recommended_command = next;
 	activeCtx.updated_at = new Date().toISOString();

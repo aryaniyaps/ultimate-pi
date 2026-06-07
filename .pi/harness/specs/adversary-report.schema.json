@@ -46,6 +46,19 @@
 				"minLength": 1
 			}
 		},
+		"repro_commands": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": ["cmd"],
+				"properties": {
+					"cmd": { "type": "string", "minLength": 1 },
+					"cwd": { "type": "string", "minLength": 1 },
+					"safe_for_phase1": { "type": "boolean" }
+				}
+			}
+		},
 		"block_merge": {
 			"type": "boolean"
 		}

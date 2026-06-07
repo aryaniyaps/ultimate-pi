@@ -24,6 +24,31 @@ const REVIEW_SUBAGENT_TYPES = new Set([
 const EXECUTOR_SUBAGENT_TYPE = "harness/running/executor";
 const PLANNING_SUBAGENT_PREFIX = "harness/planning/";
 
+/** ADR 0057: Phase 1 deterministic scripts allowed in review phase (same executor session). */
+const PHASE1_ALLOWLIST = [
+	/harness-verify\.mjs/,
+	/harness-review-preflight\.mjs/,
+	/harness-adversary-repro-pack\.mjs/,
+	/harness-sentrux-report\.mjs/,
+	/harness-sentrux-diagnostics\.mjs/,
+	/harness-ls-lint-cli\.mjs/,
+];
+
+function bashCommandFromToolInput(input: unknown): string {
+	if (!input || typeof input !== "object") return "";
+	const rec = input as Record<string, unknown>;
+	if (typeof rec.command === "string") return rec.command;
+	if (typeof rec.cmd === "string") return rec.cmd;
+	return "";
+}
+
+function isPhase1AllowlistedShell(toolName: string, input: unknown): boolean {
+	if (toolName !== "bash" && toolName !== "shell") return false;
+	const cmd = bashCommandFromToolInput(input);
+	if (!cmd) return false;
+	return PHASE1_ALLOWLIST.some((p) => p.test(cmd));
+}
+
 interface IsolationState {
 	executorSessionId: string | null;
 	violationActive: boolean;
@@ -310,6 +335,10 @@ export default function reviewIntegrity(pi: ExtensionAPI) {
 		}
 
 		if (!state.violationActive) return undefined;
+
+		if (isPhase1AllowlistedShell(event.toolName, event.input)) {
+			return undefined;
+		}
 
 		await appendIncident({
 			type: "review_integrity_violation",

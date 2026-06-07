@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
+import { writeYamlFile } from "../.pi/lib/harness-yaml.ts";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { randomUUID } from "node:crypto";
@@ -222,6 +223,65 @@ test("maybeHeadlessQaAutoExecuteSmoke writes smoke ISO after auto plan", async (
 		for (const [key, value] of Object.entries(saved)) {
 			if (value === undefined) delete process.env[key];
 			else process.env[key] = value;
+		}
+	}
+});
+
+test("shouldEndHeadlessHarnessPrintSession ends after steer hygiene", async () => {
+	const { shouldEndHeadlessHarnessPrintSession } = await import(
+		"../.pi/lib/plan-headless-ux.ts"
+	);
+	const prev = process.env.HARNESS_QA_SMOKE;
+	const prevNi = process.env.HARNESS_NON_INTERACTIVE;
+	process.env.HARNESS_QA_SMOKE = "1";
+	process.env.HARNESS_NON_INTERACTIVE = "1";
+	const end = await shouldEndHeadlessHarnessPrintSession({
+		command: "harness-steer",
+		runCtx: {
+			run_id: "r1",
+			last_completed_step: "steer",
+			last_outcome: "completed",
+		},
+		projectRoot: process.cwd(),
+	});
+	assert.equal(end, true);
+	if (prev === undefined) delete process.env.HARNESS_QA_SMOKE;
+	else process.env.HARNESS_QA_SMOKE = prev;
+	if (prevNi === undefined) delete process.env.HARNESS_NON_INTERACTIVE;
+	else process.env.HARNESS_NON_INTERACTIVE = prevNi;
+});
+
+test("shouldEndHeadlessHarnessPrintSession ends harness-run when executor handoff exists", async () => {
+	const { shouldEndHeadlessHarnessPrintSession } = await import(
+		"../.pi/lib/plan-headless-ux.ts"
+	);
+	const saved = { HARNESS_NON_INTERACTIVE: process.env.HARNESS_NON_INTERACTIVE };
+	process.env.HARNESS_NON_INTERACTIVE = "1";
+	try {
+		const projectRoot = join(tmpdir(), `headless-run-end-${randomUUID()}`);
+		const runId = "run-exec-handoff";
+		const runDir = join(projectRoot, ".pi", "harness", "runs", runId);
+		await mkdir(join(runDir, "handoff"), { recursive: true });
+		await writeYamlFile(join(runDir, "handoff", "executor-summary.yaml"), {
+			schema_version: "1.0.0",
+			execution_status: "completed",
+		});
+		const shouldEnd = await shouldEndHeadlessHarnessPrintSession({
+			command: "harness-run",
+			projectRoot,
+			runCtx: {
+				run_id: runId,
+				plan_ready: true,
+				last_completed_step: "execute",
+				last_outcome: "completed",
+			},
+		});
+		assert.equal(shouldEnd, true);
+	} finally {
+		if (saved.HARNESS_NON_INTERACTIVE === undefined) {
+			delete process.env.HARNESS_NON_INTERACTIVE;
+		} else {
+			process.env.HARNESS_NON_INTERACTIVE = saved.HARNESS_NON_INTERACTIVE;
 		}
 	}
 });

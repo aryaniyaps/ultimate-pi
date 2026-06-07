@@ -88,8 +88,26 @@ sentrux_check: pass|fail|skipped|not_installed
 sentrux_gate: pass|degraded|skipped|not_installed
 ls_lint: pass|fail|skipped|not_installed
 ls_lint_violations: 0
+steer_attempt: <current steer_attempt from run-context>
+adversary_repro: pass|fail|skipped
 notes: "…"
 ```
+
+**Hard gate** before Phase 2 evaluators:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-review-preflight.mjs" --run-dir "<run_dir>" --steer-attempt <N>
+```
+
+Abort evaluator spawns if preflight fails (stale/missing `benchmark-log.yaml`).
+
+After steer repair, when adversary may be skipped (lite tier), run repro pack first:
+
+```bash
+node "$UP_PKG/.pi/scripts/harness-adversary-repro-pack.mjs" --run-dir "<run_dir>"
+```
+
+Lite skip is allowed only when `benchmark-log.adversary_repro: pass` and no prior `block_merge` on disk.
 
 `harness_artifact_ready({ paths: ["artifacts/benchmark-log.yaml", "artifacts/sentrux-report.json", "artifacts/sentrux-diagnostics.json", "artifacts/sentrux-signal.yaml", "artifacts/ls-lint-signal.yaml"] })` when written.
 
@@ -211,9 +229,11 @@ Write **`artifacts/review-outcome.yaml`** and **`artifacts/repair-brief.yaml`** 
 | `remediation_class` | `recommended_next` |
 |---------------------|-------------------|
 | `pass` | `/harness-policy-status` |
-| `implementation_gap` | `/harness-steer` |
+| `implementation_gap` | `/harness-steer` or `/harness-steer --burst` when eval pass + adversary `block_merge` and `HARNESS_STEER_BURST=1` |
 | `plan_gap` | `/harness-plan` (mode: revise) |
 | `rollback` | `/harness-incident` |
+
+Use `synthesizeReviewOutcome` fields: `eval_status`, `adversary_status`, `gap_kind` (`hygiene` \| `functional` \| `mixed`). **Do not** fuse executor repair in this session — defer to `/harness-steer` or `/harness-steer --burst`.
 
 One `ask_user` steer gate when not pass (unless `steer_approved` on run-context).
 
