@@ -3,6 +3,16 @@
 All notable changes to this project are documented in this file.
 
 
+## [v0.25.0] — 2026-06-07
+
+### ✨ Features
+
+- Wire agent-native speed program: `parallel_probes` end-to-end, eligibility snapshot, plan FSM (`harness_plan_next_action`), synthesizer routing, auto-approve policy, per-phase spawn caps, review parallel default, 50% VCC auto-compact, ADR 0056.
+
+### 🐛 Fixes
+
+- Headless QA E2E: seed planning-context for smoke auto-approve, finalize plan on `agent_end`, write smoke ISO for `/harness-auto`, and exit via `ctx.abort()` without kill-switch false failures.
+
 ## [v0.24.0] — 2026-06-06
 
 ### ✨ Features
