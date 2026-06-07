@@ -3,7 +3,12 @@ import { shouldEmitBlockingBudgetExhausted } from "./harness-budget-enforce.js";
 import {
 	extractCompletionStatuses,
 	getLatestRunContext,
+	hasConfirmedClearAfterLatestRunContext,
+	hasConfirmedHarnessClear,
+	isRunClearedByConfirmedHarnessClear,
+	isRunIdTombstonedByConfirmedHarnessClear,
 	nextStepAfterOutcome,
+	runIdFromCrossSessionResumeCommand,
 } from "./harness-run-context.js";
 import { buildHarnessProgressStatusLine } from "./harness-subagent-progress.js";
 
@@ -151,6 +156,7 @@ const RELEVANT_CUSTOM_TYPES = new Set([
 	"harness-run-trace",
 	"harness-trace-state",
 	"harness-run-context",
+	"harness-clear-result",
 ]);
 
 function asNumber(value: unknown): number | null {
@@ -338,6 +344,15 @@ function applyTraceState(
 				: null;
 }
 
+function resetActiveRunState(state: HarnessUiState): void {
+	state.phase = "plan";
+	state.planApproved = false;
+	state.planId = null;
+	state.traceRunId = null;
+	state.nextRecommendedCommand = "/harness-plan";
+	state.crossSessionResumeCommand = null;
+}
+
 function applyRunContextState(
 	state: HarnessUiState,
 	latest: Map<string, unknown>,
@@ -356,7 +371,18 @@ function applyRunContextState(
 		  }
 		| undefined;
 	if (!runCtx) {
-		state.nextRecommendedCommand = null;
+		resetActiveRunState(state);
+		return;
+	}
+	if (hasConfirmedClearAfterLatestRunContext(entries)) {
+		resetActiveRunState(state);
+		return;
+	}
+	if (
+		typeof runCtx.run_id === "string" &&
+		isRunClearedByConfirmedHarnessClear(entries, runCtx.run_id)
+	) {
+		resetActiveRunState(state);
 		return;
 	}
 	if (runCtx.plan_ready) {
@@ -408,6 +434,7 @@ export function harnessUiEntriesFingerprint(entries: unknown[]): string {
 	return JSON.stringify({
 		len: entries.length,
 		policy: latest.get("harness-policy-state") ?? null,
+		clear: latest.get("harness-clear-result") ?? null,
 		run: latest.get("harness-run-context") ?? null,
 	});
 }
@@ -529,9 +556,26 @@ export function deriveHarnessStatusHint(state: HarnessUiState): {
 	}
 }
 
+function hasRunContextEntryAfterIndex(
+	entries: unknown[],
+	entryCountAtClear: number,
+): boolean {
+	for (let i = Math.max(0, entryCountAtClear); i < entries.length; i++) {
+		const entry = entries[i] as CustomEntryLike;
+		if (entry.type === "custom" && entry.customType === "harness-run-context") {
+			return true;
+		}
+	}
+	return false;
+}
+
 export class HarnessUiStateStore {
 	private lastFingerprint = "";
 	private crossSessionResumeCommand: string | null = null;
+	private suppressActiveRunUntilUpdate = false;
+	/** Session entry count when clearActiveRunState ran; new run-context after this lifts suppress. */
+	private suppressAfterEntryCount = -1;
+	private entriesLengthAtLastRefresh = 0;
 	private cachedState: HarnessUiState = {
 		...DEFAULT_STATE,
 		severity: { ...DEFAULT_STATE.severity },
@@ -539,6 +583,26 @@ export class HarnessUiStateStore {
 
 	public setCrossSessionResumeCommand(command: string | null): void {
 		this.crossSessionResumeCommand = command;
+	}
+
+	public acknowledgeRunContextUpdated(): void {
+		this.crossSessionResumeCommand = null;
+		this.suppressActiveRunUntilUpdate = false;
+		this.lastFingerprint = "";
+	}
+
+	public clearActiveRunState(sessionEntryCount?: number): void {
+		this.crossSessionResumeCommand = null;
+		this.suppressActiveRunUntilUpdate = true;
+		this.suppressAfterEntryCount =
+			sessionEntryCount ?? this.entriesLengthAtLastRefresh;
+		this.lastFingerprint = "";
+		const nextState: HarnessUiState = {
+			...this.cachedState,
+			severity: { ...this.cachedState.severity },
+		};
+		resetActiveRunState(nextState);
+		this.cachedState = nextState;
 	}
 
 	private applyCrossSessionOverlay(state: HarnessUiState): HarnessUiState {
@@ -551,17 +615,62 @@ export class HarnessUiStateStore {
 		};
 	}
 
+	private maybeLiftSuppressAfterClear(entries: unknown[]): void {
+		if (!this.suppressActiveRunUntilUpdate) return;
+		if (this.suppressAfterEntryCount < 0) return;
+		if (entries.length <= this.suppressAfterEntryCount) return;
+		if (
+			hasRunContextEntryAfterIndex(entries, this.suppressAfterEntryCount) ||
+			hasConfirmedClearAfterLatestRunContext(entries)
+		) {
+			this.suppressActiveRunUntilUpdate = false;
+			this.suppressAfterEntryCount = -1;
+			this.crossSessionResumeCommand = null;
+		}
+	}
+
 	/** Refresh from session entries; recompute when harness policy/run context changes. */
 	public refresh(ctx: ExtensionContext): HarnessUiState {
 		const entries = ctx.sessionManager.getEntries();
 		const fingerprint = harnessUiEntriesFingerprint(entries);
+		const resumeRunId = runIdFromCrossSessionResumeCommand(
+			this.crossSessionResumeCommand,
+		);
+		const clearBlocksResume =
+			hasConfirmedClearAfterLatestRunContext(entries) ||
+			(resumeRunId
+				? isRunIdTombstonedByConfirmedHarnessClear(entries, resumeRunId)
+				: false);
+		if (clearBlocksResume) {
+			this.crossSessionResumeCommand = null;
+		}
+
 		if (fingerprint !== this.lastFingerprint) {
 			this.cachedState = createStateFromEntries(entries);
 			this.lastFingerprint = fingerprint;
-			if (getLatestRunContext(entries)) {
-				this.crossSessionResumeCommand = null;
+			this.maybeLiftSuppressAfterClear(entries);
+			if (!this.suppressActiveRunUntilUpdate) {
+				if (
+					this.cachedState.traceRunId &&
+					(hasConfirmedHarnessClear(entries) || getLatestRunContext(entries))
+				) {
+					this.crossSessionResumeCommand = null;
+				} else if (clearBlocksResume) {
+					this.crossSessionResumeCommand = null;
+					this.suppressActiveRunUntilUpdate = true;
+					this.suppressAfterEntryCount = entries.length;
+				}
 			}
 		}
+		if (this.suppressActiveRunUntilUpdate) {
+			const nextState: HarnessUiState = {
+				...this.cachedState,
+				severity: { ...this.cachedState.severity },
+			};
+			resetActiveRunState(nextState);
+			this.cachedState = nextState;
+		}
+		this.entriesLengthAtLastRefresh = entries.length;
 		this.cachedState = this.applyCrossSessionOverlay(this.cachedState);
 		return this.cachedState;
 	}

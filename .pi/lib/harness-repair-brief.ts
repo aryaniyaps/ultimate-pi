@@ -4,13 +4,17 @@
 
 import { join } from "node:path";
 import {
+	classifyImplementationGap,
+	type GapKind,
+	parseReproCommandsFromAdversary,
 	type RemediationClass,
 	remediationClassFromEvalVerdict,
+	synthesizeReviewOutcome,
 } from "./harness-remediation.js";
 import { harnessRunsRoot } from "./harness-subagent-submit-path.js";
 import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
 
-const REPAIR_BRIEF_SCHEMA = "1.0.0";
+const REPAIR_BRIEF_SCHEMA = "1.1.0";
 
 function asRecord(v: unknown): Record<string, unknown> | null {
 	return v && typeof v === "object" && !Array.isArray(v)
@@ -74,9 +78,34 @@ export async function synthesizeRepairBrief(
 		"sentrux-repair-plan",
 	);
 
+	const benchmark = await readArtifactYaml(
+		runRoot,
+		"artifacts/benchmark-log.yaml",
+		"benchmark-log",
+	);
+	const synthesized = synthesizeReviewOutcome({
+		runId: input.runId,
+		eval: evalDoc as {
+			status?: string;
+			recommended_action?: string;
+			failed_checks?: string[];
+		},
+		adversary: adversary as {
+			block_merge?: boolean;
+			repro_steps?: string[];
+			repro_commands?: { cmd: string }[];
+		},
+		benchmark: benchmark as {
+			harness_verify?: string;
+			ls_lint?: string;
+			notes?: string;
+		},
+		steerAttempt: input.steerAttempt,
+	});
 	const remediation =
 		(typeof review?.remediation_class === "string" &&
 			(review.remediation_class as RemediationClass)) ||
+		synthesized?.remediation_class ||
 		remediationClassFromEvalVerdict(
 			evalDoc as {
 				status?: string;
@@ -85,6 +114,25 @@ export async function synthesizeRepairBrief(
 			},
 		) ||
 		"inconclusive";
+	const gapKind: GapKind | undefined =
+		(typeof review?.gap_kind === "string"
+			? (review.gap_kind as GapKind)
+			: undefined) ||
+		synthesized?.gap_kind ||
+		(remediation === "implementation_gap"
+			? classifyImplementationGap(
+					evalDoc as { failed_checks?: string[] },
+					adversary as { block_merge?: boolean; repro_steps?: string[] },
+					benchmark as { notes?: string; ls_lint?: string },
+				)
+			: undefined);
+	const { commands: reproCommands, skipped: reproSkipped } =
+		parseReproCommandsFromAdversary(
+			adversary as {
+				repro_steps?: string[];
+				repro_commands?: { cmd: string }[];
+			},
+		);
 
 	const sourceArtifacts = buildSourceArtifacts(input, planRel, {
 		evalDoc,
@@ -140,6 +188,14 @@ export async function synthesizeRepairBrief(
 	if (priorityLakeIds.length > 0) {
 		brief.priority_lake_ids = [...new Set(priorityLakeIds)];
 	}
+	if (gapKind) brief.gap_kind = gapKind;
+	if (reproCommands.length > 0) {
+		brief.repro_commands = reproCommands;
+		brief.must_pass_before_handoff = true;
+	}
+	if (reproSkipped.length > 0) brief.repro_skipped = reproSkipped;
+	const verification: string[] = stringList(benchmark?.verification_commands);
+	if (verification.length > 0) brief.verification_commands = verification;
 	return brief;
 }
 

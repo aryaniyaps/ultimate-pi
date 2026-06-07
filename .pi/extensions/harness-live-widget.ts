@@ -3,7 +3,12 @@ import type {
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
-import { evaluateCrossSessionResume } from "../lib/harness-run-context.js";
+import {
+	evaluateCrossSessionResume,
+	hasConfirmedClearAfterLatestRunContext,
+	isRunIdTombstonedByConfirmedHarnessClear,
+	runIdFromCrossSessionResumeCommand,
+} from "../lib/harness-run-context.js";
 import { buildHarnessProgressStatusLine } from "../lib/harness-subagent-progress.js";
 import {
 	deriveHarnessStatusHint,
@@ -308,7 +313,7 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	});
 
 	pi.events.on("harness-run-context:updated", () => {
-		stateStore.setCrossSessionResumeCommand(null);
+		stateStore.acknowledgeRunContextUpdated();
 		if (mountCtx) scheduleRefresh(mountCtx);
 	});
 
@@ -327,7 +332,26 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 				: null;
 		const cmd =
 			typeof data?.resume_command === "string" ? data.resume_command : null;
+		if (mountCtx) {
+			const entries = mountCtx.sessionManager.getEntries();
+			const runId = runIdFromCrossSessionResumeCommand(cmd);
+			if (
+				hasConfirmedClearAfterLatestRunContext(entries) ||
+				(runId
+					? isRunIdTombstonedByConfirmedHarnessClear(entries, runId)
+					: false)
+			) {
+				stateStore.clearActiveRunState(entries.length);
+				scheduleRefresh(mountCtx);
+				return;
+			}
+		}
 		stateStore.setCrossSessionResumeCommand(cmd);
+		if (mountCtx) scheduleRefresh(mountCtx);
+	});
+	pi.events.on("harness-runs-cleared", () => {
+		const entryCount = mountCtx?.sessionManager.getEntries().length ?? 0;
+		stateStore.clearActiveRunState(entryCount);
 		if (mountCtx) scheduleRefresh(mountCtx);
 	});
 

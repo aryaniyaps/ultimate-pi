@@ -13,7 +13,10 @@
 		"fix_directives"
 	],
 	"properties": {
-		"schema_version": { "type": "string", "const": "1.0.0" },
+		"schema_version": {
+			"type": "string",
+			"enum": ["1.0.0", "1.1.0"]
+		},
 		"run_id": { "type": "string", "minLength": 1 },
 		"steer_attempt": { "type": "integer", "minimum": 1 },
 		"remediation_class": {
@@ -40,6 +43,25 @@
 		"constraints": {
 			"type": "array",
 			"items": { "type": "string", "minLength": 1 }
+		},
+		"repro_commands": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"repro_skipped": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"verification_commands": {
+			"type": "array",
+			"items": { "type": "string", "minLength": 1 }
+		},
+		"must_pass_before_handoff": {
+			"type": "boolean"
+		},
+		"gap_kind": {
+			"type": "string",
+			"enum": ["hygiene", "functional", "mixed"]
 		}
 	}
 }

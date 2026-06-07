@@ -168,16 +168,25 @@ function registerHarnessDebateHandler1(pi: ExtensionAPI) {
 		if (applied.length === 0) return;
 
 		const status = await getPlanDebateRoundStatus(rd, lastRound, runId);
+		const nextBody = [
+			"**Debate lane auto-applied from subagent output**",
+			...applied,
+			"",
+			status.next_tool
+				? `**Required next tool (do not stop with prose only):** ${status.next_tool}`
+				: "Check harness_debate_round_status for this round.",
+		].join("\n");
+		if (isHarnessNonInteractive()) {
+			pi.appendEntry("harness-debate-next-step", {
+				applied,
+				status,
+				recorded_at: new Date().toISOString(),
+			});
+			return;
+		}
 		pi.sendMessage({
 			customType: "harness-debate-next-step",
-			content: [
-				"**Debate lane auto-applied from subagent output**",
-				...applied,
-				"",
-				status.next_tool
-					? `**Required next tool (do not stop with prose only):** ${status.next_tool}`
-					: "Check harness_debate_round_status for this round.",
-			].join("\n"),
+			content: nextBody,
 			display: true,
 			details: { applied, status },
 		});

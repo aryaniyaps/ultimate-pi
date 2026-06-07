@@ -756,6 +756,23 @@ async function checkAutoCommitGitCommit() {
 	if (!out.includes("Co-authored-by:")) {
 		fail("harness-git-commit message missing Co-authored-by trailer");
 	}
+	const branchScript = join(ROOT, ".pi", "scripts", "harness-git-branch.mjs");
+	const branchLib = join(ROOT, ".pi", "lib", "harness-git-branch.mjs");
+	if (!(await fileExists(branchScript)) || !(await fileExists(branchLib))) {
+		fail("missing harness-git-branch script or lib");
+	}
+	const dryBranch = await runNodeScript(branchScript, [
+		"--run-id",
+		"harness-verify-smoke",
+		"--dry-run",
+	]);
+	if (dryBranch.code !== 0) {
+		fail(dryBranch.out.trim() || "harness-git-branch --dry-run failed");
+	}
+	const qaAssert = join(ROOT, ".pi", "scripts", "harness-git-qa-assert.mjs");
+	if (!(await fileExists(qaAssert))) {
+		fail("missing harness-git-qa-assert.mjs");
+	}
 	ok("auto-commit git commit (skill, CLI, config, SYSTEM.md)");
 }
 

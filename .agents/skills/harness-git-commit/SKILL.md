@@ -27,8 +27,13 @@ Deterministic commits via bundled CLI. Config merges **project** `.pi/auto-commi
    ```bash
    node "$UP_PKG/.pi/scripts/harness-auto-commit-bootstrap.mjs"
    ```
-3. Stage files: `git add …` (CLI does not stage).
-4. Commit via CLI (examples):
+3. When `branch.strategy` is `auto-feature-branch`, ensure working branch before execute:
+   ```bash
+   node "$UP_PKG/.pi/scripts/harness-git-branch.mjs" \
+     --run-id "<run_id>" --run-dir "<run_dir>" --project-root "<project_root>"
+   ```
+4. Stage files: `git add …` (CLI does not stage).
+5. Commit via CLI (examples):
    ```bash
    # Conventional subject from config template
    node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" \
@@ -40,6 +45,10 @@ Deterministic commits via bundled CLI. Config merges **project** `.pi/auto-commi
 
    # Amend: preserve body, ensure trailer
    node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" --amend --message "$(git log -1 --format=%B)"
+
+   # Scoped commit (ignores other staged paths)
+   node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" \
+     --only-path "path/to/file.ts" --type chore --scope harness --subject "scoped change"
 
    # Preview only
    node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" --dry-run --subject "preview"
@@ -55,6 +64,8 @@ Deterministic commits via bundled CLI. Config merges **project** `.pi/auto-commi
 | `message.coAuthorTrailer` | `Co-authored-by: {login} <{email}>` |
 | `coAuthor.login` / `coAuthor.email` | Attribution (project overrides package) |
 | `coAuthor.required` | When false, skip trailer (default true) |
+| `branch.strategy` | `auto-feature-branch` creates `harness/<run-id>` from protected branches |
+| `branch.protected` | Branch globs that trigger auto feature branch (default main/master/release/*) |
 
 Edit project file to change format or co-author for external repos.
 

@@ -23,7 +23,7 @@ Follow **harness-plan** performance rules (`subagent` with `agentScope: "both"`)
 1. **Plan** — follow `/harness-plan`; drive steps via `harness_plan_next_action`. When `HARNESS_PLAN_AUTO_APPROVE=1` and deterministic gates pass (non-interactive), `approve_plan` auto-approves. Otherwise one human approval.
 2. **Execute** — `harness/running/executor` with `executor_strategy` from packet (default `single_pass` for low/med).
 3. **Review** — always **`/harness-review`** after execute (no benchmark fail-fast).
-4. **Steer loop** — while `review-outcome.remediation_class === implementation_gap` and `steer_attempt < HARNESS_STEER_MAX_ATTEMPTS`: `/harness-steer` → `/harness-review` (tiered adversary on attempts 2+).
+4. **Steer loop** — while `review-outcome.remediation_class === implementation_gap` and `steer_attempt < effective max`: `/harness-steer` (or `/harness-steer --burst` when eval pass + adversary `block_merge` and `HARNESS_STEER_BURST=1`) → `/harness-review` (tiered adversary on attempts 2+; hygiene at steer start via `harness-steer-hygiene.mjs` when `gap_kind: hygiene`).
 5. **Parent** — apply locked strict gates; commit/PR only when `remediation_class: pass`. For commits, invoke **harness-git-commit** skill (never raw `git commit`).
 
 Do **not** call separate `/harness-eval` or `/harness-critic` (deprecated aliases of `/harness-review`).

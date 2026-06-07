@@ -791,6 +791,37 @@ function truncateSubagentDetails(
 	};
 }
 
+const HARNESS_HANDOFF_CONTENT_CAP = 1400;
+
+function applyTruncateDetailsPolicy<T extends { content: Array<{ type: string; text?: string }>; details?: SubagentDetails }>(
+	toolResult: T,
+	options: HarnessSubagentsOptions,
+): T {
+	if (!options.truncateDetails || !toolResult.details) return toolResult;
+	const details = truncateSubagentDetails(toolResult.details);
+	const harnessResults = details.results.filter((r) => r.agent.startsWith("harness/"));
+	if (harnessResults.length === 1) {
+		const r = harnessResults[0]!;
+		const output = getResultFinalOutput(r);
+		const status = r.timedOut
+			? "timed out"
+			: r.exitCode === 0
+				? "completed"
+				: "failed";
+		let body = output.trim();
+		if (body.length > HARNESS_HANDOFF_CONTENT_CAP) {
+			body = `${body.slice(0, HARNESS_HANDOFF_CONTENT_CAP)}\n…(truncated — read handoff artifacts under HARNESS_RUN_DIR)`;
+		}
+		const text = [
+			`[subagent ${r.agent}] ${status}.`,
+			body || "(no final output)",
+			"Submit tools wrote canonical artifacts; do not re-parse subprocess transcript.",
+		].join("\n");
+		return { ...toolResult, content: [{ type: "text", text }], details };
+	}
+	return { ...toolResult, details };
+}
+
 type SubagentToolParams = {
 	agent?: string;
 	task?: string;
@@ -1508,7 +1539,7 @@ export function createSubagentsExtension(
 					...(toolResult.details?.aggregator ? [toolResult.details.aggregator] : []),
 				];
 				spawnTimedOut = allResults.some((r) => r.timedOut === true);
-				return toolResult;
+				return applyTruncateDetailsPolicy(toolResult, options);
 			} finally {
 				options.onSpawnEnd?.(harnessAgents.length);
 				const mode = params.chain?.length

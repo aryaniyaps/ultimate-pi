@@ -67,7 +67,10 @@ export async function runAskUser(
 		};
 	}
 
-	if (isHarnessNonInteractive()) {
+	if (
+		isHarnessNonInteractive() &&
+		process.env.HARNESS_ASK_USER_UI?.toLowerCase() !== "headless"
+	) {
 		const blocked = nonInteractiveAskUserResult(params.question ?? "");
 		return {
 			error: blocked.text,

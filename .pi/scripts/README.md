@@ -37,6 +37,8 @@ From **Typescript extensions**, use `resolveHarnessScript()` / `getHarnessPackag
 | Resolve package root (`UP_PKG`) | `node "$UP_PKG/.pi/scripts/harness-resolve-up-pkg.mjs"` |
 | Auto-commit config bootstrap | `node "$UP_PKG/.pi/scripts/harness-auto-commit-bootstrap.mjs"` |
 | Git commit + co-author trailer | `node "$UP_PKG/.pi/scripts/harness-git-commit.mjs" --subject "…"` [`--dry-run`] |
+| Git feature branch before execute | `node "$UP_PKG/.pi/scripts/harness-git-branch.mjs" --run-id "<id>" --run-dir "<dir>"` |
+| Git QA smoke commit assert | `node "$UP_PKG/.pi/scripts/harness-git-qa-assert.mjs" [--project-root DIR]` |
 | Project `.env` (append-only) | `node "$UP_PKG/.pi/scripts/harness-sync-env.mjs"` (`--create-missing` after user confirms) |
 | Harness lens extension | `.pi/extensions/harness-lens.ts` → `.pi/lib/harness-lens/index.ts` (loaded by `.pi/extensions`; PostHog owns lens telemetry) |
 

@@ -41,6 +41,10 @@ function parseArgs(argv) {
 		else if (a === "--body" && argv[i + 1]) opts.body = argv[++i];
 		else if (a === "--message" && argv[i + 1]) opts.message = argv[++i];
 		else if (a === "--root" && argv[i + 1]) opts.root = argv[++i];
+		else if (a === "--only-path" && argv[i + 1]) {
+			opts.onlyPaths ??= [];
+			opts.onlyPaths.push(argv[++i]);
+		}
 		else if (a.startsWith("-")) {
 			console.error(`harness-git-commit: unknown flag ${a}`);
 			process.exit(1);
@@ -158,6 +162,12 @@ async function main() {
 		if (flags.has("amend")) gitArgs.push("--amend");
 		if (flags.has("no-verify")) gitArgs.push("--no-verify");
 		if (flags.has("signoff")) gitArgs.push("--signoff");
+		if (Array.isArray(opts.onlyPaths) && opts.onlyPaths.length > 0) {
+			for (const relPath of opts.onlyPaths) {
+				await runGit(["add", "--", relPath], projectRoot);
+			}
+			gitArgs.push("--only", "--", ...opts.onlyPaths);
+		}
 
 		const out = await runGit(gitArgs, projectRoot);
 		if (out.trim()) process.stdout.write(out);

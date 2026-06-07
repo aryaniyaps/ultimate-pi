@@ -41,6 +41,18 @@
 		"source_artifacts": {
 			"type": "object",
 			"additionalProperties": { "type": "string" }
+		},
+		"eval_status": {
+			"type": "string",
+			"minLength": 1
+		},
+		"adversary_status": {
+			"type": "string",
+			"enum": ["proceed", "block_merge", "conditional_pass"]
+		},
+		"gap_kind": {
+			"type": "string",
+			"enum": ["hygiene", "functional", "mixed"]
 		}
 	}
 }

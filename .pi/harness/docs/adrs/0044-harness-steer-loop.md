@@ -14,9 +14,9 @@ After `/harness-run`, failed benchmarks or blocked execution previously routed u
 3. **Remediation routing** — `review-outcome.remediation_class`: `implementation_gap` → `/harness-steer`; `plan_gap` → `/harness-plan` revise with `repair_brief_path`; `pass` → policy status. **Review outcome wins** over executor `scope_drift` when they disagree; tie → `plan_gap`.
 4. **Plan-gap revise reset** — When review returns `plan_gap` and the next `/harness-plan` runs in revise mode, archive stale plan-phase debate state and generated planning artifacts under `artifacts/revisions/<timestamp>/` before the planner starts. Preserve review repair artifacts in place so the new planning round starts clean while retaining audit history.
 5. **`/harness-steer`** — Thin orchestrator: read briefs, set policy **phase `execute`**, spawn `harness/executor` with `mode: repair`, then `/harness-review` again.
-6. **Caps** — `HARNESS_STEER_MAX_ATTEMPTS` (default 3). **Tiered review:** full review on initial run + steer 1; steers 2+ use lite (benchmark + verdict) unless prior `block_merge` or user forces full.
-6. **Sentrux** — Refresh baseline or compare new violations only after steer mutations (avoid false degraded on every attempt).
-7. **Evaluate-phase writes** — Orchestrator may write review/steer YAML under run `artifacts/` in `evaluate`/`adversary` phase (allowlisted files).
+6. **Caps** — `HARNESS_STEER_MAX_ATTEMPTS` (default 3). **Tiered review:** full review on initial run + steer 1; steers 2+ use lite (benchmark + verdict) unless prior `block_merge` on disk, `adversary_repro` fail, or user forces full (see ADR 0057). **Burst:** when eval pass + adversary `block_merge`, `HARNESS_STEER_BURST=1` grants one extra steer slot via `/harness-steer --burst`. **Hygiene:** `gap_kind: hygiene` at steer entry runs `harness-steer-hygiene.mjs` without incrementing `steer_attempt` (`hygiene_repairs` increments instead).
+7. **Sentrux** — Refresh baseline or compare new violations only after steer mutations (avoid false degraded on every attempt).
+8. **Evaluate-phase writes** — Orchestrator may write review/steer YAML under run `artifacts/` in `evaluate`/`adversary` phase (allowlisted files).
 
 ## Consequences
 
@@ -34,4 +34,4 @@ After `/harness-run`, failed benchmarks or blocked execution previously routed u
 - `.pi/prompts/harness-steer.md`
 - `.pi/harness/specs/review-outcome.schema.json`, `repair-brief.schema.json`
 - `nextStepAfterOutcome` in `.pi/lib/harness-run-context.ts`
-- ADR 0039 (amended), 0043
+- ADR 0039 (amended), 0043, 0057
