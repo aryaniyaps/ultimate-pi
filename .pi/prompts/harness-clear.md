@@ -1,18 +1,18 @@
 ---
-description: Safely delete historical harness run directories while preserving the active run.
+description: Safely delete all harness run directories, including the active run.
 ---
 
 # harness-clear
 
-Delete only historical run directories under `.pi/harness/runs/`.
+Delete all run directories under `.pi/harness/runs/`, including the current active run.
 
 ## What this does
 
 - enumerates delete candidates strictly from `.pi/harness/runs/<run_id>/`
-- always preserves active run ids discovered from session context and active-run pointer
+- includes active run ids discovered from session context and the active-run pointer
 - asks for one confirmation before any filesystem mutation
 - fails closed: cancel/decline/timeout/error/unavailable confirmation paths delete nothing
-- reports deleted vs protected/skipped counts
+- clears `.pi/harness/active-run.json` and reports deleted vs skipped counts
 
 ## Usage
 
@@ -20,6 +20,6 @@ Delete only historical run directories under `.pi/harness/runs/`.
 
 ## Safety boundaries
 
-- in scope: historical run directories only
-- out of scope: full `.pi/harness/` reset, non-run harness assets, active-run deletion overrides
+- in scope: all run directories plus `.pi/harness/active-run.json`
+- out of scope: full `.pi/harness/` reset and non-run harness assets
 - confirmation is mandatory; non-affirmative outcomes are no-op

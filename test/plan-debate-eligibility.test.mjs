@@ -13,6 +13,8 @@ import { tmpdir } from "node:os";
 test("eligibility defaults to standard when ambiguous", () => {
 	const r = harnessPlanDebateEligibility({ risk_level: "med" });
 	assert.equal(r.profile, "standard");
+	assert.equal(r.review_gate_strategy.mode, "parallel_probes");
+	assert.equal(r.review_gate_strategy.min_focus_rounds, 1);
 	assert.match(r.rationale.join(" "), /default profile: standard/);
 	assert.deepEqual(r.required_focuses, ["spec", "wbs", "schedule", "quality"]);
 });
@@ -98,6 +100,28 @@ test("lanesForRound includes sprint-audit on quality focus before round 4", () =
 	assert.ok(lanes.includes("sprint-audit"));
 	const early = lanesForRound(2, "spec");
 	assert.ok(!early.includes("sprint-audit"));
+});
+
+test("getPlanFocusCoverage includes parallel-probes artifact", async () => {
+	const root = await mkdtemp(join(tmpdir(), "debate-parallel-"));
+	const runDir = join(root, "run");
+	const art = join(runDir, "artifacts");
+	await mkdir(art, { recursive: true });
+	await writeFile(
+		join(art, "review-round-parallel-probes.yaml"),
+		`schema_version: "1.0.0"\nround_index: 1\ndebate_round_focus: all\nreview_gate_ready: true\n`,
+		"utf-8",
+	);
+	const required = ["spec", "wbs", "schedule", "quality"];
+	const coverage = await getPlanFocusCoverage(runDir, { requiredFocuses: required });
+	assert.deepEqual(coverage.covered, required);
+	assert.equal(
+		planDebateOutcomeComplete(coverage, {
+			requiredFocuses: required,
+			minRoundIndex: 1,
+		}),
+		true,
+	);
 });
 
 test("planDebateOutcomeComplete passes light profile with two focuses", async () => {

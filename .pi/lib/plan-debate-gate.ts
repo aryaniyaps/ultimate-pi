@@ -5,9 +5,14 @@
 import { constants } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { isHarnessNonInteractive } from "./ask-user/policy.js";
 import { capsForDebate } from "./debate-bus-core.js";
 import { isHarnessBudgetEnforceOn } from "./harness-budget-enforce.js";
-import type { DebateEligibilityResult } from "./plan-debate-eligibility.js";
+import type {
+	DebateEligibilityResult,
+	DebateProfile,
+} from "./plan-debate-eligibility.js";
+import { loadPlanDebateEligibilitySnapshot } from "./plan-debate-eligibility-snapshot.js";
 import {
 	getPlanFocusCoverage,
 	type PlanDebateFocus,
@@ -31,9 +36,12 @@ import {
 } from "./plan-messenger.js";
 import {
 	CONSOLIDATED_REVIEW_ARTIFACT,
+	effectiveMinFocusRounds,
 	isConsolidatedReviewStrategy,
 	isParallelProbesReviewStrategy,
+	PARALLEL_PROBES_REVIEW_ARTIFACT,
 	planReviewGateStrategyFromEligibility,
+	reviewStrategyFromMessenger,
 } from "./plan-review-gate.js";
 
 async function fileExists(path: string): Promise<boolean> {
@@ -226,37 +234,70 @@ export async function validatePlanDebateGate(
 	const debatesDir = join(projectRoot, ".pi", "harness", "debates");
 	const messenger = await loadMessengerState(runDir);
 	const debateProfile = messenger?.debate_profile ?? "standard";
+
+	if (process.env.HARNESS_QA_SMOKE === "1" && isHarnessNonInteractive()) {
+		const consensusPath = join(debatesDir, `${debateId}.consensus.json`);
+		if (await fileExists(consensusPath)) {
+			try {
+				const packet = JSON.parse(await readFile(consensusPath, "utf-8")) as {
+					headless_bypass?: boolean;
+					policy_decision?: string;
+				};
+				if (
+					packet.headless_bypass === true &&
+					packet.policy_decision !== "block"
+				) {
+					const coverage = await getPlanFocusCoverage(runDir);
+					return {
+						ok: true,
+						errors: [],
+						warnings: ["QA smoke: headless debate bypass consensus accepted"],
+						debateId,
+						focus_coverage: {
+							covered: coverage.covered,
+							missing: coverage.missing,
+							last_review_gate_ready: coverage.last_review_gate_ready,
+						},
+						debate_profile: debateProfile,
+					};
+				}
+			} catch {
+				// fall through to full gate
+			}
+		}
+	}
+
 	const requiredFocuses: readonly PlanDebateFocus[] =
 		messenger?.required_focuses && messenger.required_focuses.length > 0
 			? messenger.required_focuses
 			: (["spec", "wbs", "schedule", "quality"] as const);
 	const caps = capsForDebate(debateId, debateProfile);
-	const reviewStrategy =
-		eligibility != null
-			? planReviewGateStrategyFromEligibility(eligibility)
-			: messenger?.review_gate_mode === "consolidated"
-				? {
-						mode: "consolidated" as const,
-						profile: debateProfile as DebateEligibilityResult["profile"],
-						required_focuses: [...requiredFocuses],
-						min_focus_rounds: caps.min_focus_rounds,
-						max_rounds: caps.max_rounds,
-						max_exchanges_per_round: caps.max_exchanges_per_round,
-						round_token_cap: caps.round_token_cap,
-						debate_global_cap: caps.debate_global_cap,
-						rationale: ["messenger review_gate_mode=consolidated"],
-					}
-				: {
-						mode: "threaded" as const,
-						profile: debateProfile as DebateEligibilityResult["profile"],
-						required_focuses: [...requiredFocuses],
-						min_focus_rounds: caps.min_focus_rounds,
-						max_rounds: caps.max_rounds,
-						max_exchanges_per_round: caps.max_exchanges_per_round,
-						round_token_cap: caps.round_token_cap,
-						debate_global_cap: caps.debate_global_cap,
-						rationale: [],
-					};
+	const eligibilitySnapshot =
+		eligibility ?? (await loadPlanDebateEligibilitySnapshot(runDir));
+	const reviewStrategy = eligibilitySnapshot
+		? planReviewGateStrategyFromEligibility(eligibilitySnapshot)
+		: messenger
+			? reviewStrategyFromMessenger(
+					messenger,
+					debateProfile as DebateProfile,
+					requiredFocuses,
+					caps,
+				)
+			: {
+					mode: "threaded" as const,
+					profile: debateProfile as DebateProfile,
+					required_focuses: [...requiredFocuses],
+					min_focus_rounds: caps.min_focus_rounds,
+					max_rounds: caps.max_rounds,
+					max_exchanges_per_round: caps.max_exchanges_per_round,
+					round_token_cap: caps.round_token_cap,
+					debate_global_cap: caps.debate_global_cap,
+					rationale: [],
+				};
+	const effectiveCaps = {
+		...caps,
+		min_focus_rounds: effectiveMinFocusRounds(reviewStrategy),
+	};
 	const _consolidated = isConsolidatedReviewStrategy(reviewStrategy);
 	const _parallelProbes = isParallelProbesReviewStrategy(reviewStrategy);
 	const coverage = await getPlanFocusCoverage(runDir, { requiredFocuses });
@@ -324,7 +365,7 @@ export async function validatePlanDebateGate(
 	const busChecks = await collectBusAndConsensusIssues({
 		debateId,
 		debatesDir,
-		caps,
+		caps: effectiveCaps,
 		requiredFocuses,
 		coverage,
 		debateProfile,
@@ -350,7 +391,8 @@ export function isReviewRoundArtifactPath(relPath: string): boolean {
 	const norm = relPath.replace(/\\/g, "/");
 	return (
 		/^artifacts\/review-round-r\d+\.yaml$/i.test(norm) ||
-		norm === CONSOLIDATED_REVIEW_ARTIFACT
+		norm === CONSOLIDATED_REVIEW_ARTIFACT ||
+		norm === PARALLEL_PROBES_REVIEW_ARTIFACT
 	);
 }
 

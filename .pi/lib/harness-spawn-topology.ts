@@ -7,6 +7,11 @@ import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import { validateHarnessArtifactFile } from "./harness-artifact-gate.js";
+import {
+	synthesizerAllowsRespawn,
+	synthesizerArtifactsComplete,
+} from "./harness-plan-route.js";
+import { isHarnessReviewParallelEnabled } from "./harness-review-parallel.js";
 import type { HarnessPhase } from "./harness-run-context.js";
 import { validateTaskClarificationReadyWithHumanGate } from "./plan-human-gates.js";
 
@@ -17,6 +22,7 @@ export interface SpawnTopologyResult {
 
 const DECOMPOSE_AGENT = "harness/planning/decompose";
 const HYPOTHESIS_AGENT = "harness/planning/hypothesis";
+const SYNTHESIZER_AGENT = "harness/planning/plan-synthesizer";
 
 const DEBATE_LANE_AGENTS = new Set([
 	"harness/planning/hypothesis-validator",
@@ -124,7 +130,7 @@ function validateParallelBatch(
 	const reviewEvaluator = "harness/reviewing/evaluator";
 	const reviewAdversary = "harness/reviewing/adversary";
 	const reviewParallelPair =
-		process.env.HARNESS_REVIEW_PARALLEL === "1" &&
+		isHarnessReviewParallelEnabled() &&
 		names.includes(reviewEvaluator) &&
 		names.includes(reviewAdversary) &&
 		names.filter((n) => n === reviewEvaluator || n === reviewAdversary)
@@ -199,12 +205,31 @@ async function validateHypothesisDependency(
 	if (!(names.includes(HYPOTHESIS_AGENT) && opts?.projectRoot && opts?.runId)) {
 		return null;
 	}
+	const runRoot = join(opts.projectRoot, ".pi", "harness", "runs", opts.runId);
+	if (await synthesizerArtifactsComplete(runRoot)) {
+		return "Synthesizer path complete — spawn execution-plan-author instead of hypothesis.";
+	}
 	const ready = await decompositionReady(opts.projectRoot, opts.runId);
 	if (ready) return null;
 	return (
 		"Cannot spawn hypothesis before artifacts/decomposition.yaml exists. " +
 		"Complete decompose and harness_artifact_ready on decomposition first."
 	);
+}
+
+async function validateSequentialPathBlocks(
+	names: string[],
+	opts?: { projectRoot?: string; runId?: string | null },
+): Promise<string | null> {
+	if (!(opts?.projectRoot && opts?.runId)) return null;
+	const runRoot = join(opts.projectRoot, ".pi", "harness", "runs", opts.runId);
+	if (
+		(names.includes(DECOMPOSE_AGENT) || names.includes(HYPOTHESIS_AGENT)) &&
+		(await synthesizerArtifactsComplete(runRoot))
+	) {
+		return "Synthesizer path artifacts present — use execution-plan-author, not decompose/hypothesis.";
+	}
+	return null;
 }
 
 function validatePlanPhaseMutations(
@@ -258,6 +283,13 @@ async function validateArtifactCompletionDedup(
 	const specsDir = join(opts.projectRoot, ".pi", "harness", "specs");
 
 	for (const name of names) {
+		if (name === SYNTHESIZER_AGENT) {
+			if (await synthesizerAllowsRespawn(runRoot)) continue;
+			return (
+				`Duplicate spawn blocked: ${name} already produced synthesizer artifacts. ` +
+				`Advance to execution-plan-author or set HARNESS_FORCE_RESPAWN=1.`
+			);
+		}
 		const artifactRel = PLANNING_AGENT_ARTIFACT[name];
 		if (!artifactRel) continue;
 		if (await artifactAllowsRespawn(runRoot, artifactRel)) continue;
@@ -298,6 +330,9 @@ export async function validateHarnessSpawnTopology(
 
 	const parallelError = validateParallelBatch(names, taskCount);
 	if (parallelError) return { ok: false, message: parallelError };
+
+	const sequentialBlock = await validateSequentialPathBlocks(names, opts);
+	if (sequentialBlock) return { ok: false, message: sequentialBlock };
 
 	const hypothesisError = await validateHypothesisDependency(names, opts);
 	if (hypothesisError) return { ok: false, message: hypothesisError };

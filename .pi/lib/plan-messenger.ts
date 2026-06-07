@@ -63,8 +63,8 @@ export interface MessengerState {
 	rounds: Record<string, MessengerRoundState>;
 	debate_profile?: DebateProfile;
 	required_focuses?: PlanDebateFocus[];
-	/** consolidated = single Review Gate round; threaded = per-focus rounds */
-	review_gate_mode?: "consolidated" | "threaded";
+	/** consolidated | parallel_probes = single round; threaded = per-focus rounds */
+	review_gate_mode?: "consolidated" | "threaded" | "parallel_probes";
 }
 
 function messengerRoot(runDir: string): string {
@@ -86,7 +86,7 @@ export async function initPlanMessenger(
 		debateId: string;
 		debate_profile?: DebateProfile;
 		required_focuses?: PlanDebateFocus[];
-		review_gate_mode?: "consolidated" | "threaded";
+		review_gate_mode?: "consolidated" | "threaded" | "parallel_probes";
 	},
 ): Promise<string> {
 	const root = messengerRoot(runDir);

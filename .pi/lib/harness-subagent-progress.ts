@@ -1,5 +1,5 @@
 /**
- * In-process progress state for harness live widget + stderr heartbeat.
+ * In-process progress state for the harness live widget (no stderr output).
  */
 
 export type HarnessWaitGate = "ask_user" | "approve_plan" | null;
@@ -86,23 +86,26 @@ export function buildHarnessProgressStatusLine(): string | null {
 		const agents = snapshot.activeSubagentAgents
 			.map((a) => a.replace(/^harness\//, ""))
 			.join(", ");
+		const agentsLabel = agents.length > 36 ? `${agents.slice(0, 33)}…` : agents;
 		const phase = snapshot.harnessPhase ?? "harness";
-		return `${phase} · ${agents} · ${elapsed}`;
+		return `${phase} · ${agentsLabel} · ${elapsed}`;
 	}
 	return null;
 }
 
 export function startHarnessSubagentHeartbeat(
 	onTick: (line: string) => void,
-	intervalMs = 30_000,
+	intervalMs = 10_000,
 ): void {
 	stopHarnessSubagentHeartbeat();
-	heartbeatTimer = setInterval(() => {
+	const tick = (): void => {
 		const line = buildHarnessProgressStatusLine();
 		if (!line) return;
 		snapshot = { ...snapshot, lastHeartbeatLine: line };
 		onTick(line);
-	}, intervalMs);
+	};
+	tick();
+	heartbeatTimer = setInterval(tick, intervalMs);
 	if (typeof heartbeatTimer.unref === "function") {
 		heartbeatTimer.unref();
 	}

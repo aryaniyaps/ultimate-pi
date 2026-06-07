@@ -1,7 +1,22 @@
 /**
  * Harness subagent spawn accounting (subprocess model).
- * No session caps — parallel batches are limited only by host resources.
+ * When HARNESS_BUDGET_ENFORCE=1, per-phase spawn caps apply.
  */
+
+import { isHarnessBudgetEnforceOn } from "./harness-budget-enforce.js";
+import type { HarnessPhase } from "./harness-run-context.js";
+
+const PHASE_SPAWN_CAPS: Record<HarnessPhase, number> = {
+	plan: 12,
+	execute: 3,
+	evaluate: 6,
+	adversary: 4,
+	merge: 2,
+};
+
+export function phaseSpawnCap(phase: HarnessPhase): number {
+	return PHASE_SPAWN_CAPS[phase];
+}
 
 export function isHarnessAgentType(type: string): boolean {
 	return type.startsWith("harness/");
@@ -31,11 +46,24 @@ export function countHarnessAgentsInRequest(params: {
 	return { harnessCount: harness.length, agents: harness };
 }
 
-/** Always allows spawn; state is tracked for telemetry only. */
 export function checkHarnessSpawnBudget(
-	_state: SpawnBudgetState,
-	_incomingHarnessTasks: number,
+	state: SpawnBudgetState,
+	incomingHarnessTasks: number,
+	phase?: HarnessPhase,
 ): { ok: boolean; message?: string } {
+	if (!isHarnessBudgetEnforceOn() || !phase) {
+		return { ok: true };
+	}
+	const cap = PHASE_SPAWN_CAPS[phase];
+	const projected = state.totalHarnessSpawns + incomingHarnessTasks;
+	if (projected > cap) {
+		return {
+			ok: false,
+			message:
+				`Spawn budget exceeded for ${phase} phase (${projected}/${cap}). ` +
+				`Use harness_plan_next_action or reduce spawns; set HARNESS_BUDGET_ENFORCE=0 to disable.`,
+		};
+	}
 	return { ok: true };
 }
 

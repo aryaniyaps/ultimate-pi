@@ -32,6 +32,7 @@ import {
 	summarizeSearchJson,
 } from "../lib/harness-web/run-cli.js";
 
+// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 const WEB_SEARCH_GUIDELINES = [

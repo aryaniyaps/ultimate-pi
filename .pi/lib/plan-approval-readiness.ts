@@ -6,6 +6,7 @@ import { constants } from "node:fs";
 import { access, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import { synthesizerArtifactsComplete } from "./harness-plan-route.js";
 import {
 	isTaskClarificationReady,
 	TASK_CLARIFICATION_ARTIFACT,
@@ -213,11 +214,14 @@ export async function validatePlanApprovalReadiness(
 		}
 	}
 
-	if (!(await fileExists(join(runDir, "artifacts/decomposition.yaml")))) {
-		errors.push("missing artifacts/decomposition.yaml");
-	}
-	if (!(await fileExists(join(runDir, "artifacts/hypothesis.yaml")))) {
-		errors.push("missing artifacts/hypothesis.yaml");
+	const synthComplete = await synthesizerArtifactsComplete(runDir);
+	if (!synthComplete) {
+		if (!(await fileExists(join(runDir, "artifacts/decomposition.yaml")))) {
+			errors.push("missing artifacts/decomposition.yaml");
+		}
+		if (!(await fileExists(join(runDir, "artifacts/hypothesis.yaml")))) {
+			errors.push("missing artifacts/hypothesis.yaml");
+		}
 	}
 
 	return { ok: errors.length === 0, errors, warnings };

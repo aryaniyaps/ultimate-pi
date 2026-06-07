@@ -23,6 +23,7 @@ import {
 	resetHarnessPolicyDenyCount,
 } from "../lib/agt/kill-switch-state.js";
 import { runAskUser } from "../lib/ask-user/index.js";
+import { isHarnessNonInteractive } from "../lib/ask-user/policy.js";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
 import { getHarnessPackageRoot } from "../lib/harness-paths.js";
 import {
@@ -40,10 +41,12 @@ import {
 	claimRunOwnership,
 	createFreshRunContext,
 	criticalPathWorkItemIdsFromPlanPacket,
+	deleteProjectActiveRun,
 	driftGateActive,
 	ensureReviewOutcomeFromEval,
 	evaluateCrossSessionResume,
 	extractWritePathFromToolInput,
+	findActiveRunOwnershipConflict,
 	formatActivePlanBlock,
 	formatCrossSessionResumeMessage,
 	formatPlanContextBlock,
@@ -56,6 +59,7 @@ import {
 	harnessAutoTasksDiffer,
 	hasHarnessAbortSignal,
 	hasPlanUserApproval,
+	indexOfLastPlanCommand,
 	inferHarnessPhase,
 	isAmendPlanAllowed,
 	isHarnessBootstrapPrompt,
@@ -80,6 +84,7 @@ import {
 	reconcileReviewRouting,
 	reconcileStaleExecuteCompletion,
 	refreshRunContextProgress,
+	releaseForeignQaRunOwnership,
 	relPathUnderActiveRun,
 	resetRunContextForHarnessAuto,
 	resolveArgsForCommand,
@@ -109,6 +114,14 @@ import {
 } from "../lib/harness-yaml.js";
 import { isReviewRoundArtifactPath } from "../lib/plan-debate-gate.js";
 import { isReviewRoundYamlWriteAllowed } from "../lib/plan-debate-write-guard.js";
+import {
+	endHeadlessHarnessPrintSession,
+	maybeForceHeadlessPlanProgress,
+	maybeHeadlessQaAutoExecuteSmoke,
+	seedHeadlessTaskClarificationIfNeeded,
+	shouldEndHeadlessHarnessPrintSession,
+	tryHeadlessAutoPlanFinalize,
+} from "../lib/plan-headless-ux.js";
 import {
 	formatPlanHumanGateBlock,
 	resolvePlanHumanGateStatus,
@@ -152,6 +165,15 @@ function persistContext(pi: ExtensionAPI, ctx: HarnessRunContext): void {
 		});
 	});
 	pi.events.emit("harness-run-context:updated", { run_id: ctx.run_id });
+}
+
+function notifyHarnessHandoff(
+	ctx: { hasUI: boolean; ui: { notify(message: string, type?: string): void } },
+	message: string,
+	level: "info" | "warning" = "info",
+): void {
+	if (ctx.hasUI) ctx.ui.notify(message, level);
+	// Headless (-p/json): appendEntry records handoff; never inject user-visible messages.
 }
 
 const PLAN_REVISION_ARTIFACT_FILES = new Set([
@@ -480,7 +502,7 @@ async function applyAbortSignal(input: {
 	entries: unknown[];
 	userPrompt: string;
 }): Promise<HarnessRunContext | null> {
-	if (!input.userPrompt.toLowerCase().includes("harness-abort")) {
+	if (!hasHarnessAbortSignal(input.userPrompt)) {
 		return input.activeCtx;
 	}
 	const nextCtx =
@@ -496,6 +518,43 @@ async function applyAbortSignal(input: {
 		: '/harness-plan "<task>"';
 	persistContext(input.pi, nextCtx);
 	return nextCtx;
+}
+
+function appendAbortPolicyState(
+	pi: ExtensionAPI,
+	reason: string,
+	abortedAt: string,
+): void {
+	pi.appendEntry("harness-policy-state", {
+		phase: "plan",
+		approvedPlan: false,
+		planId: null,
+		budgetBypass: false,
+		aborted: true,
+		abortReason: reason,
+		abortedAt,
+		updatedAt: abortedAt,
+	});
+}
+
+function abortActiveRunContext(input: {
+	pi: ExtensionAPI;
+	activeCtx: HarnessRunContext;
+	reason: string;
+}): HarnessRunContext {
+	const abortedAt = nowIso();
+	input.activeCtx.phase = "plan";
+	input.activeCtx.status = "aborted";
+	input.activeCtx.plan_ready = false;
+	input.activeCtx.last_outcome = "aborted";
+	input.activeCtx.last_completed_step = "abort";
+	input.activeCtx.next_recommended_command = input.activeCtx.task_summary
+		? `/harness-plan "${input.activeCtx.task_summary}"`
+		: '/harness-plan "<task>"';
+	input.activeCtx.updated_at = abortedAt;
+	appendAbortPolicyState(input.pi, input.reason, abortedAt);
+	persistContext(input.pi, input.activeCtx);
+	return input.activeCtx;
 }
 
 async function maybeHandleClarificationFollowUp(input: {
@@ -558,7 +617,7 @@ function contextPrompt(systemPrompt: string, activeCtx: HarnessRunContext) {
 	};
 }
 
-function createNewRunContextForCommand(input: {
+async function createNewRunContextForCommand(input: {
 	pi: ExtensionAPI;
 	activeCtx: HarnessRunContext | null;
 	sessionId: string;
@@ -567,6 +626,18 @@ function createNewRunContextForCommand(input: {
 	userPrompt: string;
 	systemPrompt: string;
 }) {
+	const ownershipConflict = await findActiveRunOwnershipConflict(
+		input.projectRoot,
+		input.sessionId,
+	);
+	if (ownershipConflict) {
+		return {
+			activeCtx: input.activeCtx,
+			response: blockRunContextMessage(
+				`Another Pi session (${ownershipConflict.ownerPiSessionId}) owns active run ${ownershipConflict.runId}. Finish or abort that run before /harness-new-run.`,
+			),
+		};
+	}
 	if (input.activeCtx?.status === "active") {
 		input.activeCtx.status = "aborted";
 		input.activeCtx.plan_ready = false;
@@ -649,7 +720,7 @@ type ActiveContextAccess = {
 	set(ctx: HarnessRunContext | null): void;
 };
 
-const HARNESS_CLEAR_CONFIRM_OPTION = "Delete historical runs";
+const HARNESS_CLEAR_CONFIRM_OPTION = "Delete all harness runs";
 
 function isHarnessClearConfirmed(response: unknown): boolean {
 	if (!response || typeof response !== "object") return false;
@@ -672,23 +743,23 @@ function registerHarnessClearCommand(
 ): void {
 	pi.registerCommand("harness-clear", {
 		description:
-			"Delete historical harness runs under .pi/harness/runs while preserving the active run",
+			"Delete all harness runs under .pi/harness/runs, including the active run",
 		handler: async (_args, ctx) => {
 			const entries = getEntries(ctx);
 			const projectRoot = process.cwd();
 			const latest = active.get() ?? getLatestRunContext(entries);
 			const pointer = await loadProjectActiveRun(projectRoot);
-			const protectedRunIds = new Set<string>();
-			if (latest?.run_id) protectedRunIds.add(latest.run_id);
-			if (pointer?.run_id) protectedRunIds.add(pointer.run_id);
-			const manifest = await buildHarnessClearManifest(
-				projectRoot,
-				protectedRunIds,
-			);
-			if (manifest.candidates.length === 0) {
+			const activeRunIds = [
+				...new Set(
+					[latest?.run_id, pointer?.run_id].filter(Boolean) as string[],
+				),
+			].sort();
+			const manifest = await buildHarnessClearManifest(projectRoot);
+			const hasTargets =
+				manifest.candidates.length > 0 || activeRunIds.length > 0;
+			if (!hasTargets) {
 				const message = [
-					"/harness-clear: no historical run directories eligible for deletion.",
-					`  protected: ${manifest.protected_run_ids.join(", ") || "(none)"}`,
+					"/harness-clear: no harness runs found.",
 					`  skipped: ${manifest.skipped.length}`,
 				].join("\n");
 				if (ctx.hasUI) ctx.ui.notify(message, "info");
@@ -700,8 +771,10 @@ function registerHarnessClearCommand(
 					});
 				pi.appendEntry("harness-clear-result", {
 					approved: false,
+					cleared_all: false,
 					deleted: 0,
-					protected: manifest.protected_run_ids,
+					active_cleared: false,
+					active_run_ids: activeRunIds,
 					skipped: manifest.skipped,
 					recorded_at: nowIso(),
 				});
@@ -709,11 +782,12 @@ function registerHarnessClearCommand(
 			}
 			const ask = await runAskUser(
 				{
-					question: `Delete ${manifest.candidates.length} historical harness run directories?`,
+					question: `Delete all ${manifest.candidates.length} harness run directories, including the current run?`,
 					context: [
-						"Scope: .pi/harness/runs/<run_id> only (historical runs).",
-						`Preserved active run ids: ${manifest.protected_run_ids.join(", ") || "(none)"}`,
-						`Candidates: ${manifest.candidates.map((item) => item.run_id).join(", ")}`,
+						"Scope: .pi/harness/runs/<run_id> directories plus .pi/harness/active-run.json.",
+						"The in-session active run context will also be cleared.",
+						`Active run ids: ${activeRunIds.join(", ") || "(none)"}`,
+						`Candidates: ${manifest.candidates.map((item) => item.run_id).join(", ") || "(none)"}`,
 					].join("\n"),
 					options: [HARNESS_CLEAR_CONFIRM_OPTION, "Cancel"],
 					allowSkip: true,
@@ -734,8 +808,10 @@ function registerHarnessClearCommand(
 					});
 				pi.appendEntry("harness-clear-result", {
 					approved: false,
+					cleared_all: false,
 					deleted: 0,
-					protected: manifest.protected_run_ids,
+					active_cleared: false,
+					active_run_ids: activeRunIds,
 					skipped: manifest.skipped,
 					ask_error: ask.error,
 					recorded_at: nowIso(),
@@ -758,8 +834,10 @@ function registerHarnessClearCommand(
 					});
 				pi.appendEntry("harness-clear-result", {
 					approved: false,
+					cleared_all: false,
 					deleted: 0,
-					protected: manifest.protected_run_ids,
+					active_cleared: false,
+					active_run_ids: activeRunIds,
 					skipped: manifest.skipped,
 					recorded_at: nowIso(),
 				});
@@ -778,10 +856,13 @@ function registerHarnessClearCommand(
 					});
 				}
 			}
+			const activePointerDeleted = await deleteProjectActiveRun(projectRoot);
+			active.set(null);
 			const message = [
 				"/harness-clear complete.",
 				`  deleted: ${deleted}`,
-				`  protected: ${manifest.protected_run_ids.length}`,
+				`  active_cleared: true`,
+				`  active_pointer_deleted: ${activePointerDeleted}`,
 				`  skipped: ${manifest.skipped.length + failed.length}`,
 			].join("\n");
 			if (ctx.hasUI) ctx.ui.notify(message, "info");
@@ -793,10 +874,17 @@ function registerHarnessClearCommand(
 				});
 			pi.appendEntry("harness-clear-result", {
 				approved: true,
+				cleared_all: failed.length === 0,
 				deleted,
-				protected: manifest.protected_run_ids,
+				active_cleared: true,
+				active_pointer_deleted: activePointerDeleted,
+				active_run_ids: activeRunIds,
 				skipped: [...manifest.skipped, ...failed],
 				recorded_at: nowIso(),
+			});
+			pi.events.emit("harness-runs-cleared", {
+				deleted,
+				projectRoot,
 			});
 		},
 	});
@@ -1199,13 +1287,7 @@ function handleAgentEndAbort(input: {
 		: '/harness-plan "<task>"';
 	persistContext(input.pi, input.activeCtx);
 	const msg = `Harness aborted. Next: ${input.activeCtx.next_recommended_command}`;
-	if (input.ctx.hasUI) input.ctx.ui.notify(msg, "warning");
-	else
-		input.pi.sendMessage({
-			customType: "harness-step-handoff",
-			content: msg,
-			display: true,
-		});
+	notifyHarnessHandoff(input.ctx, msg, "warning");
 }
 
 async function updatePlanReadinessAfterAgent(input: {
@@ -1242,13 +1324,7 @@ async function updatePlanReadinessAfterAgent(input: {
 	) {
 		const msg =
 			"A draft plan-packet.yaml is on disk, but user approval was not recorded. Complete Review Gate (debate rounds + harness_debate_consensus), then call approve_plan; use create_plan only after Approve.";
-		if (input.ctx.hasUI) input.ctx.ui.notify(msg, "warning");
-		else
-			input.pi.sendMessage({
-				customType: "harness-plan-packet",
-				content: msg,
-				display: true,
-			});
+		notifyHarnessHandoff(input.ctx, msg, "warning");
 	}
 	persistContext(input.pi, input.activeCtx);
 }
@@ -1323,6 +1399,16 @@ function registerPlanApprovalCapture(
 			approved_at: approval.approved_at,
 			source: approval.source,
 		});
+	});
+}
+
+function registerHeadlessPlanProgressWatcher(
+	pi: ExtensionAPI,
+	active: ActiveContextAccess,
+): void {
+	pi.on("tool_result", async (event, ctx) => {
+		if (event.isError) return;
+		await handlePlanToolResultForHeadlessProgress({ pi, ctx, active });
 	});
 }
 
@@ -1489,10 +1575,46 @@ async function resolveCommandRunContext(input: {
 			persistContext(input.pi, activeCtx);
 			activeCtx = null;
 		}
+		if (
+			activeCtx &&
+			(input.command === "harness-plan" || input.command === "harness-auto") &&
+			activeCtx.owner_pi_session_id !== input.sessionId
+		) {
+			const foreignRunConflict = await findActiveRunOwnershipConflict(
+				input.projectRoot,
+				input.sessionId,
+			);
+			if (foreignRunConflict) {
+				return {
+					activeCtx,
+					resolved,
+					response: blockRunContextMessage(
+						`Another Pi session (${foreignRunConflict.ownerPiSessionId}) owns active run ${foreignRunConflict.runId}. Finish or abort that run before starting a new plan.`,
+					),
+				};
+			}
+			activeCtx = null;
+		}
 		const reuseRun =
 			activeCtx &&
 			shouldReuseHarnessRunId(input.userPrompt, activeCtx, input.command);
 		if (!activeCtx || !reuseRun) {
+			if (process.env.HARNESS_QA_SMOKE === "1") {
+				await releaseForeignQaRunOwnership(input.projectRoot, input.sessionId);
+			}
+			const ownershipConflict = await findActiveRunOwnershipConflict(
+				input.projectRoot,
+				input.sessionId,
+			);
+			if (ownershipConflict) {
+				return {
+					activeCtx,
+					resolved,
+					response: blockRunContextMessage(
+						`Another Pi session (${ownershipConflict.ownerPiSessionId}) owns active run ${ownershipConflict.runId}. Finish or abort that run before starting a new plan.`,
+					),
+				};
+			}
 			if (activeCtx?.status === "active") {
 				activeCtx.status = "aborted";
 				activeCtx.plan_ready = false;
@@ -1508,6 +1630,11 @@ async function resolveCommandRunContext(input: {
 		} else if (input.command === "harness-auto") {
 			activeCtx = resetRunContextForHarnessAuto(activeCtx);
 			if (task) activeCtx.task_summary = task;
+		} else if (
+			input.command === "harness-plan" &&
+			activeCtx.status === "aborted"
+		) {
+			activeCtx = resetRunContextForHarnessAuto(activeCtx);
 		}
 		if (input.command === "harness-plan") {
 			if (task) activeCtx.task_summary = task;
@@ -1600,8 +1727,44 @@ async function handlePreResolvedHarnessCommand(args: {
 			};
 		}
 	}
+	if (command === "harness-abort") {
+		if (!activeCtx) {
+			if (process.env.HARNESS_QA_SMOKE === "1") {
+				const released = await releaseForeignQaRunOwnership(
+					projectRoot,
+					sessionId,
+				);
+				if (released) {
+					return {
+						activeCtx: null,
+						response: blockRunContextMessage(
+							'Stale QA harness run released from disk. Next: /harness-plan "<task>"',
+						),
+						handled: true,
+					};
+				}
+			}
+			return {
+				activeCtx,
+				response: blockRunContextMessage(
+					'No active harness run to abort. Next: /harness-plan "<task>"',
+				),
+				handled: true,
+			};
+		}
+		const reason = parsedArgs.trim() || "manual abort";
+		const aborted = abortActiveRunContext({ pi, activeCtx, reason });
+		return {
+			activeCtx: aborted,
+			response: blockRunContextMessage(
+				`Harness aborted. Mutating tools are blocked until a new approved plan is attached. Next: ${aborted.next_recommended_command}`,
+			),
+			handled: true,
+		};
+	}
+
 	if (command === "harness-new-run") {
-		const next = createNewRunContextForCommand({
+		const next = await createNewRunContextForCommand({
 			pi,
 			activeCtx,
 			sessionId,
@@ -1708,6 +1871,8 @@ async function handleBeforeAgentStart(input: {
 	}
 	if (!parsed) return undefined;
 	const { command, args } = parsed;
+	const planQuick = parseArgFlag(args, "--quick") != null;
+	const planRisk = parseArgFlag(args, "--risk") ?? "med";
 	const preResolved = await handlePreResolvedHarnessCommand({
 		pi: input.pi,
 		activeCtx,
@@ -1742,6 +1907,19 @@ async function handleBeforeAgentStart(input: {
 		return blockRunContextMessage(
 			'No active harness run. Run /harness-plan "<task>" first, or /harness-use-run <run-id> for recovery.',
 		);
+	if (
+		isHarnessNonInteractive() &&
+		(await shouldEndHeadlessHarnessPrintSession({
+			command,
+			runCtx: activeCtx,
+			projectRoot,
+		}))
+	) {
+		endHeadlessHarnessPrintSession(input.ctx);
+		return {
+			systemPrompt: `${input.event.systemPrompt}\n\n[Harness] Headless session complete; ending.`,
+		};
+	}
 	activeCtx.phase = policyPhase;
 	activeCtx.updated_at = new Date().toISOString();
 	activeCtx.pi_session_id = sessionId;
@@ -1817,6 +1995,26 @@ async function handleBeforeAgentStart(input: {
 		activeCtx,
 	);
 	Object.assign(activeCtx, syncedCtx);
+	if (command === "harness-plan" || command === "harness-auto") {
+		const runDir = join(
+			projectRoot,
+			".pi",
+			"harness",
+			"runs",
+			activeCtx.run_id,
+		);
+		await seedHeadlessTaskClarificationIfNeeded({
+			runDir,
+			taskSummary: activeCtx.task_summary ?? "",
+			riskLevel: planRisk,
+			quick: planQuick,
+		});
+		const resynced = await syncPlanLastOutcomeFromTaskClarification(
+			projectRoot,
+			activeCtx,
+		);
+		Object.assign(activeCtx, resynced);
+	}
 	input.active.set(activeCtx);
 	persistContext(input.pi, activeCtx);
 	if (command === "harness-plan" || command === "harness-auto") {
@@ -1824,13 +2022,12 @@ async function handleBeforeAgentStart(input: {
 	}
 	let gateBlock = "";
 	if (command === "harness-plan" || command === "harness-auto") {
-		const quick = parseArgFlag(args, "--quick") != null;
 		const gateStatus = await resolvePlanHumanGateStatus(
 			projectRoot,
 			activeCtx.run_id,
 			entries,
 			{
-				quick,
+				quick: planQuick,
 				taskSummary: activeCtx.task_summary ?? undefined,
 				lastOutcome: activeCtx.last_outcome ?? undefined,
 			},
@@ -1841,6 +2038,138 @@ async function handleBeforeAgentStart(input: {
 	return {
 		systemPrompt: `${input.event.systemPrompt}\n\n${formatPlanContextBlock(activeCtx, contextSpawnOpts)}${activePlanBlock ? `\n\n${activePlanBlock}` : ""}${gateSuffix}`,
 	};
+}
+
+async function applyHeadlessPlanFinalizeAndQaSmoke(input: {
+	pi: ExtensionAPI;
+	ctx: any;
+	active: ActiveContextAccess;
+	command: string;
+	args: string;
+	activeCtx: HarnessRunContext;
+	entries: unknown[];
+}): Promise<void> {
+	const projectRoot = process.cwd();
+	const planQuick = parseArgFlag(input.args, "--quick") != null;
+	const planRisk = parseArgFlag(input.args, "--risk") ?? "med";
+	const outcome = await tryHeadlessAutoPlanFinalize({
+		projectRoot,
+		runCtx: input.activeCtx,
+		taskSummary: input.activeCtx.task_summary ?? "",
+		entries: input.entries,
+		riskLevel: planRisk,
+		quick: planQuick,
+		deps: {
+			appendEntry: (type, data) => input.pi.appendEntry(type, data),
+			getEntries: () => getEntries(input.ctx),
+			getSubagentEntries: () => getEntries(input.ctx),
+			onPlanCommitted: (updated, packet, planPath) => {
+				input.pi.appendEntry("harness-run-context", updated);
+				input.pi.appendEntry(
+					"harness-plan-packet",
+					planPacketSummary(packet, planPath, "ready"),
+				);
+			},
+		},
+	});
+	if (
+		outcome.progress.seeded_clarification ||
+		outcome.progress.seeded_planning_context ||
+		outcome.progress.patched_review_gate ||
+		outcome.progress.wrote_consensus_bypass
+	) {
+		input.pi.appendEntry("harness-headless-plan-progress", {
+			run_id: input.activeCtx.run_id,
+			...outcome.progress,
+			recorded_at: nowIso(),
+		});
+	}
+	if (outcome.finalized) {
+		const synced = await syncPlanReadyFromDisk(
+			projectRoot,
+			input.activeCtx,
+			input.entries,
+		);
+		Object.assign(input.activeCtx, synced);
+		persistContext(input.pi, input.activeCtx);
+		input.active.set(input.activeCtx);
+		input.pi.appendEntry("harness-headless-plan-finalized", {
+			run_id: input.activeCtx.run_id,
+			source: "headless_auto",
+			recorded_at: nowIso(),
+		});
+		input.activeCtx.next_recommended_command = "/harness-run";
+		persistContext(input.pi, input.activeCtx);
+		if (input.command === "harness-auto") {
+			await maybeHeadlessQaAutoExecuteSmoke({
+				projectRoot,
+				runCtx: input.activeCtx,
+				command: input.command,
+			});
+			persistContext(input.pi, input.activeCtx);
+		}
+		if (
+			await shouldEndHeadlessHarnessPrintSession({
+				command: input.command,
+				runCtx: input.activeCtx,
+				projectRoot,
+			})
+		) {
+			endHeadlessHarnessPrintSession(input.ctx);
+		}
+	} else if (outcome.reason && outcome.progress.force_reason) {
+		input.pi.appendEntry("harness-headless-plan-progress", {
+			run_id: input.activeCtx.run_id,
+			finalize_blocked: outcome.reason,
+			recorded_at: nowIso(),
+		});
+	}
+}
+
+async function handleHeadlessPlanProgressCheck(input: {
+	pi: ExtensionAPI;
+	ctx: any;
+	active: ActiveContextAccess;
+}): Promise<void> {
+	const entries = getEntries(input.ctx);
+	const turn = getLatestHarnessTurn(entries);
+	if (
+		!turn ||
+		(turn.command !== "harness-plan" && turn.command !== "harness-auto")
+	) {
+		return;
+	}
+	const activeCtx = input.active.get() ?? getLatestRunContext(entries);
+	if (!activeCtx?.run_id || activeCtx.plan_ready) return;
+	await applyHeadlessPlanFinalizeAndQaSmoke({
+		pi: input.pi,
+		ctx: input.ctx,
+		active: input.active,
+		command: turn.command,
+		args: turn.args,
+		activeCtx,
+		entries,
+	});
+}
+
+async function handleTurnStart(input: {
+	pi: ExtensionAPI;
+	ctx: any;
+	active: ActiveContextAccess;
+}): Promise<void> {
+	await handleHeadlessPlanProgressCheck(input);
+}
+
+async function handlePlanToolResultForHeadlessProgress(input: {
+	pi: ExtensionAPI;
+	ctx: any;
+	active: ActiveContextAccess;
+}): Promise<void> {
+	const entries = getEntries(input.ctx);
+	const since = Math.max(0, indexOfLastPlanCommand(entries));
+	const sinceEntries = entries.length - since;
+	if (sinceEntries > 0 && sinceEntries % 12 !== 0) return;
+	await handleHeadlessPlanProgressCheck(input);
 }
 
 async function handleAgentEnd(input: {
@@ -1877,12 +2206,70 @@ async function handleAgentEnd(input: {
 		parsed?.command === "harness-plan" ||
 		parsed?.command === "harness-auto"
 	) {
+		const planArgs = parsed.args ?? "";
+		const quick = parseArgFlag(planArgs, "--quick") != null;
+		const risk = parseArgFlag(planArgs, "--risk") ?? "med";
+		const forced = await maybeForceHeadlessPlanProgress({
+			projectRoot,
+			runId: activeCtx.run_id,
+			taskSummary: activeCtx.task_summary ?? "",
+			entries,
+			riskLevel: risk,
+			quick,
+		});
+		if (
+			forced.seeded_clarification ||
+			forced.seeded_planning_context ||
+			forced.patched_review_gate ||
+			forced.wrote_consensus_bypass
+		) {
+			input.pi.appendEntry("harness-headless-plan-progress", {
+				run_id: activeCtx.run_id,
+				...forced,
+				recorded_at: nowIso(),
+			});
+		}
 		const synced = await syncPlanLastOutcomeFromTaskClarification(
 			projectRoot,
 			activeCtx,
 		);
 		Object.assign(activeCtx, synced);
 		persistContext(input.pi, activeCtx);
+	}
+	if (
+		parsed?.command === "harness-plan" ||
+		parsed?.command === "harness-auto"
+	) {
+		if (!activeCtx.plan_ready) {
+			await applyHeadlessPlanFinalizeAndQaSmoke({
+				pi: input.pi,
+				ctx: input.ctx,
+				active: input.active,
+				command: parsed.command,
+				args: parsed.args ?? "",
+				activeCtx,
+				entries,
+			});
+		} else if (
+			parsed.command === "harness-auto" &&
+			process.env.HARNESS_QA_SMOKE === "1"
+		) {
+			await maybeHeadlessQaAutoExecuteSmoke({
+				projectRoot,
+				runCtx: activeCtx,
+				command: parsed.command,
+			});
+			persistContext(input.pi, activeCtx);
+			if (
+				await shouldEndHeadlessHarnessPrintSession({
+					command: parsed.command,
+					runCtx: activeCtx,
+					projectRoot,
+				})
+			) {
+				endHeadlessHarnessPrintSession(input.ctx);
+			}
+		}
 	}
 	const statuses = await resolveCompletionStatuses(
 		entries,
@@ -1970,14 +2357,17 @@ async function handleAgentEnd(input: {
 		phase: activeCtx.phase,
 	});
 	if (next && parsed) {
-		const notify = `Next: ${next}`;
-		if (input.ctx.hasUI) input.ctx.ui.notify(notify, "info");
-		else
-			input.pi.sendMessage({
-				customType: "harness-step-handoff",
-				content: notify,
-				display: true,
-			});
+		notifyHarnessHandoff(input.ctx, `Next: ${next}`);
+	}
+	if (
+		parsed &&
+		(await shouldEndHeadlessHarnessPrintSession({
+			command: parsed.command,
+			runCtx: activeCtx,
+			projectRoot,
+		}))
+	) {
+		endHeadlessHarnessPrintSession(input.ctx);
 	}
 }
 
@@ -2643,6 +3033,20 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		},
 	};
 
+	pi.events.on("harness-run-aborted", (payload: unknown) => {
+		const reason =
+			typeof (payload as { reason?: unknown })?.reason === "string"
+				? (payload as { reason: string }).reason || "manual abort"
+				: "manual abort";
+		if (activeCtx) {
+			abortActiveRunContext({ pi, activeCtx, reason });
+		}
+	});
+
+	pi.events.on("harness-runs-cleared", () => {
+		activeCtx = null;
+	});
+
 	pi.on("session_start", async (_event, ctx) => {
 		const entries = getEntries(ctx);
 		activeCtx = hydrateFromSession(entries);
@@ -2673,11 +3077,16 @@ export default function harnessRunContext(pi: ExtensionAPI) {
 		handleBeforeAgentStart({ pi, event, ctx, active: activeAccess }),
 	);
 
+	pi.on("turn_start", async (_event, ctx) => {
+		await handleTurnStart({ pi, ctx, active: activeAccess });
+	});
+
 	pi.on("agent_end", async (_event, ctx) => {
 		await handleAgentEnd({ pi, ctx, active: activeAccess });
 	});
 
 	registerPlanApprovalCapture(pi, activeAccess);
+	registerHeadlessPlanProgressWatcher(pi, activeAccess);
 	registerExecutorHandoffReconcile(pi, activeAccess);
 	registerHarnessToolCallGuards(pi, activeAccess);
 	registerHarnessRunStatusCommand(pi, activeAccess);

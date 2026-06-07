@@ -118,7 +118,7 @@ function main() {
 				enabled: written.enabled,
 				path: written.path,
 				updated_at: written.updated_at,
-				reload_required: true,
+				reload_required: false,
 			},
 			null,
 			2,

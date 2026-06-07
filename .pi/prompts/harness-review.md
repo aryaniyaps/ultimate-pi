@@ -22,7 +22,7 @@ Read **harness-orchestration** and **harness-review** skills before spawning.
 
 1. Use `subagent` with `agentScope: "both"`.
 2. Run benchmark and verdict evaluator passes **sequentially** (verdict depends on benchmark gate). **Never** parallelize benchmark ∥ verdict.
-3. When `HARNESS_REVIEW_PARALLEL=1` and benchmark passed, you may spawn **verdict evaluator ∥ adversary** in one `tasks` batch (two agents only). Default is serial (`HARNESS_REVIEW_PARALLEL=0`).
+3. When benchmark passed (and not `--quick`, steer attempt &lt; 2), spawn **verdict evaluator ∥ adversary** in one `tasks` batch by default. Set `HARNESS_REVIEW_PARALLEL=0` to force serial. While benchmark runs, prepare adversary context but do not spawn adversary until benchmark passes.
 4. Adversary runs only after benchmark passes; skip adversary when benchmark failed or `--quick`.
 5. Steer attempts **2+**: lite review (benchmark + verdict only) unless prior `block_merge` — do not spawn adversary.
 6. Do **not** set `timeoutMs` unless the user requests a cap (harness applies phase-aware defaults).
@@ -145,7 +145,7 @@ Always run verdict after benchmark (even when benchmark failed).
 
 **Serial (default):** spawn verdict evaluator, gate `eval-verdict.yaml`, then spawn adversary (unless `--quick` or steer attempt ≥ 2 without prior `block_merge`).
 
-**Parallel (opt-in):** when `HARNESS_REVIEW_PARALLEL=1`, benchmark passed, not `--quick`, and steer attempt &lt; 2 (or prior `block_merge`):
+**Parallel (default):** when benchmark passed, not `--quick`, steer attempt &lt; 2 (or prior `block_merge`), unless `HARNESS_REVIEW_PARALLEL=0`:
 
 ```
 subagent({

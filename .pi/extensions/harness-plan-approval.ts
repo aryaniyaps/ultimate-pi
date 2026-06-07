@@ -2,9 +2,11 @@
  * harness-plan-approval — PlanPacket approval UI and transcript renderer for parent sessions.
  */
 
+import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Text } from "@earendil-works/pi-tui";
 import { claimHarnessGovernanceLoad } from "../lib/extension-load-guard.js";
+import { tryAutoApprovePlan } from "../lib/harness-auto-approve.js";
 import type { PlanPacketLike } from "../lib/harness-run-context.js";
 import {
 	appendPlanApprovalIfNew,
@@ -47,6 +49,7 @@ import {
 	validateApprovePlanParams,
 } from "../lib/plan-approval/validate.js";
 import { validatePlanApprovalReadiness } from "../lib/plan-approval-readiness.js";
+import { loadPlanDebateEligibilitySnapshot } from "../lib/plan-debate-eligibility-snapshot.js";
 import { validatePlanDebateGate } from "../lib/plan-debate-gate.js";
 
 // @ts-expect-error pi extensions run as ESM
@@ -166,40 +169,58 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 			const risk = String(
 				validated.plan_packet.risk_level ?? "med",
 			).toLowerCase();
+			let readinessResult: Awaited<
+				ReturnType<typeof validatePlanApprovalReadiness>
+			> | null = null;
+			let debateGateResult: Awaited<
+				ReturnType<typeof validatePlanDebateGate>
+			> | null = null;
 			if (runCtx?.run_id) {
-				const readiness = await validatePlanApprovalReadiness(
+				readinessResult = await validatePlanApprovalReadiness(
 					projectRoot,
 					runCtx.run_id,
 					{ risk_level: risk },
 				);
-				if (!readiness.ok) {
+				if (!readinessResult.ok) {
 					return {
 						content: [
 							{
 								type: "text",
-								text: `approve_plan blocked — plan phase not ready:\n- ${readiness.errors.join("\n- ")}`,
+								text: `approve_plan blocked — plan phase not ready:\n- ${readinessResult.errors.join("\n- ")}`,
 							},
 						],
 						details: {
 							plan_packet: validated.plan_packet,
-							readiness,
+							readiness: readinessResult,
 							cancelled: true,
 						},
 						isError: true,
 					};
 				}
-				implWarnings.push(...readiness.warnings);
+				implWarnings.push(...readinessResult.warnings);
 			}
 			if (runCtx?.run_id) {
-				const gate = await validatePlanDebateGate(projectRoot, runCtx.run_id);
-				if (!gate.ok) {
+				const runDir = join(
+					projectRoot,
+					".pi",
+					"harness",
+					"runs",
+					runCtx.run_id,
+				);
+				const eligibility = await loadPlanDebateEligibilitySnapshot(runDir);
+				debateGateResult = await validatePlanDebateGate(
+					projectRoot,
+					runCtx.run_id,
+					eligibility ?? undefined,
+				);
+				if (!debateGateResult.ok) {
 					const { buildPlanDebateGateRecovery } = await import(
 						"../lib/plan-debate-gate.js"
 					);
 					const recovery = await buildPlanDebateGateRecovery(
 						projectRoot,
 						runCtx.run_id,
-						gate,
+						debateGateResult,
 					);
 					return {
 						content: [
@@ -210,13 +231,24 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 						],
 						details: {
 							plan_packet: validated.plan_packet,
-							debate_gate: gate,
+							debate_gate: debateGateResult,
 							cancelled: true,
 						},
 						isError: true,
 					};
 				}
 			}
+			const autoOutcome =
+				runCtx?.run_id && readinessResult && debateGateResult
+					? await tryAutoApprovePlan({
+							projectRoot,
+							runId: runCtx.run_id,
+							riskLevel: risk,
+							readiness: readinessResult,
+							debateGate: debateGateResult,
+						})
+					: { approved: false, reasons: [] };
+
 			const reviewPath = await writePlanReviewMarkdown(
 				projectRoot,
 				runCtx,
@@ -224,7 +256,7 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				{
 					human_summary: validated.human_summary,
 					research_brief: validated.research_brief,
-					status: "draft",
+					status: autoOutcome.approved ? "approved" : "draft",
 				},
 			);
 			const planMarkdown = buildPlanApprovalMarkdown(validated);
@@ -247,16 +279,27 @@ export default function harnessPlanApproval(pi: ExtensionAPI) {
 				},
 			});
 
-			setHarnessWaitingForUser("approve_plan");
-			pi.events.emit("harness-waiting-for-user", { gate: "approve_plan" });
 			let outcome: PlanApprovalDialogResult;
-			try {
-				outcome = await runPlanApprovalDialog(ctx.ui, validated, {
-					hasUI: ctx.hasUI,
-				});
-			} finally {
-				setHarnessWaitingForUser(null);
-				pi.events.emit("harness-waiting-for-user", { gate: null });
+			if (autoOutcome.approved) {
+				outcome = {
+					response: {
+						kind: "selection",
+						selections: ["Approve"],
+					},
+					cancelled: false,
+					ui_backend: "headless",
+				};
+			} else {
+				setHarnessWaitingForUser("approve_plan");
+				pi.events.emit("harness-waiting-for-user", { gate: "approve_plan" });
+				try {
+					outcome = await runPlanApprovalDialog(ctx.ui, validated, {
+						hasUI: ctx.hasUI,
+					});
+				} finally {
+					setHarnessWaitingForUser(null);
+					pi.events.emit("harness-waiting-for-user", { gate: null });
+				}
 			}
 
 			const details = toApprovePlanToolDetails(

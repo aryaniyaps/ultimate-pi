@@ -19,9 +19,24 @@ const readyDoc = {
 };
 
 test("validateTaskClarificationHumanGate blocks ready without ask_user", () => {
-	const gate = validateTaskClarificationHumanGate([], readyDoc);
-	assert.equal(gate.ok, false);
-	assert.ok(gate.errors[0]?.includes("ask_user"));
+	const saved = {
+		HARNESS_NON_INTERACTIVE: process.env.HARNESS_NON_INTERACTIVE,
+		HARNESS_PLAN_AUTO_APPROVE: process.env.HARNESS_PLAN_AUTO_APPROVE,
+		HARNESS_PLAN_NONINTERACTIVE: process.env.HARNESS_PLAN_NONINTERACTIVE,
+	};
+	delete process.env.HARNESS_NON_INTERACTIVE;
+	delete process.env.HARNESS_PLAN_AUTO_APPROVE;
+	delete process.env.HARNESS_PLAN_NONINTERACTIVE;
+	try {
+		const gate = validateTaskClarificationHumanGate([], readyDoc);
+		assert.equal(gate.ok, false);
+		assert.ok(gate.errors[0]?.includes("ask_user"));
+	} finally {
+		for (const [key, value] of Object.entries(saved)) {
+			if (value === undefined) delete process.env[key];
+			else process.env[key] = value;
+		}
+	}
 });
 
 test("validateTaskClarificationHumanGate allows ready after ask_user transcript", () => {
@@ -203,23 +218,38 @@ execution_plan:
 });
 
 test("spawn topology blocks decompose when clarification ready but no ask_user", async () => {
-	const projectRoot = join(tmpdir(), `proj-hgate-${randomUUID()}`);
-	const runId = `run-${randomUUID()}`;
-	const runDir = join(projectRoot, ".pi", "harness", "runs", runId, "artifacts");
-	await mkdir(runDir, { recursive: true });
-	await writeFile(
-		join(runDir, "task-clarification.yaml"),
-		`status: ready
+	const saved = {
+		HARNESS_NON_INTERACTIVE: process.env.HARNESS_NON_INTERACTIVE,
+		HARNESS_PLAN_AUTO_APPROVE: process.env.HARNESS_PLAN_AUTO_APPROVE,
+		HARNESS_PLAN_NONINTERACTIVE: process.env.HARNESS_PLAN_NONINTERACTIVE,
+	};
+	delete process.env.HARNESS_NON_INTERACTIVE;
+	delete process.env.HARNESS_PLAN_AUTO_APPROVE;
+	delete process.env.HARNESS_PLAN_NONINTERACTIVE;
+	try {
+		const projectRoot = join(tmpdir(), `proj-hgate-${randomUUID()}`);
+		const runId = `run-${randomUUID()}`;
+		const runDir = join(projectRoot, ".pi", "harness", "runs", runId, "artifacts");
+		await mkdir(runDir, { recursive: true });
+		await writeFile(
+			join(runDir, "task-clarification.yaml"),
+			`status: ready
 clarified_task: Implement harness plan gates with user approval
 unresolved_questions: []
 `,
-		"utf-8",
-	);
-	const result = await validateHarnessSpawnTopology(
-		["harness/planning/decompose"],
-		"plan",
-		{ projectRoot, runId, entries: [] },
-	);
-	assert.equal(result.ok, false);
-	assert.ok(result.message?.includes("ask_user"));
+			"utf-8",
+		);
+		const result = await validateHarnessSpawnTopology(
+			["harness/planning/decompose"],
+			"plan",
+			{ projectRoot, runId, entries: [] },
+		);
+		assert.equal(result.ok, false);
+		assert.ok(result.message?.includes("ask_user"));
+	} finally {
+		for (const [key, value] of Object.entries(saved)) {
+			if (value === undefined) delete process.env[key];
+			else process.env[key] = value;
+		}
+	}
 });
