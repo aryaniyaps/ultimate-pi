@@ -3,6 +3,12 @@
 All notable changes to this project are documented in this file.
 
 
+## [v0.26.0] — 2026-06-07
+
+### ✨ Features
+
+- Git workflow automation and steer/review hardening: auto feature branches from protected refs, scoped commits with `--only-path`, headless QA git finalize with `git-workflow.yaml`, hygiene fast-path steer, lite review preflight, inline repair, and ADR 0057 fast steer completion.
+
 ## [v0.25.0] — 2026-06-07
 
 ### ✨ Features
