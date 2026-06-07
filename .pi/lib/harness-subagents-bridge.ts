@@ -24,6 +24,7 @@ import {
 	incrementHarnessPhaseSubagentCount,
 	recordHarnessPhaseStart,
 } from "./harness-phase-telemetry.js";
+import { isHarnessPhaseWorkerEnabled } from "./harness-phase-worker.js";
 import { captureHarnessEvent } from "./harness-posthog.js";
 import {
 	getLatestRunContext,
@@ -48,7 +49,6 @@ import {
 	precheckHarnessSubagentSpawn,
 } from "./harness-subagent-precheck.js";
 import {
-	buildHarnessProgressStatusLine,
 	clearHarnessSubagentProgress,
 	setHarnessSubagentProgress,
 	startHarnessSubagentHeartbeat,
@@ -154,6 +154,9 @@ export function createHarnessSubagentsExtension(
 				HARNESS_PKG_ROOT: packageRoot,
 				HARNESS_PROJECT_ROOT: projectRoot,
 			};
+			if (isHarnessPhaseWorkerEnabled()) {
+				base.HARNESS_PHASE_WORKER = "1";
+			}
 			if (agent.name.startsWith("harness/web-retrieval/")) {
 				const ctx = parseSpawnContextFromTask(task);
 				const remembered = getRememberedSessionWebArtifactDir(lastSessionId);
@@ -223,13 +226,17 @@ export function createHarnessSubagentsExtension(
 			);
 			pendingSpawnTelemetry = null;
 			if (harnessCount > 0) {
-				const budget = checkHarnessSpawnBudget(spawnBudget, harnessCount);
+				const entries = ctx.sessionManager.getEntries();
+				const phase = inferPhaseForPrecheck(entries);
+				const budget = checkHarnessSpawnBudget(
+					spawnBudget,
+					harnessCount,
+					phase,
+				);
 				if (!budget.ok) {
 					return { ok: false, message: budget.message };
 				}
-				const entries = ctx.sessionManager.getEntries();
 				const runCtx = getLatestRunContext(entries);
-				const phase = inferPhaseForPrecheck(entries);
 				const pre = await precheckHarnessSubagentSpawn(
 					params as Parameters<typeof precheckHarnessSubagentSpawn>[0],
 					agents,
@@ -303,9 +310,8 @@ export function createHarnessSubagentsExtension(
 				agent_ids: agentIds,
 				agent_count: agentIds.length,
 			});
-			startHarnessSubagentHeartbeat((line) => {
-				console.error(`harness-progress: ${line}`);
-				bridgePi?.events.emit("harness-progress:updated", { line });
+			startHarnessSubagentHeartbeat(() => {
+				bridgePi?.events.emit("harness-progress:updated", {});
 			});
 			captureHarnessEvent(lastSessionId, "harness_subagent_spawned", {
 				active_after: spawnBudget.active,
@@ -328,12 +334,8 @@ export function createHarnessSubagentsExtension(
 		},
 		onCompleted: ({ agents, mode, durationMs, timedOut, stop_reason }) => {
 			stopHarnessSubagentHeartbeat();
-			const statusLine = buildHarnessProgressStatusLine();
-			if (statusLine) {
-				console.error(`harness-progress: ${statusLine} (done)`);
-			}
 			clearHarnessSubagentProgress();
-			bridgePi?.events.emit("harness-progress:updated", { line: null });
+			bridgePi?.events.emit("harness-progress:updated", {});
 
 			if (agents.length === 0) return;
 			const runId = pendingSpawnTelemetry?.run_id ?? lastSessionId;

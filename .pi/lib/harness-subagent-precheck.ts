@@ -8,6 +8,7 @@ import {
 } from "../../vendor/pi-subagents/src/agents.js";
 import { getAgentKind } from "./agents-policy.mjs";
 import { getHarnessPackageRoot } from "./harness-paths.js";
+import { isHarnessReviewParallelEnabled } from "./harness-review-parallel.js";
 import { type HarnessPhase, inferHarnessPhase } from "./harness-run-context.js";
 import { validateHarnessSpawnTopology } from "./harness-spawn-topology.js";
 import { shouldBlockSubagentForMissingPlanApproval } from "./plan-human-gates.js";
@@ -103,15 +104,15 @@ export async function precheckHarnessSubagentSpawn(
 		};
 	}
 
+	const steerAttempt = parseSteerAttemptFromTasks(params);
 	const parallelEvalAdversary =
-		process.env.HARNESS_REVIEW_PARALLEL === "1" &&
+		isHarnessReviewParallelEnabled({ quick: opts?.quick, steerAttempt }) &&
 		(params.tasks?.length ?? 0) === 2 &&
 		params.tasks?.some((t) => t.agent === "harness/reviewing/evaluator") &&
 		params.tasks?.some((t) => t.agent === "harness/reviewing/adversary") &&
 		names.length === 2 &&
 		phase === "evaluate";
 
-	const steerAttempt = parseSteerAttemptFromTasks(params);
 	if (
 		steerAttempt >= 2 &&
 		names.includes("harness/reviewing/adversary") &&

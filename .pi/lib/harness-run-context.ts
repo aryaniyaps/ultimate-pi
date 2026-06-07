@@ -12,6 +12,7 @@ import {
 	readFile,
 	realpath,
 	stat,
+	unlink,
 	writeFile,
 } from "node:fs/promises";
 import { isAbsolute, join, relative, resolve } from "node:path";
@@ -20,7 +21,23 @@ import {
 	PLAN_APPROVE_OPTION,
 	PLAN_CANCEL_OPTION,
 } from "./ask-user/policy.js";
+import {
+	type RemediationClass,
+	type ReviewOutcomeLike,
+	recommendedNextForRemediation,
+	remediationClassFromEvalVerdict,
+} from "./harness-remediation.js";
 import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
+
+export type {
+	RemediationClass,
+	ReviewOutcomeLike,
+} from "./harness-remediation.js";
+export {
+	recommendedNextForRemediation,
+	remediationClassFromEvalVerdict,
+} from "./harness-remediation.js";
+
 import { readTaskClarificationDoc } from "./plan-task-clarification.js";
 
 export { isPlanApprovalAskUser } from "./ask-user/policy.js";
@@ -969,6 +986,25 @@ export function getLatestRunContext(
 	entries: unknown[],
 ): HarnessRunContext | null {
 	for (let i = entries.length - 1; i >= 0; i--) {
+		const clearEntry = entries[i] as SessionEntryLike;
+		if (
+			clearEntry.type === "custom" &&
+			clearEntry.customType === "harness-clear-result"
+		) {
+			const clearData = clearEntry.data as
+				| {
+						approved?: boolean;
+						active_cleared?: boolean;
+						cleared_all?: boolean;
+				  }
+				| undefined;
+			if (
+				clearData?.approved === true &&
+				(clearData.active_cleared === true || clearData.cleared_all === true)
+			) {
+				return null;
+			}
+		}
 		const entry = entries[i] as SessionEntryLike;
 		if (entry.type !== "custom" || entry.customType !== "harness-run-context")
 			continue;
@@ -1067,6 +1103,17 @@ export async function loadProjectActiveRun(
 	}
 }
 
+export async function deleteProjectActiveRun(
+	projectRoot: string,
+): Promise<boolean> {
+	try {
+		await unlink(activeRunPointerPath(projectRoot));
+		return true;
+	} catch {
+		return false;
+	}
+}
+
 export async function saveProjectActiveRun(
 	ctx: HarnessRunContext,
 ): Promise<void> {
@@ -1105,6 +1152,52 @@ export function isStaleActiveRunPointer(
 	const ageMs = Date.now() - Date.parse(pointer.updated_at);
 	if (!Number.isFinite(ageMs)) return true;
 	return ageMs > activeRunTtlHours() * 60 * 60 * 1000;
+}
+
+export interface ActiveRunOwnershipConflict {
+	runId: string;
+	ownerPiSessionId: string;
+}
+
+/** True when another Pi session owns a non-stale active run on disk. */
+export async function findActiveRunOwnershipConflict(
+	projectRoot: string,
+	sessionId: string,
+): Promise<ActiveRunOwnershipConflict | null> {
+	const pointer = await loadProjectActiveRun(projectRoot);
+	if (!pointer || isStaleActiveRunPointer(pointer, projectRoot)) return null;
+	if (pointer.owner_pi_session_id === sessionId) return null;
+	const disk = await loadRunContextFromDisk(pointer.run_id, projectRoot);
+	if (!disk || disk.status !== "active") return null;
+	return {
+		runId: pointer.run_id,
+		ownerPiSessionId: pointer.owner_pi_session_id,
+	};
+}
+
+/** QA smoke: drop stale harness-qa-live ownership left by interrupted live QA runs. */
+export async function releaseForeignQaRunOwnership(
+	projectRoot: string,
+	sessionId: string,
+): Promise<boolean> {
+	if (process.env.HARNESS_QA_SMOKE !== "1") return false;
+	const pointer = await loadProjectActiveRun(projectRoot);
+	if (!pointer || pointer.owner_pi_session_id === sessionId) return false;
+	if (!pointer.owner_pi_session_id.startsWith("harness-qa-live-")) {
+		return false;
+	}
+	const disk = await loadRunContextFromDisk(pointer.run_id, projectRoot);
+	if (disk && disk.status === "active") {
+		await saveRunContextToDisk({
+			...disk,
+			status: "aborted",
+			last_outcome: "abandoned",
+			last_completed_step: "abort",
+			updated_at: nowIso(),
+		});
+	}
+	await deleteProjectActiveRun(projectRoot);
+	return true;
 }
 
 export interface CrossSessionResumeInfo {
@@ -1937,8 +2030,32 @@ export function isHarnessBootstrapPrompt(prompt: string): boolean {
 }
 
 export function hasHarnessAbortSignal(prompt: string): boolean {
-	const p = prompt.toLowerCase();
-	return p.includes("/harness-abort") || p.includes("harness-abort");
+	const slice = userVisiblePromptSlice(prompt);
+	for (const line of slice.split("\n")) {
+		const parsed = parseHarnessSlashInput(line.trim());
+		if (parsed?.command === "harness-abort") return true;
+	}
+	return false;
+}
+
+/** Slash command line for AGT prompt defense — not expanded prompt template bodies. */
+export function harnessSlashCommandLineForPolicy(
+	prompt: string,
+	entries?: unknown[],
+): string | null {
+	const slice = userVisiblePromptSlice(prompt);
+	for (const line of slice.split("\n")) {
+		const trimmed = line.trim();
+		const parsed = parseHarnessSlashInput(trimmed);
+		if (parsed) return trimmed;
+	}
+	if (entries?.length) {
+		const turn = getLatestHarnessTurn(entries);
+		if (turn?.command) {
+			return `/${turn.command}${turn.args ? ` ${turn.args}` : ""}`.trim();
+		}
+	}
+	return null;
 }
 
 /** Mirrors policy-gate phase checks so run-context does not inject on blocked turns. */
@@ -2007,20 +2124,6 @@ export function isNewTaskPlanBlocked(
 	return newTask.length > 0 && prior.length > 0;
 }
 
-export type RemediationClass =
-	| "pass"
-	| "implementation_gap"
-	| "plan_gap"
-	| "rollback"
-	| "inconclusive";
-
-export interface ReviewOutcomeLike {
-	schema_version?: string;
-	status?: string;
-	remediation_class?: RemediationClass | string;
-	recommended_next?: string;
-}
-
 export async function readReviewOutcomeFromRun(
 	runId: string,
 	projectRoot: string,
@@ -2035,62 +2138,6 @@ export async function readReviewOutcomeFromRun(
 		return (await readYamlFile(path, "review-outcome")) as ReviewOutcomeLike;
 	} catch {
 		return null;
-	}
-}
-
-/** Infer remediation when parent skipped Phase 6 but eval-verdict exists on disk. */
-export function remediationClassFromEvalVerdict(
-	verdict: EvalVerdictDisk | null,
-): RemediationClass | null {
-	if (!verdict) return null;
-	const status = (verdict.status ?? "").toLowerCase();
-	if (status === "pass") return "pass";
-	const action = (verdict.recommended_action ?? "").toLowerCase();
-	if (
-		action === "replan" ||
-		action.includes("revise") ||
-		action.includes("plan")
-	) {
-		return "plan_gap";
-	}
-	if (action === "rollback" || action.includes("rollback")) {
-		return "rollback";
-	}
-	if (
-		action === "steer" ||
-		action === "repair" ||
-		action.includes("implement")
-	) {
-		return "implementation_gap";
-	}
-	const failed = (verdict as EvalVerdictDisk & { failed_checks?: string[] })
-		.failed_checks;
-	const joined = Array.isArray(failed) ? failed.join(" ").toLowerCase() : "";
-	if (
-		joined.includes("scope_minimization") ||
-		joined.includes("scope_drift") ||
-		joined.includes("replan")
-	) {
-		return "plan_gap";
-	}
-	if (status === "fail") return "inconclusive";
-	return null;
-}
-
-export function recommendedNextForRemediation(
-	remediation: RemediationClass,
-): string {
-	switch (remediation) {
-		case "pass":
-			return "/harness-policy-status";
-		case "implementation_gap":
-			return "/harness-steer";
-		case "plan_gap":
-			return "/harness-plan (mode: revise)";
-		case "rollback":
-			return "/harness-incident";
-		default:
-			return "/harness-review";
 	}
 }
 

@@ -60,6 +60,7 @@ const PHASE_ORDER: HarnessPhase[] = [
 	"merge",
 ];
 
+// @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
 
 const MUTATING_TOOLS = new Set(["write", "edit"]);
@@ -183,6 +184,10 @@ async function handlePolicyBeforeAgentStart(args: {
 		stateRef.current.updatedAt = stateRef.current.abortedAt;
 		stateRef.current = state;
 		pi.appendEntry("harness-policy-state", stateRef.current);
+		pi.events.emit("harness-run-aborted", {
+			reason: state.abortReason,
+			abortedAt: stateRef.current.abortedAt,
+		});
 		return {
 			message: {
 				customType: "harness-policy-aborted",
@@ -435,6 +440,10 @@ export default function policyGate(pi: ExtensionAPI) {
 			stateRef.current.abortedAt = nowIso();
 			stateRef.current.updatedAt = stateRef.current.abortedAt;
 			pi.appendEntry("harness-policy-state", stateRef.current);
+			pi.events.emit("harness-run-aborted", {
+				reason: stateRef.current.abortReason,
+				abortedAt: stateRef.current.abortedAt,
+			});
 
 			const runCtx = getLatestRunContext(ctx.sessionManager.getEntries());
 			if (runCtx) {

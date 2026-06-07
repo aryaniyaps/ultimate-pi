@@ -33,7 +33,10 @@ export type HarnessPostHogEventName =
 	| "harness_subagent_result_wait"
 	| "harness_subagent_setup"
 	| "harness_phase_completed"
-	| "harness_blackboard_op";
+	| "harness_blackboard_op"
+	| "harness_auto_compact"
+	| "harness_plan_fsm"
+	| "harness_plan_route";
 
 const SCHEMA_VERSION = "1.0.0";
 

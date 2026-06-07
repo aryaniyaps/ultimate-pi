@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -159,5 +160,23 @@ describe("harness enable/disable TUI refresh", () => {
 				{ name: "harness-project-enabled:changed", enabled: true },
 			],
 		);
+	});
+
+	test("harness-project-toggle CLI reports no reload required", () => {
+		const repoRoot = process.cwd();
+		const tmp = withTempProject(false);
+		cleanup = tmp.cleanup;
+		const raw = execFileSync(
+			process.execPath,
+			[
+				join(repoRoot, ".pi", "scripts", "harness-project-toggle.mjs"),
+				"enable",
+				"--project-root",
+				tmp.projectRoot,
+			],
+			{ encoding: "utf8" },
+		);
+		const result = JSON.parse(raw) as { reload_required?: boolean };
+		assert.equal(result.reload_required, false);
 	});
 });

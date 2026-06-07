@@ -14,7 +14,9 @@ import { planDebateIdForRun } from "./plan-debate-id.js";
 import { laneArtifactPath } from "./plan-debate-lane.js";
 import {
 	lanesForConsolidatedRound,
+	lanesForParallelProbesRound,
 	lanesForRound,
+	PARALLEL_PROBES_REVIEW_ARTIFACT,
 } from "./plan-debate-lanes.js";
 import {
 	getMessengerRoundState,
@@ -53,16 +55,20 @@ export async function getPlanDebateRoundStatus(
 	opts?: { debate_round_focus?: PlanDebateRoundFocus },
 ): Promise<RoundStatusResult> {
 	const messengerState = await loadMessengerState(runDir);
+	const parallelProbes =
+		messengerState?.review_gate_mode === "parallel_probes" && roundIndex === 1;
 	const consolidated =
 		messengerState?.review_gate_mode === "consolidated" && roundIndex === 1;
 	const focus =
 		opts?.debate_round_focus ??
-		(consolidated ? ("all" as PlanDebateRoundFocus) : null) ??
+		(consolidated || parallelProbes ? ("all" as PlanDebateRoundFocus) : null) ??
 		(await readDebateRoundFocus(runDir, roundIndex));
 	const missing: string[] = [];
-	const laneList = consolidated
-		? lanesForConsolidatedRound()
-		: lanesForRound(roundIndex, focus);
+	const laneList = parallelProbes
+		? lanesForParallelProbesRound()
+		: consolidated
+			? lanesForConsolidatedRound()
+			: lanesForRound(roundIndex, focus);
 	for (const lane of laneList) {
 		const rel = laneArtifactPath(lane, roundIndex);
 		if (!(await exists(join(runDir, rel)))) {
@@ -82,13 +88,22 @@ export async function getPlanDebateRoundStatus(
 	if (!dialogue.ok) {
 		missing.push(...dialogue.errors.map((e) => `messenger: ${e}`));
 	}
-	const reviewRound = consolidated
-		? "artifacts/review-round-consolidated.yaml"
-		: `artifacts/review-round-r${roundIndex}.yaml`;
+	const reviewRound = parallelProbes
+		? PARALLEL_PROBES_REVIEW_ARTIFACT
+		: consolidated
+			? "artifacts/review-round-consolidated.yaml"
+			: `artifacts/review-round-r${roundIndex}.yaml`;
 	const reviewRoundOnDisk = await exists(join(runDir, reviewRound));
 
 	let next_tool: string | undefined;
-	if (missing.some((m) => m.includes("hypothesis-validation"))) {
+	if (
+		parallelProbes &&
+		missing.some((m) => m.includes("validation-turn")) &&
+		missing.some((m) => m.includes("adversary-brief"))
+	) {
+		next_tool =
+			"subagent parallel batch: harness/planning/plan-evaluator ∥ harness/planning/plan-adversary (parallel_probes)";
+	} else if (missing.some((m) => m.includes("hypothesis-validation"))) {
 		next_tool = "subagent harness/planning/hypothesis-validator";
 	} else if (missing.some((m) => m.includes("validation-turn"))) {
 		next_tool = "subagent harness/planning/plan-evaluator";

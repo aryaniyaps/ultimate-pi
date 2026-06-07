@@ -4,6 +4,7 @@ import type {
 } from "@earendil-works/pi-coding-agent";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
 import { evaluateCrossSessionResume } from "../lib/harness-run-context.js";
+import { buildHarnessProgressStatusLine } from "../lib/harness-subagent-progress.js";
 import {
 	deriveHarnessStatusHint,
 	formatHarnessPhaseLabel,
@@ -312,11 +313,11 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 	});
 
 	pi.events.on("harness-progress:updated", () => {
-		if (mountCtx) scheduleRefresh(mountCtx);
+		if (mountCtx) scheduleProgressRefresh(mountCtx);
 	});
 
 	pi.events.on("harness-waiting-for-user", () => {
-		if (mountCtx) scheduleRefresh(mountCtx);
+		if (mountCtx) scheduleProgressRefresh(mountCtx);
 	});
 
 	pi.events.on("harness-cross-session-resume", (payload: unknown) => {
@@ -366,7 +367,23 @@ export default function harnessLiveWidget(pi: ExtensionAPI) {
 			flowSubstate: state.flowSubstate,
 			nextRecommendedCommand: state.nextRecommendedCommand,
 			crossSessionResumeCommand: state.crossSessionResumeCommand,
+			progressLine: buildHarnessProgressStatusLine(),
 		});
+	}
+
+	/** Re-render widget when elapsed-time progress changes (bypasses hash short-circuit). */
+	function scheduleProgressRefresh(ctx: ExtensionContext): void {
+		if (!isHarnessProjectEnabled()) {
+			clearHarnessWidget(ctx);
+			return;
+		}
+		const state = stateStore.refresh(ctx);
+		const hash = computeRenderHash(state);
+		updateStatusFallback(ctx, state);
+		lastRenderHash = hash;
+		if (component) component.setData(state);
+		component?.invalidate();
+		tuiHandle?.requestRender();
 	}
 
 	function scheduleRefresh(ctx: ExtensionContext): void {

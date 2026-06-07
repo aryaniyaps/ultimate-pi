@@ -4,21 +4,35 @@
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { PromptDefenseEvaluator } from "@microsoft/agent-governance-sdk";
+import { isHarnessNonInteractive } from "../lib/ask-user/policy.js";
 import { isHarnessProjectEnabled } from "../lib/harness-project-config.js";
-import { userVisiblePromptSlice } from "../lib/harness-run-context.js";
+import { harnessSlashCommandLineForPolicy } from "../lib/harness-run-context.js";
 
 const evaluator = new PromptDefenseEvaluator({ minGrade: "D" });
 
 export default function agtPromptGuard(pi: ExtensionAPI) {
 	if (!isHarnessProjectEnabled()) return;
 
-	pi.on("before_agent_start", async (event) => {
-		const prompt = userVisiblePromptSlice(event.prompt);
-		if (!prompt.trim()) return undefined;
-		if (!/\/harness-/.test(prompt)) return undefined;
+	pi.on("before_agent_start", async (event, ctx) => {
+		const commandLine = harnessSlashCommandLineForPolicy(
+			event.prompt,
+			ctx.sessionManager.getEntries(),
+		);
+		if (!commandLine) return undefined;
 
-		const report = evaluator.evaluate(prompt);
+		const report = evaluator.evaluate(commandLine);
 		if (report.isBlocking("D")) {
+			if (isHarnessNonInteractive()) {
+				pi.appendEntry("harness-policy-violation", {
+					source: "agt-prompt-guard",
+					display: false,
+					grade: report.grade,
+					score: report.score,
+					missing: report.missing,
+					advisory: true,
+				});
+				return undefined;
+			}
 			return {
 				message: {
 					customType: "harness-policy-violation",

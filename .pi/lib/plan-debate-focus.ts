@@ -65,7 +65,7 @@ export async function getPlanFocusCoverage(
 	let files: string[] = [];
 	try {
 		files = (await readdir(artifactsDir)).filter((f) =>
-			/^review-round(?:-r\d+|-consolidated)\.yaml$/i.test(f),
+			/^review-round(?:-r\d+|-consolidated|-parallel-probes)\.yaml$/i.test(f),
 		);
 	} catch {
 		return {
@@ -80,11 +80,14 @@ export async function getPlanFocusCoverage(
 
 	for (const name of files.sort()) {
 		const consolidated = /^review-round-consolidated\.yaml$/i.test(name);
+		const parallelProbes = /^review-round-parallel-probes\.yaml$/i.test(name);
 		const m = consolidated
 			? ["review-round-consolidated.yaml", "1"]
-			: /^review-round-r(\d+)\.yaml$/i.exec(name);
+			: parallelProbes
+				? ["review-round-parallel-probes.yaml", "1"]
+				: /^review-round-r(\d+)\.yaml$/i.exec(name);
 		if (!m) continue;
-		const roundIndex = consolidated ? 1 : Number(m[1]);
+		const roundIndex = consolidated || parallelProbes ? 1 : Number(m[1]);
 		if (roundIndex > last_round_index) last_round_index = roundIndex;
 		const raw = await readFile(join(artifactsDir, name), "utf-8");
 		let draft: Record<string, unknown>;
@@ -151,13 +154,22 @@ export async function readDebateRoundFocus(
 	runDir: string,
 	roundIndex: number,
 ): Promise<PlanDebateRoundFocus | null> {
-	const path = join(runDir, "artifacts", `review-round-r${roundIndex}.yaml`);
-	if (!(await fileExists(path))) return null;
-	try {
-		const raw = await readFile(path, "utf-8");
-		const draft = parseYaml(raw) as Record<string, unknown>;
-		return focusFromDraft(draft);
-	} catch {
-		return null;
+	const candidates =
+		roundIndex === 1
+			? [
+					"review-round-parallel-probes.yaml",
+					"review-round-consolidated.yaml",
+					`review-round-r${roundIndex}.yaml`,
+				]
+			: [`review-round-r${roundIndex}.yaml`];
+	for (const name of candidates) {
+		const path = join(runDir, "artifacts", name);
+		if (!(await fileExists(path))) continue;
+		try {
+			const raw = await readFile(path, "utf-8");
+			const draft = parseYaml(raw) as Record<string, unknown>;
+			return focusFromDraft(draft);
+		} catch {}
 	}
+	return null;
 }

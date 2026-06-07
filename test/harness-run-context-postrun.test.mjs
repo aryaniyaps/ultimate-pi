@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { describe, test } from "node:test";
 import {
 	buildHarnessClearManifest,
+	getLatestRunContext,
 	claimRunOwnership,
 	nextStepAfterOutcome,
 	parseHarnessUseRunArgs,
@@ -25,6 +26,7 @@ import {
 	reconcileReviewRouting,
 	reconcileStaleExecuteCompletion,
 	refreshRunContextProgress,
+	releaseForeignQaRunOwnership,
 	resolveArgsForCommand,
 	resolveHarnessRunPostAgentState,
 	syncPlanLastOutcomeFromTaskClarification,
@@ -53,7 +55,7 @@ describe("parseHarnessUseRunArgs", () => {
 
 
 describe("buildHarnessClearManifest", () => {
-	test("limits candidates to in-root historical run directories", async () => {
+	test("limits candidates to in-root run directories and only protects explicit ids", async () => {
 		const root = await mkdtemp(join(tmpdir(), "up-clear-manifest-"));
 		const runsRoot = join(root, ".pi", "harness", "runs");
 		await mkdir(runsRoot, { recursive: true });
@@ -68,6 +70,12 @@ describe("buildHarnessClearManifest", () => {
 			["run-a"],
 		);
 		assert.equal(manifest.protected_run_ids.includes("run-b"), true);
+
+		const clearAllManifest = await buildHarnessClearManifest(root);
+		assert.deepEqual(
+			clearAllManifest.candidates.map((candidate) => candidate.run_id),
+			["run-a", "run-b"],
+		);
 		assert.equal(
 			manifest.skipped.some(
 				(item) =>
@@ -76,6 +84,36 @@ describe("buildHarnessClearManifest", () => {
 			true,
 		);
 		await rm(root, { recursive: true, force: true });
+	});
+	test("getLatestRunContext treats confirmed harness-clear as clearing active run", () => {
+		const runContext = {
+			schema_version: "1.0.0",
+			run_id: "run-cleared",
+			pi_session_id: "sess",
+			project_root: "/tmp/project",
+			phase: "plan",
+			plan_id: null,
+			plan_packet_path: null,
+			plan_ready: false,
+			task_summary: "clear",
+			status: "active",
+			last_completed_step: null,
+			last_outcome: null,
+			next_recommended_command: null,
+			owner_pi_session_id: "sess",
+			updated_at: "2026-01-01T00:00:00.000Z",
+		};
+		assert.equal(
+			getLatestRunContext([
+				{ type: "custom", customType: "harness-run-context", data: runContext },
+				{
+					type: "custom",
+					customType: "harness-clear-result",
+					data: { approved: true, cleared_all: true },
+				},
+			]),
+			null,
+		);
 	});
 });
 
@@ -738,5 +776,57 @@ describe("syncPlanReadyFromDisk", () => {
 		assert.equal(synced.last_outcome, "ready");
 		assert.equal(synced.next_recommended_command, "/harness-run");
 		await rm(root, { recursive: true, force: true });
+	});
+});
+
+describe("releaseForeignQaRunOwnership", () => {
+	test("aborts stale harness-qa-live pointer owned by another session", async () => {
+		const saved = { HARNESS_QA_SMOKE: process.env.HARNESS_QA_SMOKE };
+		process.env.HARNESS_QA_SMOKE = "1";
+		const root = await mkdtemp(join(tmpdir(), "qa-release-"));
+		const runId = "harness-qa-live-stale-123";
+		const runDir = join(root, ".pi", "harness", "runs", runId);
+		await mkdir(runDir, { recursive: true });
+		await writeYamlFile(join(runDir, "context.yaml"), {
+			schema_version: "1.0.0",
+			run_id: runId,
+			project_root: root,
+			phase: "execute",
+			plan_id: `${runId}-plan`,
+			plan_ready: true,
+			status: "active",
+			owner_pi_session_id: "harness-qa-live-old-run",
+			updated_at: "2026-06-06T00:00:00.000Z",
+		});
+		await mkdir(join(root, ".pi", "harness"), { recursive: true });
+		await writeFile(
+			join(root, ".pi", "harness", "active-run.json"),
+			`${JSON.stringify({
+				schema_version: "1.0.0",
+				run_id: runId,
+				project_root: root,
+				owner_pi_session_id: "harness-qa-live-old-run",
+				phase: "execute",
+				plan_id: `${runId}-plan`,
+				plan_ready: true,
+				updated_at: "2026-06-06T00:00:00.000Z",
+			})}\n`,
+		);
+		const cwd = process.cwd();
+		process.chdir(root);
+		try {
+			const released = await releaseForeignQaRunOwnership(
+				root,
+				"harness-qa-live-new",
+			);
+			assert.equal(released, true);
+		} finally {
+			process.chdir(cwd);
+			for (const [key, value] of Object.entries(saved)) {
+				if (value === undefined) delete process.env[key];
+				else process.env[key] = value;
+			}
+			await rm(root, { recursive: true, force: true });
+		}
 	});
 });

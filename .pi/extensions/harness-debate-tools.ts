@@ -52,9 +52,17 @@ import {
 	withReviewRoundYamlWrite,
 } from "../lib/harness-debate-workflow-deps.js";
 import {
+	loadPlanDebateEligibilitySnapshot,
+	writePlanDebateEligibilitySnapshot,
+} from "../lib/plan-debate-eligibility-snapshot.js";
+import {
 	checkDebateWallClock,
 	debateWallClockRecoveryHint,
 } from "../lib/plan-debate-wall-clock.js";
+import {
+	planReviewGateModeForProfile,
+	planReviewGateStrategyFromEligibility,
+} from "../lib/plan-review-gate.js";
 
 // @ts-expect-error pi extensions run as ESM
 const MODULE_URL = import.meta.url;
@@ -237,6 +245,7 @@ function registerHarnessDebateHandler2(pi: ExtensionAPI) {
 				),
 			};
 			const result = harnessPlanDebateEligibility(input);
+			await writePlanDebateEligibilitySnapshot(rd, result);
 			const lines = [
 				`profile: ${result.profile}`,
 				`review_gate_mode: ${result.review_gate_strategy.mode}`,
@@ -272,6 +281,11 @@ function registerHarnessDebateHandler3(pi: ExtensionAPI) {
 					Type.String({ description: "spec | wbs | schedule | quality" }),
 				),
 			),
+			review_gate_mode: Type.Optional(
+				Type.String({
+					description: "consolidated | threaded | parallel_probes",
+				}),
+			),
 		}),
 		async execute(_id, params, _signal, _onUpdate, ctx) {
 			const runId = getRunId(ctx);
@@ -280,6 +294,7 @@ function registerHarnessDebateHandler3(pi: ExtensionAPI) {
 				debate_id?: string;
 				debate_profile?: string;
 				required_focuses?: string[];
+				review_gate_mode?: string;
 			};
 			const raw = String(p.debate_id ?? "");
 			const { debateId, corrected, warning } = normalizePlanDebateId(
@@ -296,14 +311,23 @@ function registerHarnessDebateHandler3(pi: ExtensionAPI) {
 			const required_focuses = (p.required_focuses ?? []).filter((f) =>
 				["spec", "wbs", "schedule", "quality"].includes(f),
 			) as Array<"spec" | "wbs" | "schedule" | "quality">;
+			const rd = runDir(projectRoot, runId);
+			const eligibilitySnapshot = await loadPlanDebateEligibilitySnapshot(rd);
 			const opened = await openDebateBus(runId, debateId, debateHooks(pi), {
 				debate_profile: profile,
 				required_focuses:
 					required_focuses.length > 0 ? required_focuses : undefined,
 			});
+			const explicitMode = p.review_gate_mode;
 			const review_gate_mode =
-				profile === "fast" ? ("consolidated" as const) : ("threaded" as const);
-			await initPlanMessenger(runDir(projectRoot, runId), {
+				explicitMode === "consolidated" ||
+				explicitMode === "threaded" ||
+				explicitMode === "parallel_probes"
+					? explicitMode
+					: eligibilitySnapshot
+						? planReviewGateStrategyFromEligibility(eligibilitySnapshot).mode
+						: planReviewGateModeForProfile(profile);
+			await initPlanMessenger(rd, {
 				runId,
 				debateId,
 				debate_profile: profile,

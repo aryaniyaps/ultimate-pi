@@ -7,6 +7,8 @@ argument-hint: "\"<task>\" [--risk low|med|high] [--quick]"
 
 You are the **planning orchestrator**. Produce an execution baseline (`plan-packet.yaml` + `plan-review.md`) with **lake-sized** outcomes and path-first tools. Parent owns gates: `ask_user`, `approve_plan({ human_summary? })`, `create_plan()`, plan-verify, and scoped writes under `.pi/harness/runs/<run_id>/`.
 
+**Happy path:** call `harness_plan_next_action` → execute the returned spawn/tool/gate → `harness_artifact_ready` → repeat. Use `harness_plan_route` for synthesizer vs sequential framing. Context compacts automatically at 50% usage (VCC); call `vcc_recall` if task state is unclear after compaction.
+
 Use the phase order and spawn topology defined in this prompt directly.
 
 Subagents persist artifacts via scoped **`submit_*`** tools (deterministic YAML under the run dir). Parent uses **`harness_artifact_ready`** to gate phases (no JSON parsing). Parent merges still use **`write_harness_yaml`** for `research-brief.yaml`, `plan-packet.yaml`, `planning-context.yaml`, and integrator patches.
@@ -270,7 +272,7 @@ Med/low non-fork plans with clear stack and no implementation `open_questions` d
 
 **Practice:** Code Complete collaborative construction with Fagan-style inspection criteria. Parent is **chair**; one debate agent per `subagent` batch.
 
-**Forbidden:** parallel `subagent` calls for any debate lane agent in one batch.
+**Forbidden:** parallel debate lanes except **plan-evaluator ∥ plan-adversary** when `review_gate_mode: parallel_probes` (med default).
 
 1. Optional: `harness_plan_scope_check` — if `material_drift`, `ask_user` before debate.
 2. Drive debate with **`harness_debate_focus_coverage`** and **`harness_debate_round_status({ round_index, debate_round_focus })`** — cover **required_focuses** from eligibility, not always all four.
@@ -296,7 +298,18 @@ IF review_gate_ready false OR blockers: escalate — threaded round per missing 
 harness_debate_focus_coverage → harness_debate_consensus
 ```
 
-### Threaded state machine (standard/full/light)
+### Parallel probes state machine (`review_gate_mode: parallel_probes`, profile standard)
+
+```
+round_index := 1
+debate_round_focus := all
+spawn hypothesis-validator (blind verifier)
+spawn parallel batch: plan-evaluator ∥ plan-adversary
+spawn review-integrator → harness_debate_submit_round (review-round-parallel-probes.yaml)
+harness_debate_focus_coverage → harness_debate_consensus
+```
+
+### Threaded state machine (full/light)
 
 ```
 round_index := next uncovered required focus

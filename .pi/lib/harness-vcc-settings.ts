@@ -10,6 +10,14 @@ export interface PiVccSettings {
 	overrideDefaultCompaction: boolean;
 	/** Write debug snapshot to /tmp/pi-vcc-debug.json on each compaction. */
 	debug: boolean;
+	/** Compact when context usage ≥ this percent (harness auto-compact extension). */
+	compactThresholdPercent: number;
+	/** Hysteresis: re-arm after usage falls below this percent. */
+	compactRearmPercent: number;
+	/** Enable harness 50% auto-compact gate. */
+	compactAuto: boolean;
+	/** Allow auto-compact in subagent subprocesses (default false). */
+	compactSubagents: boolean;
 }
 
 const FALSE_VALUES = new Set(["false", "0", "off", "no"]);
@@ -39,10 +47,38 @@ export function resolveVccDebug(): boolean {
 	return parseHarnessBool("HARNESS_VCC_DEBUG", false);
 }
 
+function parseHarnessPercent(envName: string, defaultValue: number): number {
+	const raw = process.env[envName]?.trim();
+	if (!raw) return defaultValue;
+	const n = Number.parseInt(raw, 10);
+	if (!Number.isFinite(n) || n < 1 || n > 99) return defaultValue;
+	return n;
+}
+
+export function resolveCompactThresholdPercent(): number {
+	return parseHarnessPercent("HARNESS_COMPACT_THRESHOLD_PERCENT", 50);
+}
+
+export function resolveCompactRearmPercent(): number {
+	return parseHarnessPercent("HARNESS_COMPACT_REARM_PERCENT", 40);
+}
+
+export function resolveCompactAuto(): boolean {
+	return parseHarnessBool("HARNESS_COMPACT_AUTO", true);
+}
+
+export function resolveCompactSubagents(): boolean {
+	return parseHarnessBool("HARNESS_COMPACT_SUBAGENTS", false);
+}
+
 export function loadSettings(): PiVccSettings {
 	return {
 		overrideDefaultCompaction: resolveOverrideDefaultCompaction(),
 		debug: resolveVccDebug(),
+		compactThresholdPercent: resolveCompactThresholdPercent(),
+		compactRearmPercent: resolveCompactRearmPercent(),
+		compactAuto: resolveCompactAuto(),
+		compactSubagents: resolveCompactSubagents(),
 	};
 }
 

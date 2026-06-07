@@ -15,6 +15,7 @@ Safely abort the current harness run in this session.
   - `planId: null`
 - clears active run `plan_ready` (plan files may remain on disk for forensics)
 - records abort metadata for observability
+- returns immediately without continuing work under the previous run
 - enables a hard safety lock that blocks mutating tools until a new approved plan is attached
 
 ## Usage

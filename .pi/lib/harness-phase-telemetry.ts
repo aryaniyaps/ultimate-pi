@@ -72,3 +72,10 @@ export function resetHarnessPhaseTelemetryForTests(): void {
 	phaseCompletedKeys.clear();
 	phaseSubagentCounts.clear();
 }
+
+export function getHarnessPhaseSubagentCount(
+	runId: string,
+	phase: HarnessPhase,
+): number {
+	return phaseSubagentCounts.get(phaseKey(runId, phase)) ?? 0;
+}

@@ -4,10 +4,10 @@
 
 import { join } from "node:path";
 import {
-	harnessRunsRoot,
 	type RemediationClass,
 	remediationClassFromEvalVerdict,
-} from "./harness-run-context.js";
+} from "./harness-remediation.js";
+import { harnessRunsRoot } from "./harness-subagent-submit-path.js";
 import { readYamlFile, writeYamlFile } from "./harness-yaml.js";
 
 const REPAIR_BRIEF_SCHEMA = "1.0.0";

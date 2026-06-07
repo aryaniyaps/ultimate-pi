@@ -249,6 +249,16 @@ export function harnessPlanDebateEligibility(
 			: [...PLAN_FOCUS_AREAS];
 
 	const caps = capsForProfile(profile);
+	const reviewMode =
+		profile === "fast"
+			? ("consolidated" as const)
+			: profile === "standard"
+				? ("parallel_probes" as const)
+				: ("threaded" as const);
+	const minFocusForStrategy =
+		reviewMode === "parallel_probes" || reviewMode === "consolidated"
+			? 1
+			: caps.min_focus_rounds;
 
 	return {
 		profile,
@@ -257,15 +267,10 @@ export function harnessPlanDebateEligibility(
 		human_required,
 		rationale,
 		review_gate_strategy: {
-			mode:
-				profile === "fast"
-					? "consolidated"
-					: profile === "standard"
-						? "parallel_probes"
-						: "threaded",
+			mode: reviewMode,
 			profile,
 			required_focuses: [...required_focuses],
-			min_focus_rounds: caps.min_focus_rounds,
+			min_focus_rounds: minFocusForStrategy,
 			max_rounds: caps.max_rounds,
 			max_exchanges_per_round: caps.max_exchanges_per_round,
 			round_token_cap: caps.round_token_cap,

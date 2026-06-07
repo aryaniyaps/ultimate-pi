@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
 	getLatestHarnessTurn,
+	hasHarnessAbortSignal,
+	harnessSlashCommandLineForPolicy,
 	inferHarnessPhase,
 	inferHarnessPhaseFromTurn,
 	parseHarnessSlashInput,
@@ -42,6 +44,35 @@ test("harness-turn drives phase inference not setup prose", () => {
 			"# harness-setup\n\nNext run harness-plan after bootstrap",
 		),
 		"plan",
+	);
+});
+
+test("hasHarnessAbortSignal matches slash abort only, not prompt docs", () => {
+	assert.equal(hasHarnessAbortSignal("/harness-abort qa preflight"), true);
+	assert.equal(
+		hasHarnessAbortSignal(
+			"# harness-auto\n\nInterrupt: `/harness-abort [reason]` then `/harness-plan`.",
+		),
+		false,
+	);
+});
+
+test("harnessSlashCommandLineForPolicy ignores expanded template bodies", () => {
+	assert.equal(
+		harnessSlashCommandLineForPolicy(
+			"# harness-auto\n\nInterrupt: `/harness-abort [reason]` then `/harness-plan`.",
+			[
+				{
+					type: "custom",
+					customType: "harness-turn",
+					data: {
+						command: "harness-auto",
+						args: '"smoke task" --quick --risk low',
+					},
+				},
+			],
+		),
+		'/harness-auto "smoke task" --quick --risk low',
 	);
 });
 
