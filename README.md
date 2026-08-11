@@ -1,3 +1,5 @@
+
+
 ![Ultimate PI banner](https://raw.githubusercontent.com/aryaniyaps/ultimate-pi/main/.github/banner-v2.png)
 
 > The **ultimate AI coding harness** on top of [**pi.dev**](https://pi.dev).
@@ -129,7 +131,6 @@ Subagents run isolated from the parent session. They persist canonical YAML thro
 | No approved plan | Run `/harness-plan "<task>"`, then `/harness-run`. |
 | Need to inspect handoff | Run `/harness-trace` or inspect `.pi/harness/runs/<run_id>/`. |
 | Need to restart safely | Run `/harness-abort [reason]`, then create a fresh plan. |
-
 | Need to prune old run history safely | Run `/harness-clear`; all run directories, including the active run, are eligible and confirmation failure/cancel deletes nothing. |
 | Review says `implementation_gap` | Run `/harness-steer`, then `/harness-review`. |
 | Review says `plan_gap` | Revise with `/harness-plan "<updated task>"`. |
